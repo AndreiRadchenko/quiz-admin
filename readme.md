@@ -35,3 +35,61 @@ To [create migration](https://www.prisma.io/docs/getting-started/quickstart) (Cr
 ```js
 npx prisma migrate dev --name init
 ```
+
+### Tailwind with [shadcn](https://ui.shadcn.com/docs/installation/next) component library
+
+Run the shadcn-ui init command to setup your project:
+
+```js
+npx shadcn-ui@latest init
+```
+
+Into the `src/lib/utils.ts` will be added `cn` function for merging class names
+
+Add font family variable to `tailwind.config.ts`
+
+```js
+import { fontFamily } from 'tailwindcss/defaultTheme'; // <--
+
+const config = {
+  darkMode: ['class'],
+  content: [
+  ],
+  prefix: '',
+  theme: {
+    container: {
+      },
+    },
+    extend: {
+      fontFamily: { // <--
+        sans: ['var(--font-sans)', ...fontFamily.sans],
+      },
+```
+
+Use `cn` function to config mix style in `src/app/layout.tsx`
+
+```js
+import { cn } from '@/lib/utils';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode,
+}>) {
+  return (
+    <html lang="en">
+      <body
+        className={cn(
+          // <--
+          'bg-background min-h-screen font-sans antialiased',
+          inter.variable // <--
+        )}
+      >
+        {children}
+      </body>
+    </html>
+  );
+}
+```

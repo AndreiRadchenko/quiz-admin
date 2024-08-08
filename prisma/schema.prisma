@@ -22,4 +22,5 @@ model Question{
   questionType QuestionType 
   image String
   answers String[]
+  rightAnswer String
 }
