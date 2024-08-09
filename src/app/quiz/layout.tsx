@@ -1,9 +1,10 @@
-import { Nav, NavLink } from '@/components/Nav';
+import NavMenu from '@/components/Nav/components/NavMenu';
+import { Nav, NavLink } from '@/components/Nav/Nav';
 import { IoMdHome } from "react-icons/io";
 
 export const dynamic = 'force-dynamic';
 
-export default function AdminLayout({
+export default function QuizLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

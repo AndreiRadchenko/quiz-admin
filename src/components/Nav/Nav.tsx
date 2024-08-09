@@ -4,11 +4,15 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
+import NavMenu from './components/NavMenu';
 
 export function Nav({ children }: { children: ReactNode }) {
   return (
-    <nav className="bg-primary text-primary-foreground flex justify-start px-4">
-      {children}
+    <nav className=" bg-primary text-primary-foreground ">
+      <div className='container flex justify-between'>
+        <div className=' flex justify-start'>{children}</div>
+        <NavMenu />
+      </div>
     </nav>
   );
 }
