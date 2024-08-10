@@ -20,7 +20,7 @@ export default function QuizLayout({
         <NavLink href="/quiz/question-data">Question Data</NavLink>
         <NavLink href="/quiz/answers">Answers</NavLink>
       </Nav>
-      <div className="bg-background container my-6 min-h-screen ">
+      <div className="bg-background container pt-6 min-h-screen ">
         {children}
       </div>
     </>

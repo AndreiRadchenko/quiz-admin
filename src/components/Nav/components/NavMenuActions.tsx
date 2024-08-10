@@ -1,33 +1,28 @@
-'use client';
-
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { useTransition } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export function ThemeToggleDropdownItem(
-  //   {
-  //   id,
-  //   isAvailableForPurchase,
-  // }: {
-  //   id: string;
-  //   isAvailableForPurchase: boolean;
-  //   }
-) {
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
+import { usePreferencesContext } from '@/context/preferences-provider';
+
+export function ThemeToggleDropdownItem() {
+  const { userPreferences, setUserPreferences } = usePreferencesContext();
+
+  // const [isPending, startTransition] = useTransition();
+  // const router = useRouter();
+
   return (
     <DropdownMenuItem
-      disabled={isPending}
+      // disabled={isPending}
       onClick={() => {
         // startTransition(async () => {
         //   await toggleProductAvailability(id, !isAvailableForPurchase);
         //   router.refresh();
         // });
-        console.log('toggle theme');
+        setUserPreferences(prevState => ({ ...prevState, mode: prevState.mode === 'dark' ? 'light' : 'dark' }))
+        console.log(userPreferences);
       }}
     >
-      Dark Theme
-      {/* {isAvailableForPurchase ? 'Deactivate' : 'Activate'} */}
+      {userPreferences.mode === 'dark' ? 'Light Theme' : 'Dark Theme'}
     </DropdownMenuItem>
   );
 }
