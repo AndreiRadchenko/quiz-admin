@@ -30,13 +30,8 @@ export default function NavMenu() {
           Edit
         </Link>
       </DropdownMenuItem>
-
       <DropdownMenuSeparator />
-      <ThemeToggleDropdownItem
-      // id={product.id}
-      // isAvailableForPurchase={product.isAvailableForPurchase}
-      />
-
+      <ThemeToggleDropdownItem />
     </DropdownMenuContent>
   </DropdownMenu>
 
