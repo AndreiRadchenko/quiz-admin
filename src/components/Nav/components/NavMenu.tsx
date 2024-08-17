@@ -11,8 +11,10 @@ import Link from 'next/link';
 
 import { IoMdMore } from "react-icons/io";
 import { ThemeToggleDropdownItem } from './NavMenuActions';
+import { usePreferencesContext } from '@/context/preferences-provider';
 
 export default function NavMenu() {
+  const { userPreferences, setUserPreferences } = usePreferencesContext();
 
   return <DropdownMenu>
     <DropdownMenuTrigger>
@@ -29,6 +31,20 @@ export default function NavMenu() {
         <Link href={`/quiz/players`}>
           Edit
         </Link>
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem onClick={() => {
+        setUserPreferences(prevState => ({ ...prevState, lang: 'uk' }))
+      }}
+      >
+        Ukrainian
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        onClick={() => {
+          setUserPreferences(prevState => ({ ...prevState, lang: 'en' }))
+        }}
+      >
+        English
       </DropdownMenuItem>
       <DropdownMenuSeparator />
       <ThemeToggleDropdownItem />

@@ -8,11 +8,21 @@ import React, {
   ReactNode,
   SetStateAction
 } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 import { storage, Preferences } from '@/lib/localStor';
+import { Locale, UNKNOWN_LOCALE } from "../../i18n-config";
 
-const defaultPreferences: Preferences = { mode: "dark", lang: "en" }
+const redirectedPathName = (locale: Locale, pathName: string) => {
+  if (!pathName) return "/";
+  const segments = pathName.split("/");
+  if (locale) {
+    segments[1] = locale;
+  }
+  return segments.join("/");
+};
 
+const defaultPreferences: Preferences = { mode: "dark", lang: UNKNOWN_LOCALE }
 interface iPreferencesContext {
   userPreferences: Preferences;
   setUserPreferences: React.Dispatch<SetStateAction<Preferences>>
@@ -23,8 +33,10 @@ const PreferencesContext = createContext<iPreferencesContext>(
 );
 
 export default function PreferencesProvider({
-  children,
+  children
 }: { children: ReactNode }) {
+  const pathName = usePathname();
+  const router = useRouter();
 
   const [userPreferences, setUserPreferences] = useState<Preferences>(() => {
     const preferences = storage.getItems();
@@ -34,15 +46,25 @@ export default function PreferencesProvider({
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const pathNameLocale = pathName.split('/')[1] as Locale;
     if (!isMounted) {
       setIsMounted(true);
+
+      if (userPreferences.lang === UNKNOWN_LOCALE) {
+        setUserPreferences(prevState => ({ ...prevState, lang: pathNameLocale }));
+      }
     }
     else {
-      storage.setItems(userPreferences);
+      if (pathNameLocale !== userPreferences.lang) {
+        router.push(redirectedPathName(userPreferences.lang, pathName));
+      }
+
       if (userPreferences.mode === 'dark') { document.documentElement.classList.add('dark') }
       else { document.documentElement.classList.remove('dark') }
+
+      storage.setItems(userPreferences);
     }
-  }, [userPreferences, isMounted])
+  }, [userPreferences, isMounted, router, pathName])
 
   if (!isMounted) {
     return null;

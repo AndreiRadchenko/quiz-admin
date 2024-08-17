@@ -1,0 +1,31 @@
+{
+  "menu": {
+    "langEn": "English",
+    "langUk": "Українська",
+    "lightTheme": "Світла тема",
+    "darkTheme": "Темна тема"
+  },
+  "quiz": {
+    "nav": {
+      "players": "Гравці",
+      "questions": "Запитання",
+      "questionData": "Данні запитань",
+      "answers": "Відповіді"
+    },
+    "dashboard": {
+      "title": "1% Клуб Панель управління"
+    },
+    "players": {
+      "title": "Гравці"
+    },
+    "questions": {
+      "title": "Запитання"
+    },
+    "questionData": {
+      "title": "Данні запитань"
+    },
+    "answers": {
+      "title": "Відповіді"
+    }
+  }
+}

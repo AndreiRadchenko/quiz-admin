@@ -1,9 +1,11 @@
+import { type Locale } from '../../i18n-config';
+
 export type Preferences = {
-  mode: "dark" | "light";
-  lang: "en" | "ua";
+  mode: 'dark' | 'light';
+  lang: Locale;
 };
 
-export const PREFKEY = "preferences";
+export const PREFKEY = 'preferences';
 
 export class CustomStorage<T> {
   private key: string;
@@ -12,7 +14,7 @@ export class CustomStorage<T> {
     this.key = key;
   }
 
-  public getItems(): "" | T | null {
+  public getItems(): '' | T | null {
     try {
       if (global?.window === undefined) {
         return null;
@@ -20,7 +22,7 @@ export class CustomStorage<T> {
       const data = localStorage.getItem(this.key);
       return data && (JSON.parse(data) as T);
     } catch (error) {
-      throw new Error("Failed to retrieve items from storage");
+      throw new Error('Failed to retrieve items from storage');
     }
   }
 
@@ -28,7 +30,7 @@ export class CustomStorage<T> {
     try {
       localStorage.setItem(this.key, JSON.stringify(items));
     } catch (error) {
-      throw new Error("Failed to set items in storage");
+      throw new Error('Failed to set items in storage');
     }
   }
 
@@ -36,7 +38,7 @@ export class CustomStorage<T> {
     try {
       localStorage.removeItem(this.key);
     } catch (error) {
-      throw new Error("Failed to clear items from storage");
+      throw new Error('Failed to clear items from storage');
     }
   }
 }

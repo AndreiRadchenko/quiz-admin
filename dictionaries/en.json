@@ -1,0 +1,31 @@
+{
+  "menu": {
+    "langEn": "English",
+    "langUk": "Українська",
+    "lightTheme": "Light Theme",
+    "darkTheme": "Dark Theme"
+  },
+  "quiz": {
+    "nav": {
+      "players": "Players",
+      "questions": "Questions",
+      "questionData": "Question Data",
+      "answers": "Answers"
+    },
+    "dashboard": {
+      "title": "1% Club Dashboard"
+    },
+    "players": {
+      "title": "Players"
+    },
+    "questions": {
+      "title": "Questions"
+    },
+    "questionData": {
+      "title": "Question Data"
+    },
+    "answers": {
+      "title": "Answers"
+    }
+  }
+}
