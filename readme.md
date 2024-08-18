@@ -93,9 +93,11 @@ export default function RootLayout({
 }
 ```
 
+---
+
 ### Tailwind dark mode
 
----To implement dark mode you should get though the next steps:---
+**_To implement dark mode you should get though the next steps:_**
 
 1. Use the css variables in root (default light) and dark classes for color
    definition in `global.css`.
@@ -126,3 +128,61 @@ export default function RootLayout({
 
 7. Add `ThemeToggleDropdownItem` to the `NavMenu` in
    `src/components/Nav/components/NavMenu.tsx`
+
+---
+
+### Next.js internationalization
+
+[Next.js internationalization docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
+
+**_Internalization workflow_**
+
+- In `next.config.mjs` set permanent redirection (page that will be opened on
+  server base url) **_example:_** `/quiz`
+
+- If url doesn't contain `lang` slug , `middleware.ts` is taken into account.
+  Inside the middleware we choose lang from locales in header (browser settings)
+  if there are some matches between headers accept-language and locales defining
+  in `i18n-config.ts` rout will be redirected to the rout with matched lang. If
+  no matches occur default lang from `i18n-config.ts` will be taken.
+  **_example:_** `uk/quiz` _where `uk` comes from browser settings_
+
+- In `PreferencesProvider` on first initialization of `userPreferences` state
+  from local storage, lang param set to `UNKNOWN_LOCALE`.
+
+  On first render, check if the local storage contains lang preferences
+  (userPreferences.lang !== UNKNOWN_LOCALE) If it is **first time we open the
+  application** (userPreferences.lang === UNKNOWN_LOCALE) we set
+  userPreferences.lang in state and local storage to the value that is come from
+  url (lang has sat in middleware form browser settings)
+
+  If it isn't first time we open app (prefs exist in local storage) and lang
+  from pathName not equal to lang from prefs, rout will be redirected to the
+  rout with lang from prefs.
+
+  ```js
+  if (pathNameLocale !== userPreferences.lang) {
+    router.push(redirectedPathName(userPreferences.lang, pathName));
+  }
+  ```
+
+- Internalization prefs are changed from `NavMenu.tsx` where setUserPreferences
+  of PreferencesProvider is obtained from usePreferencesContext()
+  ```js
+  const { userPreferences, setUserPreferences } = usePreferencesContext();
+  ```
+
+**_[Localization](https://nextjs.org/docs/app/building-your-application/routing/internationalization#localization)_**
+
+- We've created dictionary json file in dictionaries folder for every language.
+  Also we've created `getDictionary(lang)` func for dynamic loading json file
+  into pages where we need it
+
+  ```js
+  import { getDictionary } from './dictionaries';
+  
+  export default async function Page({ params: { lang } }) {
+    const dict = await getDictionary(lang); // en
+    return <button>{dict.products.cart}</button>;
+  }
+  ```

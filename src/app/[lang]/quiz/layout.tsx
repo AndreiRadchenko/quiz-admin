@@ -19,25 +19,13 @@ export default async function QuizLayout({
   return (
     <>
       <Nav>
-        <NavLink href={{
-          pathname: `/${lang}/quiz`,
-        }}
-        >
+        <NavLink href={`/${lang}/quiz`}>
           <IoMdHome size={24} />
         </NavLink>
-        <NavLink href={{
-          pathname: `/${lang}/quiz/players`,
-        }}
-        >{t.quiz.nav.players}</NavLink>
-        <NavLink href={{
-          pathname: `/${lang}/quiz/questions`,
-        }}>{t.quiz.nav.questions}</NavLink >
-        <NavLink href={{
-          pathname: `/${lang}/quiz/question-data`,
-        }} > {t.quiz.nav.questionData}</NavLink >
-        <NavLink href={{
-          pathname: `/${lang}/quiz/answers`,
-        }}> {t.quiz.nav.answers} </NavLink >
+        <NavLink href={`/${lang}/quiz/players`}>{t.quiz.nav.players}</NavLink>
+        <NavLink href={`/${lang}/quiz/questions`}>{t.quiz.nav.questions}</NavLink >
+        <NavLink href={`/${lang}/quiz/question-data`}>{t.quiz.nav.questionData}</NavLink >
+        <NavLink href={`/${lang}/quiz/answers`}> {t.quiz.nav.answers} </NavLink >
       </Nav >
       <div className="bg-background container pt-6 min-h-screen ">
         {children}
