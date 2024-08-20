@@ -9,9 +9,12 @@ import React, {
   SetStateAction
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-
-import { storage, Preferences } from '@/lib/localStor';
 import { Locale, UNKNOWN_LOCALE } from "../../i18n-config";
+
+export type Preferences = {
+  mode: 'dark' | 'light';
+  lang: Locale;
+};
 
 const redirectedPathName = (locale: Locale, pathName: string) => {
   if (!pathName) return "/";
@@ -21,6 +24,12 @@ const redirectedPathName = (locale: Locale, pathName: string) => {
   }
   return segments.join("/");
 };
+
+const getCookieValue = (name: string) => {
+  if (global?.window !== undefined) {
+    return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+  }
+}
 
 const defaultPreferences: Preferences = { mode: "dark", lang: UNKNOWN_LOCALE }
 interface iPreferencesContext {
@@ -39,7 +48,10 @@ export default function PreferencesProvider({
   const router = useRouter();
 
   const [userPreferences, setUserPreferences] = useState<Preferences>(() => {
-    const preferences = storage.getItems();
+    const preferences = {
+      mode: getCookieValue('theme') || 'dark',
+      lang: getCookieValue('lang') || 'en'
+    } as Preferences;
     return preferences ? preferences : defaultPreferences;
   })
 
@@ -62,7 +74,10 @@ export default function PreferencesProvider({
       if (userPreferences.mode === 'dark') { document.documentElement.classList.add('dark') }
       else { document.documentElement.classList.remove('dark') }
 
-      storage.setItems(userPreferences);
+      // storage.setItems(userPreferences);
+      document.cookie = `theme=${userPreferences.mode}; max-age=31536000; path=/`
+      document.cookie = `lang=${userPreferences.lang}; max-age=31536000; path=/`
+
     }
   }, [userPreferences, isMounted, router, pathName])
 

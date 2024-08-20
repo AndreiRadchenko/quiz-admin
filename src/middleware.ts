@@ -6,7 +6,7 @@ import { i18n, type Locale } from '../i18n-config';
 import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
-function getLocale(request: NextRequest): string | undefined {
+function getLocaleFromHeader(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
@@ -42,7 +42,27 @@ export function middleware(request: NextRequest) {
 
   // Redirect if there is no locale
   if (pathnameIsMissingLocale) {
-    const locale = getLocale(request);
+    const cookieLocale = request.cookies.get('lang')?.value;
+
+    let locale = cookieLocale as unknown as string | undefined;
+
+    if (!cookieLocale) {
+      locale = getLocaleFromHeader(request);
+
+      const response = NextResponse.redirect(
+        new URL(
+          `/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`,
+          request.url
+        )
+      );
+      response.cookies.set({
+        name: 'lang',
+        value: locale as string,
+        path: '/',
+        maxAge: 31536000,
+      });
+      return response;
+    }
 
     // e.g. incoming request is /products
     // The new URL is now /en-US/products

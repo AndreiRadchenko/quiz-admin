@@ -30,6 +30,7 @@ type Props = {
 
 export default async function RootLayout({ children, params: { lang } }: Readonly<Props>) {
   const dict = await getDictionary(lang);
+
   return (
     <html lang="en" >
       <body
@@ -39,6 +40,7 @@ export default async function RootLayout({ children, params: { lang } }: Readonl
         )}
       >
         <PreferencesProvider>{children}</PreferencesProvider>
+
       </body>
     </html>
   );
