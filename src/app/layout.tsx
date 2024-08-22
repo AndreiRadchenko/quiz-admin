@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+
+import PreferencesProvider from '@/context/preferences-provider';
+
 import './globals.css';
 import { cn } from '@/lib/utils';
 import { getDictionary } from '../../dictionaries/dictionaries';
-
-import PreferencesProvider from '@/context/preferences-provider';
+import { getThemeCookie } from '@/actions/cookies';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -30,9 +32,10 @@ type Props = {
 
 export default async function RootLayout({ children, params: { lang } }: Readonly<Props>) {
   const dict = await getDictionary(lang);
+  const theme = await getThemeCookie();
 
   return (
-    <html lang="en" >
+    <html lang="en" className={theme || 'dark'}>
       <body
         className={cn(
           'min-h-screen bg-background font-sans antialiased',

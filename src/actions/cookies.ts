@@ -1,6 +1,6 @@
 'use server';
 
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 
 export async function toggleThemeCookie() {
   const theme = cookies().get('theme');
@@ -8,7 +8,13 @@ export async function toggleThemeCookie() {
   cookies().set('theme', currentTheme === 'dark' ? 'light' : 'dark');
 }
 
-export async function getThemeCookie() {
-  const theme = cookies().get('theme');
-  return theme ? theme as unknown as string: 'dark';
+export const getThemeCookie = async () => cookies().get('theme')?.value;
+
+export async function setThemeCookie(mode: string) {
+  cookies().set({
+    name: 'theme',
+    value: mode,
+    path: '/',
+    maxAge: 31536000,
+  });
 }

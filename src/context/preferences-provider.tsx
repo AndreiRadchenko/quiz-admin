@@ -9,7 +9,7 @@ import React, {
   SetStateAction
 } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Locale, UNKNOWN_LOCALE } from "../../i18n-config";
+import { Locale } from "../../i18n-config";
 
 export type Preferences = {
   mode: 'dark' | 'light';
@@ -27,11 +27,11 @@ const redirectedPathName = (locale: Locale, pathName: string) => {
 
 const getCookieValue = (name: string) => {
   if (global?.window !== undefined) {
-    return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+    return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop();
   }
 }
 
-const defaultPreferences: Preferences = { mode: "dark", lang: UNKNOWN_LOCALE }
+// const defaultPreferences: Preferences = { mode: "dark", lang: UNKNOWN_LOCALE }
 interface iPreferencesContext {
   userPreferences: Preferences;
   setUserPreferences: React.Dispatch<SetStateAction<Preferences>>
@@ -49,10 +49,10 @@ export default function PreferencesProvider({
 
   const [userPreferences, setUserPreferences] = useState<Preferences>(() => {
     const preferences = {
-      mode: getCookieValue('theme') || 'dark',
-      lang: getCookieValue('lang') || 'en'
+      mode: getCookieValue('theme'),
+      lang: getCookieValue('lang')
     } as Preferences;
-    return preferences ? preferences : defaultPreferences;
+    return preferences;
   })
 
   const [isMounted, setIsMounted] = useState(false);
@@ -61,23 +61,19 @@ export default function PreferencesProvider({
     const pathNameLocale = pathName.split('/')[1] as Locale;
     if (!isMounted) {
       setIsMounted(true);
-
-      if (userPreferences.lang === UNKNOWN_LOCALE) {
-        setUserPreferences(prevState => ({ ...prevState, lang: pathNameLocale }));
-      }
     }
     else {
       if (pathNameLocale !== userPreferences.lang) {
         router.push(redirectedPathName(userPreferences.lang, pathName));
+
+        document.cookie = `lang=${userPreferences.lang}; max-age=31536000; path=/`
       }
+      if (getCookieValue('theme') !== userPreferences.mode) {
+        document.documentElement.classList.remove('dark', 'light');
+        document.documentElement.classList.add(userPreferences.mode);
 
-      if (userPreferences.mode === 'dark') { document.documentElement.classList.add('dark') }
-      else { document.documentElement.classList.remove('dark') }
-
-      // storage.setItems(userPreferences);
-      document.cookie = `theme=${userPreferences.mode}; max-age=31536000; path=/`
-      document.cookie = `lang=${userPreferences.lang}; max-age=31536000; path=/`
-
+        document.cookie = `theme=${userPreferences.mode}; max-age=31536000; path=/`
+      }
     }
   }, [userPreferences, isMounted, router, pathName])
 
