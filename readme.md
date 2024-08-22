@@ -134,6 +134,10 @@ export default function RootLayout({
 ### Next.js internationalization
 
 [Next.js internationalization docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
+|
+[Youtube video from Rendr](https://www.youtube.com/watch?v=_airUG9o97w&list=PLyPmN8OaxCPb3lCMtklvEtTFAJ6MWAKXf&index=1)
+|
+[Github repo with no slug on default lang](https://github.dev/rendrdotio/i18n-libraries)
 
 **_Internalization workflow_**
 
@@ -186,3 +190,83 @@ export default function RootLayout({
     return <button>{dict.products.cart}</button>;
   }
   ```
+
+### Next.js cookies
+
+[LogRocket Next.js cookie article](<https://blog.logrocket.com/guide-cookies-next-js/#:~:text=To%20read%20incoming%20request%20cookie,cookies()%3B%20const%20userId%20%3D%20cookieStore.>)
+
+**_Preferences in cookie workflow_**
+
+The advantage that you can take from saving preferences in cookies over local
+storage is that it's independent of windows existence on client. Cookies are
+available during SSR (layouts or pages that are rendered on server) through the
+request header and in the middleware through NextRequest param. Therefore, you
+can set internationalization rout in middleware and class for theme in
+Rootlayout before client side rendering will be involved.
+
+Notice that there are two approaches for access cookie on server side and one on
+client site.
+
+1. [The cookies function](https://nextjs.org/docs/app/api-reference/functions/cookies)
+   allows you to read the HTTP incoming request cookies from a Server Component
+   or write outgoing request cookies in a Server Action or Route Handler.
+
+   ```js
+   import { cookies } from 'next/headers';
+   ```
+
+2. [Cookies in Next.js middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware#using-cookies)
+
+   ```js
+   export function middleware(request: NextRequest) {
+     const theme = request.cookies.get('lang')?.value;
+     ...
+   }
+   ```
+
+3. Client side.
+   [Document cookie MDN](https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie)
+
+   To read particular cookie value from document I use function:
+
+   ```js
+   const getCookieValue = (name: string) => {
+   if (global?.window !== undefined) {
+    return document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)')?.pop() || '';
+   }
+   }
+   ```
+
+#### Theme preference in cookie
+
+[Why you can't set cookies in Server Components](https://www.youtube.com/watch?v=ejO8V5vt-7I)
+
+Imagine you are opening site first time, cookie is empty. Middleware
+`withCookieThemeMiddleware` (`src/middlewares/withCookieThemeMiddleware.ts`) set
+theme cookie to "dark" if no cookie in the request. RootLayout is being rendered
+on the server (`src/app/layout.tsx`), theme value came from server actions
+getThemeCookie() (`src/actions/cookies.ts`) if it had been set before on the
+website. Otherwise if no theme cookie obtained theme set to 'dark':
+`<html className={theme || 'dark'}>`. When page is rendered on client -
+PreferencesProvider (`src/context/preferences-provider.tsx`) catches change mode
+event from menu (`src/components/Nav/components/NavMenu.tsx`), writes theme
+value to the cookies and sets theme class in the page html tag
+`document.documentElement.classList.add(userPreferences.mode)`.
+
+```js
+document.documentElement.classList.remove('dark', 'light');
+document.documentElement.classList.add(userPreferences.mode);
+
+document.cookie = `theme=${userPreferences.mode}; max-age=31536000; path=/`;
+```
+
+#### Language preference in cookie
+
+[Implementing Multiple Middleware in Next.js](https://medium.com/@tanzimhossain2/implementing-multiple-middleware-in-next-js-combining-nextauth-and-internationalization-28d5435d3187)
+
+Imagine you are opening site first time, cookie is empty. While middleware
+`withI18nMiddleware` (`src/middlewares/withI18nMiddleware.ts`) handles request
+without lang cookie, it takes lang value from locales in header (browser
+settings). Then middleware redirects request accordingly to lang slug and write
+it to the cookie. On the client side `PreferencesProvider` is responsible for
+handling languages changes from menu and store it to cookie for future use.
