@@ -30,7 +30,7 @@
     --destructive-foreground: hsl(210 40% 98%);
     --border: #8695aa;
     --nav-foreground: hsl(0 0% 100%);
-    --input: #eceef2;
+    --input: #64748b;
     --ring: #8695aa;
     --radius: 0.5rem;
     --chart-1: hsl(12 76% 61%);
@@ -41,7 +41,7 @@
   }
 
   .dark {
-    --background: black;
+    --background: #23272e;
     --foreground: #f6f7f9;
     --card: #d5d9e2;
     --card-foreground: #121316;

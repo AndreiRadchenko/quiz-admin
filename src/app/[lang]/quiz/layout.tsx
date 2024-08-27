@@ -14,7 +14,7 @@ export default async function QuizLayout({
   children,
   params: { lang }
 }: Readonly<Props>) {
-  const t = await getDictionary(lang);
+  const { quiz: { nav } } = await getDictionary(lang);
 
   return (
     <>
@@ -22,10 +22,10 @@ export default async function QuizLayout({
         <NavLink href={`/${lang}/quiz`}>
           <IoMdHome size={24} />
         </NavLink>
-        <NavLink href={`/${lang}/quiz/players`}>{t.quiz.nav.players}</NavLink>
-        <NavLink href={`/${lang}/quiz/questions`}>{t.quiz.nav.questions}</NavLink >
-        <NavLink href={`/${lang}/quiz/question-data`}>{t.quiz.nav.questionData}</NavLink >
-        <NavLink href={`/${lang}/quiz/answers`}> {t.quiz.nav.answers} </NavLink >
+        <NavLink href={`/${lang}/quiz/players`}>{nav.players}</NavLink>
+        <NavLink href={`/${lang}/quiz/questions`}>{nav.questions}</NavLink >
+        <NavLink href={`/${lang}/quiz/question-data`}>{nav.questionData}</NavLink >
+        <NavLink href={`/${lang}/quiz/answers`}> {nav.answers} </NavLink >
       </Nav >
       <div className="bg-background container pt-6 min-h-screen ">
         {children}

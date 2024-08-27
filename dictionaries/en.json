@@ -13,7 +13,49 @@
       "answers": "Answers"
     },
     "dashboard": {
-      "title": "1% Club Dashboard"
+      "title": "1% Club Dashboard",
+      "buttons": {
+        "gameFlow": {
+          "resetGame": "Reset Game",
+          "idle": "Idle",
+          "refreshStatus": "Refresh status",
+          "rebuildExternal": "Rebuild external"
+        },
+        "buyout": {
+          "startBuyout": "Start buyout",
+          "stopBuyout": "Stop buyout"
+        },
+        "endGameBuyout": {
+          "showEndGameBuyout": "Show endgame buyout prompt",
+          "stopEndgameBuyout": "Stop endgame buyout",
+          "reconcileEndgameBuyout": "Reconcile endgame buyout"
+        },
+        "showButtons": {
+          "showPasses": "Show passes",
+          "showActive": "Show active",
+          "showEndgameActive": "Show endgame active"
+        },
+        "commCheck": {
+          "commCheckStart": "Comm Check Start",
+          "commCheckStop": "Comm Check Stop",
+          "commCheckSilent": "Comm Check Silent",
+          "commCheckSilentActive": "Comm Check Silent Active"
+        }
+      },
+      "inputs": {
+        "forceCurrentQuestion": {
+          "name": "Force current question",
+          "tooltip": "Input explanation, Input explanation"
+        },
+        "setShowNumber": {
+          "name": "Set show number",
+          "tooltip": "Input explanation, Input explanation"
+        },
+        "overwritePrizePot": {
+          "name": "Overwrite prize pot",
+          "tooltip": "Input explanation. Set 0 to clear"
+        }
+      }
     },
     "players": {
       "title": "Players"
