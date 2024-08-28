@@ -1,8 +1,3 @@
-
-
 export default async function QuizAnswers() {
-  return (
-    <h1>Answers</h1>
-  );
+  return <h1>Answers</h1>;
 }
-

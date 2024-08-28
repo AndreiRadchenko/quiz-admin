@@ -7,11 +7,13 @@ export function ThemeToggleDropdownItem() {
   return (
     <DropdownMenuItem
       onClick={() => {
-        setUserPreferences(prevState => ({ ...prevState, mode: prevState.mode === 'dark' ? 'light' : 'dark' }))
+        setUserPreferences(prevState => ({
+          ...prevState,
+          mode: prevState.mode === 'dark' ? 'light' : 'dark',
+        }));
       }}
     >
       {userPreferences.mode === 'dark' ? 'Light Theme' : 'Dark Theme'}
     </DropdownMenuItem>
   );
 }
-

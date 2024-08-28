@@ -44,16 +44,34 @@
       },
       "inputs": {
         "forceCurrentQuestion": {
-          "name": "Force current question",
+          "buttonText": "Force current question",
           "tooltip": "Input explanation, Input explanation"
         },
         "setShowNumber": {
-          "name": "Set show number",
+          "buttonText": "Set show number",
           "tooltip": "Input explanation, Input explanation"
         },
         "overwritePrizePot": {
-          "name": "Overwrite prize pot",
+          "buttonText": "Overwrite prize pot",
           "tooltip": "Input explanation. Set 0 to clear"
+        }
+      },
+      "importFiles": {
+        "seatInfo": {
+          "label": "Seat info",
+          "buttonText": "Import seat info"
+        },
+        "playerData": {
+          "label": "Player data",
+          "buttonText": "Import player data"
+        },
+        "externalQuestionData": {
+          "label": "External Question Data",
+          "buttonText": "Import questions"
+        },
+        "externalPlayerInfo": {
+          "label": "External Player Info",
+          "buttonText": "Import player data"
         }
       }
     },
