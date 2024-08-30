@@ -41,7 +41,7 @@
   }
 
   .dark {
-    --background: #23272e;
+    --background: #13171e;
     --foreground: #f6f7f9;
     --card: #d5d9e2;
     --card-foreground: #121316;
@@ -55,8 +55,8 @@
     --secondary-hover: #213d87;
     --secondary-active: #192752;
     --secondary-foreground: #f2f7fd;
-    --muted: #eceef2;
-    --muted-foreground: #8695aa;
+    --muted: #23272e;
+    --muted-foreground: #526077;
     --accent: #f59e0b;
     --accent-foreground: #452c03;
     --destructive: hsl(0 84.2% 60.2%);

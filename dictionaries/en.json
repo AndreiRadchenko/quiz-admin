@@ -76,7 +76,21 @@
       }
     },
     "players": {
-      "title": "Players"
+      "title": "Players",
+      "table": {
+        "header": {
+          "edit": "",
+          "seat": "Seat #",
+          "id": "ID",
+          "name": "Name",
+          "active": "Active",
+          "usedPass": "Used pass",
+          "boughtOut": "Bought Out",
+          "camera": "Camera",
+          "swapWith": "Swap With",
+          "commCheck": "Comm Check"
+        }
+      }
     },
     "questions": {
       "title": "Questions"

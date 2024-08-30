@@ -18,6 +18,7 @@ export interface InputProps
   btnName: string;
   tooltip?: string;
   label?: string;
+  btnSize?: 'default' | 'sm' | 'lg' | 'icon' | null | undefined;
 }
 
 export function InputWithButton({
@@ -25,6 +26,7 @@ export function InputWithButton({
   tooltip = '',
   label,
   className,
+  btnSize = 'default',
   ...props
 }: InputProps) {
   return (
@@ -37,7 +39,9 @@ export function InputWithButton({
       <div className="flex align-top gap-0 w-fit">
         <div className="flex items-center space-x-2">
           <Input className={cn('', className)} id="input" {...props} />
-          <Button type="button">{btnName}</Button>
+          <Button type="button" size={btnSize}>
+            {btnName}
+          </Button>
         </div>
         {tooltip && (
           <TooltipProvider>
