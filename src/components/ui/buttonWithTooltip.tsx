@@ -29,9 +29,7 @@ export function ButtonWithTooltip({
         <TooltipTrigger asChild>
           <Button {...props}>{children}</Button>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>{tooltip}</p>
-        </TooltipContent>
+        <TooltipContent>{tooltip}</TooltipContent>
       </Tooltip>
     </TooltipProvider>
   );

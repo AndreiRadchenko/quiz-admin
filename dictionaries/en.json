@@ -77,6 +77,29 @@
     },
     "players": {
       "title": "Players",
+      "filter": { "all": "All", "active": "Active", "passes": "Passes" },
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Input Names",
+          "tooltip": "Input Names"
+        },
+        "resetInfo": {
+          "buttonText": "Reset Info",
+          "tooltip": "Reset all game info"
+        },
+        "defaultNames": {
+          "buttonText": "Default Names",
+          "tooltip": "Set all names to default"
+        },
+        "resetSeats": {
+          "buttonText": "Reset Seat",
+          "tooltip": "Rearrange seats numbers with players id in ascend order"
+        },
+        "endgameMap": {
+          "buttonText": "Endgame Map",
+          "tooltip": "Open endgame map form"
+        }
+      },
       "table": {
         "header": {
           "edit": "",

@@ -1,5 +1,5 @@
 import PlayersTable from './_components/PlayersTable';
-
+import { ButtonsSection } from './_components/ButtonsSection';
 import { getDictionary } from '../../../../../dictionaries/dictionaries';
 
 type Props = {
@@ -17,7 +17,11 @@ export default async function QuizPlayers({
 
   return (
     <>
-      <h1 className="mb-12">Players</h1>
+      <h1 className="mb-6">Players</h1>
+      <ButtonsSection
+        filter={players.filter}
+        buttons={players.buttons}
+      />
       <PlayersTable header={players.table.header} />
     </>
   );
