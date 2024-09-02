@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "name": "default player 1",
+    "active": true,
+    "usedPass": false,
+    "boughtOut": false,
+    "camera": "Cam 7,8"
+  },
+  {
+    "id": "2",
+    "name": "default player 2",
+    "active": true,
+    "usedPass": false,
+    "boughtOut": false,
+    "camera": "Cam 7,8"
+  },
+  {
+    "id": "3",
+    "name": "default player 3",
+    "active": true,
+    "usedPass": false,
+    "boughtOut": false,
+    "camera": "Cam 3,4"
+  },
+  {
+    "id": "4",
+    "name": "default player 4",
+    "active": true,
+    "usedPass": false,
+    "boughtOut": false,
+    "camera": "Cam 3,4"
+  },
+  {
+    "id": "5",
+    "name": "default player 5",
+    "active": true,
+    "usedPass": false,
+    "boughtOut": false,
+    "camera": "Cam 3,4"
+  }
+]

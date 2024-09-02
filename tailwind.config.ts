@@ -37,17 +37,21 @@ const config = {
           active: 'var(--secondary-active)',
           foreground: 'var(--secondary-foreground)',
         },
+        accent: {
+          DEFAULT: 'var(--accent)',
+          hover: 'var(--accent-hover)',
+          active: 'var(--accent-active)',
+          foreground: 'var(--accent-foreground)',
+        },
         destructive: {
           DEFAULT: 'var(--destructive)',
+          hover: 'var(--destructive-hover)',
+          active: 'var(--destructive-active)',
           foreground: 'var(--destructive-foreground)',
         },
         muted: {
           DEFAULT: 'var(--muted)',
           foreground: 'var(--muted-foreground)',
-        },
-        accent: {
-          DEFAULT: 'var(--accent)',
-          foreground: 'var(--accent-foreground)',
         },
         popover: {
           DEFAULT: 'var(--popover)',
