@@ -116,10 +116,37 @@
       }
     },
     "questions": {
-      "title": "Questions"
+      "title": "Questions",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Import Bindings",
+          "tooltip": "Import Bindings"
+        },
+        "exportBindings": {
+          "buttonText": "Export Bindings",
+          "tooltip": "Export Bindings"
+        },
+        "exportExpanded": {
+          "buttonText": "Export Expanded",
+          "tooltip": "Export Expanded"
+        },
+        "unbindAll": {
+          "buttonText": "Unbind All",
+          "tooltip": "Unbind All"
+        }
+      },
+      "table": {
+        "header": {
+          "edit": "",
+          "index": "Index",
+          "legend": "Legend",
+          "type": "Type",
+          "bindQuestion": "Bind Question"
+        }
+      }
     },
     "questionData": {
-      "title": "Question Data"
+      "title": "Question Definitions"
     },
     "answers": {
       "title": "Answers"

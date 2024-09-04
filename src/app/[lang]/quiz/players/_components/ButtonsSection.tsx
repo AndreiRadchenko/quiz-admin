@@ -8,7 +8,7 @@ import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { cn } from '@/lib/utils';
 
 type ButtonsProps = {
-  filter: {
+  filter?: {
     all: FilterValue;
     active: FilterValue;
     passes: FilterValue;
@@ -28,7 +28,9 @@ export function ButtonsSection({ filter, buttons }: ButtonsProps) {
   const { importFileBtn } = buttons;
   return (
     <section className="flex justify-between my-6">
-      <FilterRadioGroup filter={filter} setFilterValue={setFilterValue} />
+      {filter && (
+        <FilterRadioGroup filter={filter} setFilterValue={setFilterValue} />
+      )}
 
       <>
         <div

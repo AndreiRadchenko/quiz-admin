@@ -1,0 +1,104 @@
+[
+  {
+    "idx": "-3",
+    "legend": "Demo 1",
+    "bindType": "MULTIPLE",
+    "bindQuestion": "AV001"
+  },
+  {
+    "idx": "-2",
+    "legend": "Demo 2",
+    "bindType": "TEXT",
+    "bindQuestion": "AV002"
+  },
+  {
+    "idx": "-1",
+    "legend": "Demo 2",
+    "bindType": "TEXT_NUMBER",
+    "bindQuestion": "AV003"
+  },
+  {
+    "idx": "1",
+    "legend": "90%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "2",
+    "legend": "80%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "3",
+    "legend": "70%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "4",
+    "legend": "60%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "5",
+    "legend": "50%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "6",
+    "legend": "40%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "7",
+    "legend": "35%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "8",
+    "legend": "30%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "9",
+    "legend": "25%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "10",
+    "legend": "20%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "11",
+    "legend": "15%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "12",
+    "legend": "10%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "13",
+    "legend": "5%",
+    "bindType": "",
+    "bindQuestion": ""
+  },
+  {
+    "idx": "14",
+    "legend": "1%",
+    "bindType": "",
+    "bindQuestion": ""
+  }
+]

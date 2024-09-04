@@ -17,7 +17,6 @@ export default async function QuizDashboard({
       dashboard: { buttons = {}, inputs = {}, importFiles = {} },
     },
   } = await getDictionary(lang);
-  const { gameFlow, buyout, endGameBuyout, showButtons, commCheck } = buttons;
 
   return (
     <>
