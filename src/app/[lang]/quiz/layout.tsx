@@ -37,7 +37,7 @@ export default async function QuizLayout({
         </NavLink>
         <NavLink href={`/${lang}/quiz/answers`}> {nav.answers} </NavLink>
       </Nav>
-      <div className="bg-background container pt-6 h-fit mt-16">{children}</div>
+      <div className="bg-background container py-6 h-fit mt-16">{children}</div>
     </>
   );
 }

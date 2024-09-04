@@ -7,15 +7,17 @@ import {
   TableBody,
 } from '@/components/ui/table';
 
-import PlayersTableRow from './PlayersTableRow';
-import players from '@/moc/players.json' assert { type: 'json' };
-
-type TableProps = {
+type TableProps<T extends { index?: number }> = {
+  QuizTableRow: React.ComponentType<T>;
   header: { [key: string]: string };
-  data?: {};
+  rowsData: Omit<T, 'index'>[];
 };
 
-function PlayersTable({ header, data }: TableProps) {
+function QuizTable<T extends { index?: number }>({
+  header,
+  rowsData,
+  QuizTableRow,
+}: TableProps<T>) {
   return (
     <Table>
       <TableHeader className="bg-secondary-hover">
@@ -28,12 +30,12 @@ function PlayersTable({ header, data }: TableProps) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {players.map((player, idx) => (
-          <PlayersTableRow key={idx} {...player} idx={idx} />
+        {rowsData.map((row, index) => (
+          <QuizTableRow key={index} {...(row as T)} index={index} />
         ))}
       </TableBody>
     </Table>
   );
 }
 
-export default PlayersTable;
+export default QuizTable;

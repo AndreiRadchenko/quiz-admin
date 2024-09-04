@@ -2,41 +2,44 @@ import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-import { Button } from '@/components/ui/button';
 import { InputWithButton } from '@/components/ui/inputWithButton';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdCreate, IoMdFlash, IoMdVolumeOff } from 'react-icons/io';
 
-type playerProps = {
+export type PlayerProps = {
   id: string;
   name: string;
   active: boolean;
   usedPass: boolean;
   boughtOut: boolean;
   camera: string;
-  idx: number;
+  index: number;
 };
 
+// type PlayerProps = {
+//   [key: string]: string | number | boolean;
+// };
+
 function PlayersTableRow({
-  idx,
+  index,
   id,
   name,
   active,
   usedPass,
   boughtOut,
   camera,
-}: playerProps) {
+}: PlayerProps) {
   return (
     <TableRow
       key={id}
-      className={cn('', idx % 2 === 0 ? 'bg-muted' : 'bg-background')}
+      className={cn('', index % 2 === 0 ? 'bg-muted' : 'bg-background')}
     >
       <TableCell id="edit-button">
         <ButtonWithTooltip size={'sm'} tooltip="edit player data">
           <IoMdCreate />
         </ButtonWithTooltip>
       </TableCell>
-      <TableCell id="seat">{idx + 1}</TableCell>
+      <TableCell id="seat">{index + 1}</TableCell>
       <TableCell id="id">{id}</TableCell>
       <TableCell id="name">{name}</TableCell>
       <TableCell id="active">{active ? 'true' : 'false'}</TableCell>
