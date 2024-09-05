@@ -1,5 +1,5 @@
 import { HTMLInputTypeAttribute } from 'react';
-import { Button } from './button';
+import { Button, ButtonProps } from './button';
 import { Input } from './input';
 import { Label } from './label';
 
@@ -9,20 +9,23 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from './tooltip';
+import { ButtonWithTooltip, IButtonWithTooltip } from './buttonWithTooltip';
 import { IoMdInformationCircleOutline } from 'react-icons/io';
 
 import { cn } from '@/lib/utils';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  btnName: string;
+  // ButtonWithTooltip: React.ComponentType<IButtonWithTooltip>;
+  // btnName: string;
   tooltip?: string;
   label?: string;
   btnSize?: 'default' | 'sm' | 'lg' | 'icon' | null | undefined;
 }
 
 export function InputWithButton({
-  btnName,
+  // btnName,
+  children,
   tooltip = '',
   label,
   className,
@@ -39,9 +42,10 @@ export function InputWithButton({
       <div className="flex align-top gap-0 w-fit">
         <div className="flex items-center space-x-2">
           <Input className={cn('', className)} id="input" {...props} />
-          <Button type="button" size={btnSize}>
+          {/* <Button type="button" size={btnSize}>
             {btnName}
-          </Button>
+          </Button> */}
+          {children}
         </div>
         {tooltip && (
           <TooltipProvider>

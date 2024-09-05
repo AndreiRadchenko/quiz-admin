@@ -1,7 +1,4 @@
-import { HTMLInputTypeAttribute } from 'react';
 import { Button, ButtonProps } from './button';
-import { Input } from './input';
-import { Label } from './label';
 
 import {
   Tooltip,
@@ -10,26 +7,22 @@ import {
   TooltipTrigger,
 } from './tooltip';
 
-import { cn } from '@/lib/utils';
-
-export interface InputProps extends ButtonProps {
-  btnName?: string;
+export interface IButtonWithTooltip extends ButtonProps {
   tooltip?: string;
 }
 
 export function ButtonWithTooltip({
   children,
   tooltip = '',
-  className,
   ...props
-}: InputProps) {
+}: IButtonWithTooltip) {
   return (
     <TooltipProvider delayDuration={1500}>
       <Tooltip>
         <TooltipTrigger asChild>
           <Button {...props}>{children}</Button>
         </TooltipTrigger>
-        <TooltipContent>{tooltip}</TooltipContent>
+        {tooltip && <TooltipContent>{tooltip}</TooltipContent>}
       </Tooltip>
     </TooltipProvider>
   );

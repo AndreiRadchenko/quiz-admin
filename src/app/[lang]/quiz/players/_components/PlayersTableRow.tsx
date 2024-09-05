@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { InputWithButton } from '@/components/ui/inputWithButton';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdCreate, IoMdFlash, IoMdVolumeOff } from 'react-icons/io';
+import { Input } from '@/components/ui/input';
 
 export type PlayerProps = {
   id: string;
@@ -15,10 +16,6 @@ export type PlayerProps = {
   camera: string;
   index: number;
 };
-
-// type PlayerProps = {
-//   [key: string]: string | number | boolean;
-// };
 
 function PlayersTableRow({
   index,
@@ -47,11 +44,12 @@ function PlayersTableRow({
       <TableCell id="boughtOut">{boughtOut ? 'true' : 'false'}</TableCell>
       <TableCell id="camera">{camera}</TableCell>
       <TableCell id="swap">
-        <InputWithButton
-          className="w-12 size-9"
-          btnName="Swap"
-          btnSize={'sm'}
-        />
+        <div className="flex flex-row gap-1">
+          <Input className="p-1 w-12 size-9 text-inherit" accept=".csv" />
+          <ButtonWithTooltip size={'sm'} tooltip={'swap players'}>
+            Swap
+          </ButtonWithTooltip>
+        </div>
       </TableCell>
       <TableCell id="commCheck" className="flex gap-2">
         <ButtonWithTooltip size={'sm'} tooltip="controlCommCheckStart">

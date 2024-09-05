@@ -1,5 +1,4 @@
-import QuizTable from '@/components/table/quizTable';
-import { ButtonsSection } from './_components/ButtonsSection';
+import { QuizTable, ButtonsSection } from '@/components/quiz';
 import { getDictionary } from '../../../../../dictionaries/dictionaries';
 
 import PlayersTableRow from './_components/PlayersTableRow';

@@ -13,7 +13,7 @@ type TableProps<T extends { index?: number }> = {
   rowsData: Omit<T, 'index'>[];
 };
 
-function QuizTable<T extends { index?: number }>({
+export function QuizTable<T extends { index?: number }>({
   header,
   rowsData,
   QuizTableRow,

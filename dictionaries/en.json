@@ -59,19 +59,23 @@
       "importFiles": {
         "seatInfo": {
           "label": "Seat info",
-          "buttonText": "Import seat info"
+          "buttonText": "Import seat info",
+          "tooltip": "Import seat info"
         },
         "playerData": {
           "label": "Player data",
-          "buttonText": "Import player data"
+          "buttonText": "Import player data",
+          "tooltip": "Import player data"
         },
         "externalQuestionData": {
           "label": "External Question Data",
-          "buttonText": "Import questions"
+          "buttonText": "Import questions",
+          "tooltip": "Import questions"
         },
         "externalPlayerInfo": {
           "label": "External Player Info",
-          "buttonText": "Import player data"
+          "buttonText": "Import player data",
+          "tooltip": "Import player data"
         }
       }
     },
@@ -80,8 +84,8 @@
       "filter": { "all": "All", "active": "Active", "passes": "Passes" },
       "buttons": {
         "importFileBtn": {
-          "buttonText": "Input Names",
-          "tooltip": "Input Names"
+          "buttonText": "Import Names",
+          "tooltip": "Import Names"
         },
         "resetInfo": {
           "buttonText": "Reset Info",
