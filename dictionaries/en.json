@@ -9,7 +9,7 @@
     "nav": {
       "players": "Players",
       "questions": "Questions",
-      "questionData": "Question Data",
+      "questionDefinitions": "Question Definitions",
       "answers": "Answers"
     },
     "dashboard": {
@@ -145,15 +145,65 @@
           "index": "Index",
           "legend": "Legend",
           "type": "Type",
-          "bindQuestion": "Bind Question"
+          "bindQuestion": "Binded Question"
         }
       }
     },
-    "questionData": {
-      "title": "Question Definitions"
+    "questionDefinitions": {
+      "title": "Question Definitions",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Import Questions",
+          "tooltip": "Import Questions"
+        },
+        "addNew": {
+          "buttonText": "Add New",
+          "tooltip": "Add New Question"
+        },
+        "exportCSV": {
+          "buttonText": "Export CSV",
+          "tooltip": "Export to CSV file"
+        },
+        "deleteAll": {
+          "buttonText": "Delete All",
+          "tooltip": "Delete All"
+        }
+      },
+      "table": {
+        "header": {
+          "edit": "",
+          "label": "Label",
+          "type": "Type",
+          "description": "Description"
+        }
+      }
     },
     "answers": {
-      "title": "Answers"
+      "title": "Answers",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Import Answers",
+          "tooltip": "Import Answers"
+        },
+        "exportAnswers": {
+          "buttonText": "Export Answers",
+          "tooltip": "Export Answers"
+        },
+        "refinalize": {
+          "buttonText": "Re-finalize",
+          "tooltip": ""
+        }
+      },
+      "table": {
+        "header": {
+          "id": "#",
+          "name": "Name",
+          "answer": "Answer",
+          "correct": "Correct",
+          "pass": "Pass",
+          "auto": "Auo"
+        }
+      }
     }
   }
 }

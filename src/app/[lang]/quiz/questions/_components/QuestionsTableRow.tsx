@@ -3,7 +3,8 @@ import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
-import { IoMdCreate, IoMdEye, IoMdClose } from 'react-icons/io';
+import { IoMdLink, IoMdEye, IoMdClose } from 'react-icons/io';
+import { IoUnlinkOutline } from 'react-icons/io5';
 
 type QuestionProps = {
   idx: string;
@@ -36,9 +37,9 @@ function QuestionsTableRow({
         <ButtonWithTooltip
           size={'sm'}
           variant={'outline'}
-          tooltip="Edit question"
+          tooltip="Bind question"
         >
-          <IoMdCreate />
+          <IoMdLink />
         </ButtonWithTooltip>
         <ButtonWithTooltip
           size={'sm'}

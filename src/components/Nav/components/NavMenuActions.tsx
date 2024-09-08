@@ -1,7 +1,7 @@
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { usePreferencesContext } from '@/context/preferences-provider';
 
-export function ThemeToggleDropdownItem() {
+export function ThemeToggleDropdownItem({ menu }: any) {
   const { userPreferences, setUserPreferences } = usePreferencesContext();
 
   return (
@@ -13,7 +13,7 @@ export function ThemeToggleDropdownItem() {
         }));
       }}
     >
-      {userPreferences.mode === 'dark' ? 'Light Theme' : 'Dark Theme'}
+      {userPreferences.mode === 'dark' ? menu.lightTheme : menu.darkTheme}
     </DropdownMenuItem>
   );
 }

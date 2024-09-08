@@ -8,24 +8,206 @@
   "quiz": {
     "nav": {
       "players": "Гравці",
-      "questions": "Запитання",
-      "questionData": "Данні запитань",
+      "questions": "Питання",
+      "questionDefinitions": "Визначення питань",
       "answers": "Відповіді"
     },
     "dashboard": {
-      "title": "1% Клуб Панель управління"
+      "title": "Інформаційна панель клубу 1%.",
+      "buttons": {
+        "gameFlow": {
+          "resetGame": "Скинути гру",
+          "idle": "Бездіяльність",
+          "refreshStatus": "Оновити статус",
+          "rebuildExternal": "Перебудувати зовнішню"
+        },
+        "buyout": {
+          "startBuyout": "Розпочати викуп",
+          "stopBuyout": "Зупинити викуп"
+        },
+        "endGameBuyout": {
+          "showEndGameBuyout": "Показати підказку викупу в кінцівці",
+          "stopEndgameBuyout": "Зупинити викуп в ендшпілі",
+          "reconcileEndgameBuyout": "Узгодити викуп в ендшпілі"
+        },
+        "showButtons": {
+          "showPasses": "Показати перепустки",
+          "showActive": "Показати активний",
+          "showEndgameActive": "Показати активний фінал"
+        },
+        "commCheck": {
+          "commCheckStart": "Початок перевірки зв'язку",
+          "commCheckStop": "Зупинка перевірки зв'язку",
+          "commCheckSilent": "Перевірка зв'язку без звуку",
+          "commCheckSilentActive": "Перевірка зв'язку Без звуку Активна"
+        }
+      },
+      "inputs": {
+        "forceCurrentQuestion": {
+          "buttonText": "Примусове поточне запитання",
+          "tooltip": "Пояснення введення, Пояснення введення"
+        },
+        "setShowNumber": {
+          "buttonText": "Встановіть номер шоу",
+          "tooltip": "Пояснення введення, Пояснення введення"
+        },
+        "overwritePrizePot": {
+          "buttonText": "Перезаписати призовий банк",
+          "tooltip": "Вхідне пояснення. "
+        }
+      },
+      "importFiles": {
+        "seatInfo": {
+          "label": "Інформація про місце",
+          "buttonText": "Імпорт інформації про місце",
+          "tooltip": "Імпорт інформації про місце"
+        },
+        "playerData": {
+          "label": "Дані гравця",
+          "buttonText": "Імпорт даних гравця",
+          "tooltip": "Імпорт даних гравця"
+        },
+        "externalQuestionData": {
+          "label": "Зовнішні дані питання",
+          "buttonText": "Імпортні запитання",
+          "tooltip": "Імпортні запитання"
+        },
+        "externalPlayerInfo": {
+          "label": "Інформація про зовнішнього гравця",
+          "buttonText": "Імпорт даних гравця",
+          "tooltip": "Імпорт даних гравця"
+        }
+      }
     },
     "players": {
-      "title": "Гравці"
+      "title": "Гравці",
+      "filter": {
+        "all": "все",
+        "active": "Активний",
+        "passes": "Паси"
+      },
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Імпорт імен",
+          "tooltip": "Імпорт імен"
+        },
+        "resetInfo": {
+          "buttonText": "Скинути інформацію",
+          "tooltip": "Скинути всю інформацію про гру"
+        },
+        "defaultNames": {
+          "buttonText": "Імена за замовчуванням",
+          "tooltip": "Установити всі імена за замовчуванням"
+        },
+        "resetSeats": {
+          "buttonText": "Скинути сидіння",
+          "tooltip": "Переставте номери місць з ідентифікаторами гравців у порядку зростання"
+        },
+        "endgameMap": {
+          "buttonText": "Карта фіналу",
+          "tooltip": "Відкрити форму карти ендшпілю"
+        }
+      },
+      "table": {
+        "header": {
+          "edit": "",
+          "seat": "місце №",
+          "id": "ID",
+          "name": "Ім'я",
+          "active": "Активний",
+          "usedPass": "Паспорт б/в",
+          "boughtOut": "Викуплено",
+          "camera": "Камера",
+          "swapWith": "Поміняти з",
+          "commCheck": "Перевірка зв'язку"
+        }
+      }
     },
     "questions": {
-      "title": "Запитання"
+      "title": "Питання",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Імпорт прив'язок",
+          "tooltip": "Імпорт прив'язок"
+        },
+        "exportBindings": {
+          "buttonText": "Експорт прив'язок",
+          "tooltip": "Експорт прив'язок"
+        },
+        "exportExpanded": {
+          "buttonText": "Експорт розширено",
+          "tooltip": "Експорт розширено"
+        },
+        "unbindAll": {
+          "buttonText": "Розв’язати все",
+          "tooltip": "Розв’язати все"
+        }
+      },
+      "table": {
+        "header": {
+          "edit": "",
+          "index": "Індекс",
+          "legend": "Легенда",
+          "type": "Тип",
+          "bindQuestion": "Зв'язане питання"
+        }
+      }
     },
-    "questionData": {
-      "title": "Данні запитань"
+    "questionDefinitions": {
+      "title": "Визначення питань",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Імпорт запитань",
+          "tooltip": "Імпорт запитань"
+        },
+        "addNew": {
+          "buttonText": "Додати новий",
+          "tooltip": "Додати нове запитання"
+        },
+        "exportCSV": {
+          "buttonText": "Експорт CSV",
+          "tooltip": "Експорт у файл CSV"
+        },
+        "deleteAll": {
+          "buttonText": "Видалити все",
+          "tooltip": "Видалити все"
+        }
+      },
+      "table": {
+        "header": {
+          "edit": "",
+          "label": "Мітка",
+          "type": "Тип",
+          "description": "опис"
+        }
+      }
     },
     "answers": {
-      "title": "Відповіді"
+      "title": "Відповіді",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Імпортувати відповіді",
+          "tooltip": "Імпортувати відповіді"
+        },
+        "exportAnswers": {
+          "buttonText": "Експортувати відповіді",
+          "tooltip": "Експортувати відповіді"
+        },
+        "refinalize": {
+          "buttonText": "Повторно завершити",
+          "tooltip": ""
+        }
+      },
+      "table": {
+        "header": {
+          "id": "#",
+          "name": "Ім'я",
+          "answer": "Відповідь",
+          "correct": "Правильно",
+          "pass": "Пас",
+          "auto": "Auo"
+        }
+      }
     }
   }
 }

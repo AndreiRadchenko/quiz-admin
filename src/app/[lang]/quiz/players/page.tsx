@@ -19,8 +19,12 @@ export default async function QuizPlayers({
 
   return (
     <>
-      <h1 className="mb-6">Players</h1>
-      <ButtonsSection filter={players.filter} buttons={players.buttons} />
+      <h1 className="mb-6">{players.title}</h1>
+      <ButtonsSection
+        filter={players.filter}
+        buttons={players.buttons}
+        variants={['default', 'accent', 'default', 'destructive']}
+      />
       <QuizTable
         QuizTableRow={PlayersTableRow}
         header={players.table.header}

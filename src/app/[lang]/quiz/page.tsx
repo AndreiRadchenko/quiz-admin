@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { InputWithButton } from '@/components/ui/inputWithButton';
 
 import { getDictionary } from '../../../../dictionaries/dictionaries';
 import { Input } from '@/components/ui/input';

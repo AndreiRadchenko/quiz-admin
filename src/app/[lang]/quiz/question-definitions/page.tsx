@@ -2,31 +2,31 @@ import { QuizTable, ButtonsSection } from '@/components/quiz';
 import { getDictionary } from '../../../../../dictionaries/dictionaries';
 import QuestionsTableRow from './_components/QuestionsTableRow';
 
-import questionsData from './_template/questionTableTemplate.json' assert { type: 'json' };
+import questionsData from './_template/tableTemplate.json' assert { type: 'json' };
 
 type Props = {
   children: React.ReactNode;
   params: { lang: string };
 };
 
-export default async function QuizQuestions({
+export default async function QuizQuestionsData({
   children,
   params: { lang },
 }: Readonly<Props>) {
   const {
-    quiz: { questions },
+    quiz: { questionDefinitions },
   } = await getDictionary(lang);
 
   return (
     <>
-      <h1 className="mb-6">{questions.title}</h1>
+      <h1 className="mb-6">{questionDefinitions.title}</h1>
       <ButtonsSection
-        buttons={questions.buttons}
-        variants={['default', 'default', 'default', 'accent']}
+        buttons={questionDefinitions.buttons}
+        variants={['default', 'default', 'default', 'destructive']}
       />
       <QuizTable
         QuizTableRow={QuestionsTableRow}
-        header={questions.table.header}
+        header={questionDefinitions.table.header}
         rowsData={questionsData}
       />
     </>

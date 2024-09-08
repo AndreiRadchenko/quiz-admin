@@ -6,7 +6,12 @@ import { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import NavMenu from './components/NavMenu';
 
-export function Nav({ children }: { children: ReactNode }) {
+type Props = {
+  children: React.ReactNode;
+  menu: any;
+};
+
+export function Nav({ children, menu }: Props) {
   return (
     <nav
       id="navbar"
@@ -14,7 +19,7 @@ export function Nav({ children }: { children: ReactNode }) {
     >
       <div className="container flex justify-between">
         <div className="flex justify-start">{children}</div>
-        <NavMenu />
+        <NavMenu menu={menu} />
       </div>
     </nav>
   );

@@ -18,7 +18,9 @@ export default async function QuizLayout({
 }: Readonly<Props>) {
   const {
     quiz: { nav },
+    menu,
   } = await getDictionary(lang);
+
   const navHeight =
     global?.window !== undefined
       ? window?.document?.getElementById('navBar')?.clientHeight
@@ -26,14 +28,14 @@ export default async function QuizLayout({
 
   return (
     <>
-      <Nav>
+      <Nav menu={menu}>
         <NavLink href={`/${lang}/quiz`}>
           <IoMdHome size={24} />
         </NavLink>
         <NavLink href={`/${lang}/quiz/players`}>{nav.players}</NavLink>
         <NavLink href={`/${lang}/quiz/questions`}>{nav.questions}</NavLink>
-        <NavLink href={`/${lang}/quiz/question-data`}>
-          {nav.questionData}
+        <NavLink href={`/${lang}/quiz/question-definitions`}>
+          {nav.questionDefinitions}
         </NavLink>
         <NavLink href={`/${lang}/quiz/answers`}> {nav.answers} </NavLink>
       </Nav>

@@ -2,7 +2,6 @@ import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
-import { InputWithButton } from '@/components/ui/inputWithButton';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdCreate, IoMdFlash, IoMdVolumeOff } from 'react-icons/io';
 import { Input } from '@/components/ui/input';

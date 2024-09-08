@@ -36,6 +36,9 @@ const buttonVariants = cva(
   }
 );
 
+export type ButtonVariantProps = NonNullable<
+  Pick<VariantProps<typeof buttonVariants>, 'variant'>['variant']
+>;
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {

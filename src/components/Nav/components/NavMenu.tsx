@@ -13,7 +13,11 @@ import { IoMdMore, IoMdCheckmark } from 'react-icons/io';
 import { ThemeToggleDropdownItem } from './NavMenuActions';
 import { usePreferencesContext } from '@/context/preferences-provider';
 
-export default function NavMenu() {
+type Props = {
+  menu: any;
+};
+
+export default function NavMenu({ menu }: Props) {
   const { userPreferences, setUserPreferences } = usePreferencesContext();
 
   return (
@@ -38,7 +42,7 @@ export default function NavMenu() {
           }}
           className="flex justify-between"
         >
-          Ukrainian
+          {menu?.langUk}
           {userPreferences.lang === 'uk' && <IoMdCheckmark size={18} />}
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -47,11 +51,11 @@ export default function NavMenu() {
           }}
           className="flex justify-between"
         >
-          English
+          {menu?.langEn}
           {userPreferences.lang === 'en' && <IoMdCheckmark size={18} />}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <ThemeToggleDropdownItem />
+        <ThemeToggleDropdownItem menu={menu} />
       </DropdownMenuContent>
     </DropdownMenu>
   );
