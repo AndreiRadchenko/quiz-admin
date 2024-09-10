@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
@@ -31,8 +32,11 @@ function PlayersTableRow({
       className={cn('', index % 2 === 0 ? 'bg-muted' : 'bg-background')}
     >
       <TableCell id="edit-button">
-        <ButtonWithTooltip size={'sm'} tooltip="edit player data">
-          <IoMdCreate />
+        <ButtonWithTooltip size={'sm'} tooltip="edit player data" asChild>
+          {/* <Link href={`/${lang}/quiz/players`} /> */}
+          <Link href={`/quiz/players/edit/${id}`}>
+            <IoMdCreate />
+          </Link>
         </ButtonWithTooltip>
       </TableCell>
       <TableCell id="seat">{index + 1}</TableCell>

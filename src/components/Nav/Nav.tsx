@@ -5,10 +5,11 @@ import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import NavMenu from './components/NavMenu';
+import {  type MenuType } from '../../../dictionaries/dictionaries';
 
 type Props = {
   children: React.ReactNode;
-  menu: any;
+  menu: MenuType;
 };
 
 export function Nav({ children, menu }: Props) {

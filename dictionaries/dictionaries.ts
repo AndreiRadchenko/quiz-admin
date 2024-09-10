@@ -1,5 +1,9 @@
 import 'server-only';
-import type { Locale } from '../i18n-config';
+
+import dict from './en.json';
+
+const { menu } = dict;
+export type MenuType = typeof menu;
 
 // We enumerate all dictionaries here for better linting and typescript support
 // We also get the default import for cleaner types

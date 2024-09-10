@@ -1,7 +1,10 @@
 import { Nav, NavLink } from '@/components/Nav/Nav';
 import { IoMdHome } from 'react-icons/io';
 
-import { getDictionary } from '../../../../dictionaries/dictionaries';
+import {
+  getDictionary,
+  type MenuType,
+} from '../../../../dictionaries/dictionaries';
 
 import { cn } from '@/lib/utils';
 

@@ -12,9 +12,10 @@ import Link from 'next/link';
 import { IoMdMore, IoMdCheckmark } from 'react-icons/io';
 import { ThemeToggleDropdownItem } from './NavMenuActions';
 import { usePreferencesContext } from '@/context/preferences-provider';
+import {  type MenuType } from '../../../../dictionaries/dictionaries';
 
 type Props = {
-  menu: any;
+  menu: MenuType;
 };
 
 export default function NavMenu({ menu }: Props) {

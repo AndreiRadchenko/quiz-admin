@@ -1,0 +1,42 @@
+[
+  {
+    "id": "AV001",
+    "name": "Default user 1",
+    "answer": "A",
+    "correct": false,
+    "pass": true,
+    "auto": false
+  },
+  {
+    "id": "AV001",
+    "name": "Default user 1",
+    "answer": "A",
+    "correct": false,
+    "pass": true,
+    "auto": false
+  },
+  {
+    "id": "AV001",
+    "name": "Default user 1",
+    "answer": "A",
+    "correct": false,
+    "pass": true,
+    "auto": false
+  },
+  {
+    "id": "AV001",
+    "name": "Default user 1",
+    "answer": "A",
+    "correct": false,
+    "pass": true,
+    "auto": false
+  },
+  {
+    "id": "AV001",
+    "name": "Default user 1",
+    "answer": "A",
+    "correct": false,
+    "pass": true,
+    "auto": false
+  }
+]

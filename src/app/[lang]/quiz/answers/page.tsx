@@ -1,8 +1,8 @@
 import { QuizTable, ButtonsSection } from '@/components/quiz';
 import { getDictionary } from '../../../../../dictionaries/dictionaries';
-// import QuestionsTableRow from './_components/QuestionsTableRow';
+import AnswersTableRow from './_components/AnswersTableRow';
 
-// import questionsData from './_template/tableTemplate.json' assert { type: 'json' };
+import answersData from './_template/tableTemplate.json' assert { type: 'json' };
 
 type Props = {
   children: React.ReactNode;
@@ -24,11 +24,11 @@ export default async function QuizAnswers({
         buttons={answers.buttons}
         variants={['default', 'default', 'destructive']}
       />
-      {/* <QuizTable
-        QuizTableRow={QuestionsTableRow}
-        header={questionDefinitions.table.header}
-        rowsData={questionsData}
-      /> */}
+      <QuizTable
+        QuizTableRow={AnswersTableRow}
+        header={answers.table.header}
+        rowsData={answersData}
+      />
     </>
   );
 }
