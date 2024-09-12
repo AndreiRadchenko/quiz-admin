@@ -270,3 +270,13 @@ without lang cookie, it takes lang value from locales in header (browser
 settings). Then middleware redirects request accordingly to lang slug and write
 it to the cookie. On the client side `PreferencesProvider` is responsible for
 handling languages changes from menu and store it to cookie for future use.
+
+### Create modal form in Next.js
+
+1. Create zod schema for the form `src/schemas/Player.ts`
+2. Add inputs label to localization file `dictionaries/en.json`
+3. Create PlayerForm (`src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`)
+   component with `react-hook-form` and Form from `shadcn/ui`
+4. Implement services for fetching player data `src/services/players.ts`
+5. Implement action for save player data `src/actions/player.ts`
+6.

@@ -1,5 +1,8 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +29,8 @@ function PlayersTableRow({
   boughtOut,
   camera,
 }: PlayerProps) {
+  const pathname = usePathname();
+
   return (
     <TableRow
       key={id}
@@ -33,8 +38,7 @@ function PlayersTableRow({
     >
       <TableCell id="edit-button">
         <ButtonWithTooltip size={'sm'} tooltip="edit player data" asChild>
-          {/* <Link href={`/${lang}/quiz/players`} /> */}
-          <Link href={`/quiz/players/edit/${id}`}>
+          <Link href={pathname + `/edit/${id}?seat=${index + 1}`}>
             <IoMdCreate />
           </Link>
         </ButtonWithTooltip>

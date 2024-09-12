@@ -18,3 +18,13 @@ const dictionaries: iDictionary = {
 
 export const getDictionary = async (locale: string) =>
   dictionaries[locale]?.() ?? dictionaries.en();
+
+export function replacePlaceholders(
+  template: string,
+  values: { [key: string]: string | number }
+) {
+  return template.replace(
+    /{{(.*?)}}/g,
+    (_, key) => values[key]?.toString() || ''
+  );
+}

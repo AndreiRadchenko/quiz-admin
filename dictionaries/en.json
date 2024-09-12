@@ -117,6 +117,10 @@
           "swapWith": "Swap With",
           "commCheck": "Comm Check"
         }
+      },
+      "playerForm": {
+        "title": "Edit Player ID {{id}} / Seat # {{seat}}",
+        "description": "Edit player data"
       }
     },
     "questions": {
