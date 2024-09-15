@@ -120,7 +120,28 @@
       },
       "playerForm": {
         "title": "Edit Player ID {{id}} / Seat # {{seat}}",
-        "description": "Edit player data"
+        "description": "Edit player data",
+        "labels": {
+          "name": "Name",
+          "tier": "Tier",
+          "notes": "Notes",
+          "occupation": "Occupation",
+          "prizeSpend": "Prize spend",
+          "relations": "Relations",
+          "externalID": "External ID",
+          "imagePath": "Image path"
+        },
+        "checkBoxes": {
+          "active": "Active",
+          "usedPass": "Used pass",
+          "boughtOut": "Bought out",
+          "boughtOutEndGame": "Bought out (Endgame)"
+        },
+        "buttons": {
+          "save": "Save changes",
+          "cancel": "Cancel"
+        },
+        "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
       }
     },
     "questions": {
@@ -205,7 +226,7 @@
           "answer": "Answer",
           "correct": "Correct",
           "pass": "Pass",
-          "auto": "Auo"
+          "auto": "Auto"
         }
       }
     }

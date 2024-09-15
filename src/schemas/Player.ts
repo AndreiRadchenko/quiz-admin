@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const PlayerSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   name: z.string().min(2, { message: 'Must be 2 or more characters long' }),
   tier: z.string().optional(),
   notes: z.string().optional(),

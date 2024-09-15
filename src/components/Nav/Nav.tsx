@@ -1,26 +1,36 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import NavMenu from './components/NavMenu';
-import {  type MenuType } from '../../../dictionaries/dictionaries';
+import { type MenuType } from '../../../dictionaries/dictionaries';
+import logo from '../../../public/1percentclub.png';
 
-type Props = {
+interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   menu: MenuType;
-};
+}
 
-export function Nav({ children, menu }: Props) {
+export function Nav({ children, menu, className }: Props) {
   return (
     <nav
       id="navbar"
       className="bg-secondary text-secondary-foreground fixed top-0 left-0 z-10 w-screen"
     >
-      <div className="container flex justify-between">
+      <div className="container flex flex-row justify-start items-center gap-16">
+        <Image
+          className={'py-0'}
+          src={logo}
+          alt={'logo'}
+          width={48}
+          height={24}
+          priority
+        />
         <div className="flex justify-start">{children}</div>
-        <NavMenu menu={menu} />
+        <NavMenu menu={menu} className="pt-1 flex-grow text-right" />
       </div>
     </nav>
   );

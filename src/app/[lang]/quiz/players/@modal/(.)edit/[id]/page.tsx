@@ -1,6 +1,7 @@
 import React from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+
 import { Modal } from '@/components/modal/modal';
+import PlayerForm from '../../../edit/[id]/PlayerForm';
 import {
   getDictionary,
   replacePlaceholders,
@@ -25,14 +26,18 @@ export default async function PlayerEdit({
   } = await getDictionary(lang);
 
   const formTitle = replacePlaceholders(playerForm.title, { id, seat });
-  const formDescription = playerForm.description;
 
   return (
-    <Modal title={formTitle}>
-      <h1>
-        Modal window for edit player with id = {id}, seat = {seat}
-      </h1>
-      ;
+    <Modal
+      title={formTitle}
+      alertConfirmationMessage={playerForm.alertConfirmationMessage}
+    >
+      <PlayerForm
+        id={Number(id)}
+        labels={playerForm.labels}
+        checkBoxes={playerForm.checkBoxes}
+        buttons={playerForm.buttons}
+      />
     </Modal>
   );
 }

@@ -129,9 +129,7 @@ export default function RootLayout({
 7. Add `ThemeToggleDropdownItem` to the `NavMenu` in
    `src/components/Nav/components/NavMenu.tsx`
 
----
-
-### Next.js internationalization
+## Next.js internationalization
 
 [Next.js internationalization docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
 |
@@ -191,7 +189,7 @@ export default function RootLayout({
   }
   ```
 
-### Next.js cookies
+## Next.js cookies
 
 [LogRocket Next.js cookie article](<https://blog.logrocket.com/guide-cookies-next-js/#:~:text=To%20read%20incoming%20request%20cookie,cookies()%3B%20const%20userId%20%3D%20cookieStore.>)
 
@@ -237,7 +235,7 @@ client site.
    }
    ```
 
-#### Theme preference in cookie
+### Theme preference in cookie
 
 [Why you can't set cookies in Server Components](https://www.youtube.com/watch?v=ejO8V5vt-7I)
 
@@ -260,7 +258,7 @@ document.documentElement.classList.add(userPreferences.mode);
 document.cookie = `theme=${userPreferences.mode}; max-age=31536000; path=/`;
 ```
 
-#### Language preference in cookie
+### Language preference in cookie
 
 [Implementing Multiple Middleware in Next.js](https://medium.com/@tanzimhossain2/implementing-multiple-middleware-in-next-js-combining-nextauth-and-internationalization-28d5435d3187)
 
@@ -271,12 +269,136 @@ settings). Then middleware redirects request accordingly to lang slug and write
 it to the cookie. On the client side `PreferencesProvider` is responsible for
 handling languages changes from menu and store it to cookie for future use.
 
-### Create modal form in Next.js
+## Create modal form in Next.js
+
+Video:
+[Modal Form w/ React-Hook-Form](https://www.youtube.com/watch?v=WyL_Jc6_-sY) |
+[Parallel routes](https://www.youtube.com/watch?v=M836RZxReHU) |
+[Modal w/ Parallel & Intersepting routes](https://www.youtube.com/watch?v=Ft2qs7tOW1k)
+
+Next:
+[Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
 
 1. Create zod schema for the form `src/schemas/Player.ts`
 2. Add inputs label to localization file `dictionaries/en.json`
-3. Create PlayerForm (`src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`)
+3. Create PlayerForm `src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`
    component with `react-hook-form` and Form from `shadcn/ui`
-4. Implement services for fetching player data `src/services/players.ts`
-5. Implement action for save player data `src/actions/player.ts`
-6.
+
+   _Code for debag schema:_
+   _`src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`_
+
+   ```js
+   const form =
+     useForm <
+     Player >
+     {
+       mode: 'onBlur',
+       resolver: zodResolver(PlayerSchema),
+       // resolver: async (data, context, options) => {
+       //   // you can debug your validation schema here
+       //   console.log('formData', data);
+       //   console.log(
+       //     'validation result',
+       //     await zodResolver(PlayerSchema)(data, context, options)
+       //   );
+       //   return zodResolver(PlayerSchema)(data, context, options);
+       // },
+       defaultValues: {
+         ...defaultUser,
+         id,
+         name: `Default user ${id}`,
+       },
+     };
+   ```
+
+4. Implement components for modal form:
+
+   - `src/components/modal/modal.tsx`
+   - `src/components/modal/inputWithLabel.tsx`
+   - `src/components/modal/checkboxWithLabel.tsx`
+
+5. Implement services for fetching player data `src/services/players.ts`
+6. Implement action for save player data `src/actions/player.ts`
+7. Create parallel rout with interception for modal form.
+   _`src/app/[lang]/quiz/players/@modal/(.)edit/[id]/page.tsx`_
+
+   _Don't forget to create layout for page with parallel rout:_
+   _`src/app/[lang]/quiz/players/layout.tsx`_
+
+   ```js
+   export default function PlayersLayout({
+   children,
+   modal,
+   }: Readonly<{
+   children: React.ReactNode;
+   modal: React.ReactNode;
+   }>) {
+   return (
+    <>
+      {modal} //<---------
+      {children}
+    </>
+   );
+   }
+   ```
+
+8. Create fallback page for modal form:
+   `src/app/[lang]/quiz/players/edit/[id]/page.tsx`
+9. Add alertConfirmation modal with form dirty state in local storage:
+   `src/components/modal/alertConfirmation.tsx`
+
+   `src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`
+
+   ```js
+   ...
+
+     useEffect(() => {
+    if (Object.keys(form.formState.dirtyFields).length > 0) {
+      localStorage.setItem('playerFormModified', 'true');
+    } else {
+      localStorage.setItem('playerFormModified', 'false');
+    }
+   }, [form.formState]);
+   ```
+
+   `src/components/modal/modal.tsx`
+
+   ```js
+   export function Modal(...) {
+     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
+     const router = useRouter();
+
+     const closeModal = () => {
+       router.back();
+     };
+
+     const handleOpenChange = () => {
+       const isPlayerFormModified = localStorage.getItem('playerFormModified');
+       if (isPlayerFormModified && JSON.parse(isPlayerFormModified)) {
+         setShowExitConfirmation(true);
+       } else {
+         router.back();
+       }
+     };
+
+     return (
+       <Dialog defaultOpen={true} open={true} onOpenChange={handleOpenChange}>
+         <DialogPortal>
+           <DialogOverlay className="bg-gray-500 bg-opacity-10">
+             <DialogContent className="overflow-y-hidden xl:w-2/4 w-3/4">
+               <AlertConfirmation
+                 open={showExitConfirmation}
+                 setOpen={setShowExitConfirmation}
+                 confirmationAction={closeModal}
+                 message={alertConfirmationMessage ?? ''}
+               />
+               <DialogTitle>{title}</DialogTitle>
+               <DialogDescription>{description}</DialogDescription>
+               {children}
+             </DialogContent>
+           </DialogOverlay>
+         </DialogPortal>
+       </Dialog>
+     );
+   }
+   ```

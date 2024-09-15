@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { InputWithLabel } from '@/components/modal/inputWithLabel';
+import { CheckboxWithLabel } from '@/components/modal/checkboxWithLabel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayerSchema, type Player } from '@/schemas/Player';
 import { savePlayer } from '@/actions/player';
@@ -11,11 +12,35 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 type Props = {
-  title: string;
-  player: Player;
+  id: number;
+  labels: {
+    [key: string]: string;
+  };
+  checkBoxes: {
+    [key: string]: string;
+  };
+  buttons: {
+    [key: string]: string;
+  };
 };
 
-export default function PlayerForm({ title, player }: Props) {
+const defaultUser: Player = {
+  id: 0,
+  name: 'default user',
+  tier: '',
+  notes: '',
+  occupation: '',
+  prizeSpend: '',
+  relations: '',
+  externalId: '',
+  imagePath: '',
+  active: true,
+  usedPass: false,
+  boughtOut: false,
+  boughtOutEndGame: false,
+};
+
+export default function PlayerForm({ id, labels, checkBoxes, buttons }: Props) {
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
   const router = useRouter();
@@ -23,13 +48,29 @@ export default function PlayerForm({ title, player }: Props) {
   const form = useForm<Player>({
     mode: 'onBlur',
     resolver: zodResolver(PlayerSchema),
-    defaultValues: { ...player },
+    // resolver: async (data, context, options) => {
+    //   // you can debug your validation schema here
+    //   console.log('formData', data);
+    //   console.log(
+    //     'validation result',
+    //     await zodResolver(PlayerSchema)(data, context, options)
+    //   );
+    //   return zodResolver(PlayerSchema)(data, context, options);
+    // },
+    defaultValues: {
+      ...defaultUser,
+      id,
+      name: `Default user ${id}`,
+    },
   });
 
   useEffect(() => {
-    // boolean value to indicate form has not been saved
-    localStorage.setItem('userFormModified', form.formState.isDirty.toString());
-  }, [form.formState.isDirty]);
+    if (Object.keys(form.formState.dirtyFields).length > 0) {
+      localStorage.setItem('playerFormModified', 'true');
+    } else {
+      localStorage.setItem('playerFormModified', 'false');
+    }
+  }, [form.formState]);
 
   async function onSubmit() {
     setMessage('');
@@ -44,10 +85,11 @@ export default function PlayerForm({ title, player }: Props) {
       setErrors(result.errors);
       return;
     } else {
-      setMessage(result.message);
+      // setMessage(result.message);
       router.refresh(); // could grab a new timestamp from db
       // reset dirty fields
       form.reset(form.getValues());
+      router.back();
     }
   }
 
@@ -56,7 +98,7 @@ export default function PlayerForm({ title, player }: Props) {
       {message ? <h2 className="text-2xl">{message}</h2> : null}
 
       {errors ? (
-        <div className="mb-10 text-red-500">
+        <div className="text-red-500">
           {Object.keys(errors).map(key => (
             <p key={key}>{`${key}: ${errors[key as keyof typeof errors]}`}</p>
           ))}
@@ -69,19 +111,35 @@ export default function PlayerForm({ title, player }: Props) {
             e.preventDefault();
             form.handleSubmit(onSubmit)();
           }}
-          className="flex flex-col gap-4"
+          className="flex flex-col gap-8"
         >
-          <InputWithLabel fieldTitle="First Name" nameInSchema="firstname" />
-          <InputWithLabel fieldTitle="Last Name" nameInSchema="lastname" />
-          <InputWithLabel fieldTitle="Email" nameInSchema="email" />
-          <div className="flex gap-4">
-            <Button>Submit</Button>
+          <div className="flex flex-col gap-0">
+            {Object.keys(labels).map((key, idx) => (
+              <InputWithLabel
+                key={idx}
+                fieldTitle={labels[key]}
+                nameInSchema={key}
+                labelLeft
+              />
+            ))}
+          </div>
+          <div className="flex flex-row gap-6 justify-start">
+            {Object.keys(checkBoxes).map((key, idx) => (
+              <CheckboxWithLabel
+                key={idx}
+                label={checkBoxes[key]}
+                nameInSchema={key}
+              />
+            ))}
+          </div>
+          <div className="flex gap-6 justify-start">
+            <Button type="submit">{buttons.save}</Button>
             <Button
               type="button"
-              variant="destructive"
-              onClick={() => form.reset()}
+              variant="accent"
+              onClick={() => router.back()}
             >
-              Reset
+              {buttons.cancel}
             </Button>
           </div>
         </form>

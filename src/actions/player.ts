@@ -8,11 +8,11 @@ type ReturnType = {
   errors?: Record<string, unknown>;
 };
 
-export async function savePlayer(Player: Player): Promise<ReturnType> {
+export async function savePlayer(player: Player): Promise<ReturnType> {
   // Test errors:
-  Player.name = 'D';
+  // player.name = 'D';
 
-  const parsed = PlayerSchema.safeParse(Player);
+  const parsed = PlayerSchema.safeParse(player);
 
   if (!parsed.success) {
     return {
