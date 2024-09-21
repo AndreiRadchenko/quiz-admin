@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
@@ -5,6 +7,8 @@ import { cn } from '@/lib/utils';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdLink, IoMdEye, IoMdClose } from 'react-icons/io';
 import { IoUnlinkOutline } from 'react-icons/io5';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type QuestionProps = {
   idx: string;
@@ -21,6 +25,8 @@ function QuestionsTableRow({
   bindQuestion,
   index,
 }: QuestionProps) {
+  const pathname = usePathname();
+
   return (
     <TableRow
       key={index}
@@ -38,8 +44,11 @@ function QuestionsTableRow({
           size={'sm'}
           variant={'outline'}
           tooltip="Bind question"
+          asChild
         >
-          <IoMdLink />
+          <Link href={pathname + `/bind/${idx}?legend=${legend}`}>
+            <IoMdLink />
+          </Link>
         </ButtonWithTooltip>
         <ButtonWithTooltip
           size={'sm'}

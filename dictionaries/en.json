@@ -172,6 +172,18 @@
           "type": "Type",
           "bindQuestion": "Binded Question"
         }
+      },
+      "bindForm": {
+        "title": "Bind Question # {{idx}} / {{legend}}",
+        "description": "Bind a question to the game",
+        "labels": {
+          "name": "Name"
+        },
+        "buttons": {
+          "save": "Save changes",
+          "cancel": "Cancel"
+        },
+        "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
       }
     },
     "questionDefinitions": {

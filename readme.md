@@ -271,13 +271,17 @@ handling languages changes from menu and store it to cookie for future use.
 
 ## Create modal form in Next.js
 
-Video:
-[Modal Form w/ React-Hook-Form](https://www.youtube.com/watch?v=WyL_Jc6_-sY) |
-[Parallel routes](https://www.youtube.com/watch?v=M836RZxReHU) |
-[Modal w/ Parallel & Intersepting routes](https://www.youtube.com/watch?v=Ft2qs7tOW1k)
+- Video:
+  [Modal Form w/ React-Hook-Form](https://www.youtube.com/watch?v=WyL_Jc6_-sY) |
+  [Parallel routes](https://www.youtube.com/watch?v=M836RZxReHU) |
+  [Modal w/ Parallel & Intersepting routes](https://www.youtube.com/watch?v=Ft2qs7tOW1k)
 
-Next:
-[Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+- Next:
+  [Parallel Routes](https://nextjs.org/docs/app/building-your-application/routing/parallel-routes)
+- React-Hook-Form:
+  [isDirty changing to true when no field is actually dirty](https://github.com/react-hook-form/react-hook-form/issues/3213)
+
+  ***
 
 1. Create zod schema for the form `src/schemas/Player.ts`
 2. Add inputs label to localization file `dictionaries/en.json`
