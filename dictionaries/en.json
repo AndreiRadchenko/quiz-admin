@@ -174,10 +174,10 @@
         }
       },
       "bindForm": {
-        "title": "Bind Question # {{idx}} / {{legend}}",
-        "description": "Bind a question to the game",
+        "title": "Bind to position # {{idx}} / {{legend}}",
+        "description": "Bind a question to the games position",
         "labels": {
-          "name": "Name"
+          "selectQuestion": "Question to bind"
         },
         "buttons": {
           "save": "Save changes",

@@ -10,7 +10,7 @@ export async function getPlayer(id: string) {
   //   { cache: 'no-store' }
   // );
   const player: Player = {
-    id: id,
+    id: Number(id),
     name: `Default Player ${id}`,
     active: false,
     usedPass: false,

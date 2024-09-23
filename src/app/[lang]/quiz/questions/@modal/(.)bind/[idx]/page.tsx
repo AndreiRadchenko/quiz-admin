@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Modal } from '@/components/modal/modal';
-// import PlayerForm from '../../../edit/[idx]/PlayerForm';
+import BindQuestionForm from '../../../bind/[idx]/bindQuestionForm';
 import {
   getDictionary,
   replacePlaceholders,
@@ -33,13 +33,11 @@ export default async function BindQuestion({
       description={bindForm.description}
       alertConfirmationMessage={bindForm.alertConfirmationMessage}
     >
-      {/* <PlayerForm
-        idx={Number(idx)}
-        labels={playerForm.labels}
-        checkBoxes={playerForm.checkBoxes}
-        buttons={playerForm.buttons}
-      /> */}
-      <></>
+      <BindQuestionForm
+        idx={idx}
+        labels={bindForm.labels}
+        buttons={bindForm.buttons}
+      />
     </Modal>
   );
 }

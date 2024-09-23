@@ -1,13 +1,13 @@
 export default function PlayersLayout({
   children,
-  modal,
+  modalEditPlayer,
 }: Readonly<{
   children: React.ReactNode;
-  modal: React.ReactNode;
+  modalEditPlayer: React.ReactNode;
 }>) {
   return (
     <>
-      {modal}
+      {modalEditPlayer}
       {children}
     </>
   );
