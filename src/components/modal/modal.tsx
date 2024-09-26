@@ -32,8 +32,8 @@ export function Modal({
   };
 
   const handleOpenChange = () => {
-    const isPlayerFormModified = localStorage.getItem('playerFormModified');
-    if (isPlayerFormModified && JSON.parse(isPlayerFormModified)) {
+    const isFormModified = sessionStorage.getItem('formModified');
+    if (isFormModified && JSON.parse(isFormModified)) {
       setShowExitConfirmation(true);
     } else {
       router.back();

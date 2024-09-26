@@ -1,13 +1,13 @@
 import { z } from 'zod';
 
 export const QuestionSchema = z.object({
-  id: z.number(),
+  id: z.string(),
   label: z.string().min(2, { message: 'Must be 2 or more characters long' }),
-  imagePath: z.string(),
-  answerType: z.string(),
-  answerOptions: z.string(),
-  correctAnswer: z.string(),
-  description: z.string(),
+  imagePath: z.string().optional(),
+  answerType: z.string().optional(),
+  answerOptions: z.string().optional(),
+  correctAnswer: z.string().optional(),
+  description: z.string().optional(),
 });
 
 export type Question = z.infer<typeof QuestionSchema>;

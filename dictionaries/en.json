@@ -213,6 +213,28 @@
           "type": "Type",
           "description": "Description"
         }
+      },
+      "questionForm": {
+        "title": "Edit Question",
+        "description": "Edit question data",
+        "labels": {
+          "answerType": "Type",
+          "label": "Label",
+          "description": "Description",
+          "imagePath": "Image Path",
+          "answerOptions": "Options",
+          "correctAnswer": "Correct Answer"
+        },
+        "radioButtons": {
+          "multiple": "Multiple",
+          "text": "Text",
+          "textNumeric": "Text Numeric"
+        },
+        "buttons": {
+          "save": "Save changes",
+          "cancel": "Cancel"
+        },
+        "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
       }
     },
     "answers": {

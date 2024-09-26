@@ -1,11 +1,16 @@
+'use client';
+
 import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdCreate } from 'react-icons/io';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type QuestionProps = {
+  id: string;
   label: string;
   answerType: string;
   description: string;
@@ -13,11 +18,14 @@ type QuestionProps = {
 };
 
 function QuestionsTableRow({
+  id,
   label,
   answerType,
   description,
   index,
 }: QuestionProps) {
+  const pathname = usePathname();
+
   return (
     <TableRow
       key={index}
@@ -28,8 +36,11 @@ function QuestionsTableRow({
           size={'sm'}
           variant={'default'}
           tooltip="Edit question"
+          asChild
         >
-          <IoMdCreate />
+          <Link href={pathname + `/edit/${id}`}>
+            <IoMdCreate />
+          </Link>
         </ButtonWithTooltip>
       </TableCell>
       <TableCell id="idx">{label}</TableCell>

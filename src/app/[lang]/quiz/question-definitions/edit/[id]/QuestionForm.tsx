@@ -4,19 +4,21 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { InputWithLabel } from '@/components/modal/inputWithLabel';
-import { CheckboxWithLabel } from '@/components/modal/checkboxWithLabel';
+import { RadioGroupWithLabel } from '@/components/modal/radioGroupWithLabel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayerSchema, type Player } from '@/schemas/Player';
+import { QuestionSchema, type Question } from '@/schemas/Question';
 import { savePlayer } from '@/actions/player';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { saveQuestion } from '@/actions/question';
 
 type Props = {
-  id: number;
+  id: string;
   labels: {
     [key: string]: string;
   };
-  checkBoxes: {
+  radioButtons: {
     [key: string]: string;
   };
   buttons: {
@@ -24,32 +26,32 @@ type Props = {
   };
 };
 
-const defaultUser: Player = {
-  id: 0,
-  name: 'default user',
-  tier: '',
-  notes: '',
-  occupation: '',
-  prizeSpend: '',
-  relations: '',
-  externalId: '',
+const defaultQuestion: Question = {
+  id: '',
+  label: '',
   imagePath: '',
-  active: true,
-  usedPass: false,
-  boughtOut: false,
-  boughtOutEndGame: false,
+  answerType: '',
+  answerOptions: '',
+  correctAnswer: '',
+  description: '',
 };
 
-export default function PlayerForm({ id, labels, checkBoxes, buttons }: Props) {
+export default function QuestionForm({
+  id,
+  labels,
+  radioButtons,
+  buttons,
+}: Props) {
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
   const router = useRouter();
 
-  const form = useForm<Player>({
+  const form = useForm<Question>({
     mode: 'onBlur',
-    resolver: zodResolver(PlayerSchema),
+    resolver: zodResolver(QuestionSchema),
+    // you can debug your validation schema here
     // resolver: async (data, context, options) => {
-    //   // you can debug your validation schema here
+    //
     //   console.log('formData', data);
     //   console.log(
     //     'validation result',
@@ -58,9 +60,9 @@ export default function PlayerForm({ id, labels, checkBoxes, buttons }: Props) {
     //   return zodResolver(PlayerSchema)(data, context, options);
     // },
     defaultValues: {
-      ...defaultUser,
+      ...defaultQuestion,
       id,
-      name: `Default user ${id}`,
+      label: `Default user ${id}`,
     },
   });
 
@@ -78,7 +80,7 @@ export default function PlayerForm({ id, labels, checkBoxes, buttons }: Props) {
     /* No need to validate here because 
         react-hook-form already validates with 
         our Zod schema */
-    const result = await savePlayer(form.getValues());
+    const result = await saveQuestion(form.getValues());
 
     if (result?.errors) {
       setMessage(result.message);
@@ -114,23 +116,24 @@ export default function PlayerForm({ id, labels, checkBoxes, buttons }: Props) {
           className="flex flex-col gap-8"
         >
           <div className="flex flex-col gap-0">
-            {Object.keys(labels).map((key, idx) => (
-              <InputWithLabel
-                key={idx}
-                fieldTitle={labels[key]}
-                nameInSchema={key}
-                labelLeft
-              />
-            ))}
-          </div>
-          <div className="flex flex-row gap-6 justify-start">
-            {Object.keys(checkBoxes).map((key, idx) => (
-              <CheckboxWithLabel
-                key={idx}
-                label={checkBoxes[key]}
-                nameInSchema={key}
-              />
-            ))}
+            {Object.keys(labels).map((key, idx) =>
+              key !== 'answerType' ? (
+                <InputWithLabel
+                  key={idx}
+                  fieldTitle={labels[key]}
+                  nameInSchema={key}
+                  labelLeft
+                />
+              ) : (
+                <RadioGroupWithLabel
+                  key={idx}
+                  fieldTitle={labels[key]}
+                  nameInSchema={key}
+                  radioButtons={radioButtons}
+                  labelLeft
+                />
+              )
+            )}
           </div>
           <div className="flex gap-6 justify-start">
             <Button type="submit">{buttons.save}</Button>

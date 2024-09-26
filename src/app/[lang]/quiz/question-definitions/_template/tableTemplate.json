@@ -1,5 +1,6 @@
 [
   {
+    "id": "1",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
@@ -8,6 +9,7 @@
     "description": "How many legs does a cat have? "
   },
   {
+    "id": "2",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
@@ -16,6 +18,7 @@
     "description": "How many legs does a cat have?"
   },
   {
+    "id": "3",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
@@ -24,6 +27,7 @@
     "description": "How many legs does a cat have?"
   },
   {
+    "id": "4",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
@@ -32,6 +36,7 @@
     "description": "How many legs does a cat have?"
   },
   {
+    "id": "5",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
@@ -40,6 +45,7 @@
     "description": "How many legs does a cat have?"
   },
   {
+    "id": "6",
     "label": "AV001",
     "imagePath": "AV001.png",
     "answerType": "MULTIPLE",
