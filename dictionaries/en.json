@@ -10,7 +10,8 @@
       "players": "Players",
       "questions": "Questions",
       "questionDefinitions": "Question Definitions",
-      "answers": "Answers"
+      "answers": "Answers",
+      "overview": "Overview"
     },
     "dashboard": {
       "title": "1% Club Dashboard",
@@ -76,6 +77,11 @@
           "label": "External Player Info",
           "buttonText": "Import player data",
           "tooltip": "Import player data"
+        },
+        "questionImages": {
+          "label": "Question Images",
+          "buttonText": "Import Images",
+          "tooltip": "Import question images"
         }
       }
     },
@@ -239,6 +245,33 @@
     },
     "answers": {
       "title": "Answers",
+      "buttons": {
+        "importFileBtn": {
+          "buttonText": "Import Answers",
+          "tooltip": "Import Answers"
+        },
+        "exportAnswers": {
+          "buttonText": "Export Answers",
+          "tooltip": "Export Answers"
+        },
+        "refinalize": {
+          "buttonText": "Re-finalize",
+          "tooltip": ""
+        }
+      },
+      "table": {
+        "header": {
+          "id": "#",
+          "name": "Name",
+          "answer": "Answer",
+          "correct": "Correct",
+          "pass": "Pass",
+          "auto": "Auto"
+        }
+      }
+    },
+    "overview": {
+      "title": "Overview",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Import Answers",

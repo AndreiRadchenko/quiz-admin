@@ -11,6 +11,7 @@ function getLocaleFromHeader(request: NextRequest): string | undefined {
   // Negotiator expects plain object so we need to transform headers
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
+  console.log('negotiatorHeaders:', negotiatorHeaders);
 
   // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales;
@@ -46,14 +47,18 @@ export function withI18nMiddleware(middleware: CustomMiddleware) {
       locale => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
     );
 
+    console.log('pathnameIsMissingLocale', pathnameIsMissingLocale);
+
     // Redirect if there is no locale
     if (pathnameIsMissingLocale) {
       const cookieLocale = request.cookies.get('lang')?.value;
 
       let locale = cookieLocale;
+      console.log('cookieLocale: ', cookieLocale);
 
-      if (!cookieLocale) {
+      if (cookieLocale === undefined) {
         locale = getLocaleFromHeader(request);
+        console.log('locale: ', locale);
 
         const response = NextResponse.redirect(
           new URL(

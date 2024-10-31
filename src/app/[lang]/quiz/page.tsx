@@ -5,6 +5,8 @@ import { Input } from '@/components/ui/input';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { Label } from '@/components/ui/label';
 
+import { questionImages } from './actions';
+
 type Props = {
   children: React.ReactNode;
   params: { lang: string };
@@ -46,7 +48,11 @@ export default async function QuizDashboard({
       </section>
       <section id="import-files" className="grid grid-cols-2 gap-6 my-12 w-fit">
         {Object.keys(importFiles)?.map((key, idx) => (
-          <div key={idx} className="flex flex-col justify-around w-fit">
+          <form
+            action={questionImages}
+            key={idx}
+            className="flex flex-col justify-around w-fit"
+          >
             <Label className="mb-1 w-fit" htmlFor="input">
               {importFiles[key].label}
             </Label>
@@ -54,14 +60,16 @@ export default async function QuizDashboard({
               <Input
                 id="input"
                 type="file"
+                name="file"
                 className="w-80 placeholder:background text-inherit"
-                accept=".csv"
+                accept={key === 'questionImages' ? '.png' : '.csv'}
+                multiple={key === 'questionImages'}
               />
-              <ButtonWithTooltip>
+              <ButtonWithTooltip className="w-40">
                 {importFiles[key].buttonText}
               </ButtonWithTooltip>
             </div>
-          </div>
+          </form>
         ))}
       </section>
     </>
