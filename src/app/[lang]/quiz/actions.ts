@@ -1,21 +1,18 @@
 'use server';
 
-import fs from 'fs/promises';
-import { notFound, redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { s3Service } from '@/services/s3Services';
+
+const wait = (duration: number) =>
+  new Promise(resolve => setTimeout(resolve, duration));
 
 export async function questionImages(formData: FormData) {
-  // const files = formData.get('files') as File;
   const files = formData.getAll('file') as File[];
 
-  console.log('files: ', files);
-  await fs.mkdir('public/images', { recursive: true });
+  // await wait(3000);
 
-  files.forEach(async file => {
-    await fs.writeFile(
-      `./public/images/question${file.name}`,
-      Buffer.from(await file.arrayBuffer())
-    );
+  await files.forEach(async file => {
+    await s3Service.uploadFile(file);
   });
 
   revalidatePath('/');

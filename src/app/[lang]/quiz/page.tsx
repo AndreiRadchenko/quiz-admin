@@ -1,9 +1,10 @@
-import { Button } from '@/components/ui/button';
+import React from 'react';
 
+import { Button } from '@/components/ui/button';
 import { getDictionary } from '../../../../dictionaries/dictionaries';
 import { Input } from '@/components/ui/input';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
-import { Label } from '@/components/ui/label';
+import { ImportFileForm } from './_components/ImportFileForm';
 
 import { questionImages } from './actions';
 
@@ -47,29 +48,15 @@ export default async function QuizDashboard({
         ))}
       </section>
       <section id="import-files" className="grid grid-cols-2 gap-6 my-12 w-fit">
-        {Object.keys(importFiles)?.map((key, idx) => (
-          <form
-            action={questionImages}
+        {Object.keys(importFiles)?.map((field, idx) => (
+          <ImportFileForm
             key={idx}
-            className="flex flex-col justify-around w-fit"
-          >
-            <Label className="mb-1 w-fit" htmlFor="input">
-              {importFiles[key].label}
-            </Label>
-            <div className="flex flex-row gap-2">
-              <Input
-                id="input"
-                type="file"
-                name="file"
-                className="w-80 placeholder:background text-inherit"
-                accept={key === 'questionImages' ? '.png' : '.csv'}
-                multiple={key === 'questionImages'}
-              />
-              <ButtonWithTooltip className="w-40">
-                {importFiles[key].buttonText}
-              </ButtonWithTooltip>
-            </div>
-          </form>
+            action={questionImages}
+            idx={idx}
+            field={field}
+            label={importFiles[field].label}
+            buttonText={importFiles[field].buttonText}
+          />
         ))}
       </section>
     </>
