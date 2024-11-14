@@ -34,7 +34,7 @@ class S3Service {
 
   async init() {
     const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
-    if (!exists) {
+    if (exists){} else {
       await this.Bucket.makeBucket(this.QuestionsBucket);
       await this.Bucket.setBucketPolicy(
         this.QuestionsBucket,
