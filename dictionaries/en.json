@@ -81,7 +81,9 @@
         "questionImages": {
           "label": "Question Images",
           "buttonText": "Import Images",
-          "tooltip": "Import question images"
+          "tooltip": "Import question images",
+          "successMessage": "Images uploaded successfully",
+          "errorMessage": "Error images upload"
         }
       }
     },
