@@ -1,5 +1,20 @@
 # Quiz app. Nextjs admin web and back.
 
+<a name="top"></a>
+
+1. [Install Prisma](#install-prisma)
+2. [Tailwind with shadcn component library](#tailwind-with-shadcn-component-library)
+   - [Tailwind dark mode](#tailwind-dark-mode)
+3. [Next.js internationalization](#nextjs-internationalization)
+4. [Next.js cookies](#nextjs-cookies)
+   - [Theme preference in cookie](#theme-preference-in-cookie)
+5. [Create modal form in Next.js (Edit Player)](#create-modal-form-in-nextjs)
+6. [Plain Next.js form with server action (Import file)](#plain-nextjs-form-with-server-action)
+   - [Loader on button](#loader-on-button)
+7. [Shadcn Toast component](#shadcn-toast-component)
+8. [MINIO container for local S3 file storage](#minio-container-for-local-s3-file-storage)
+9. [State management with useContext and useReduser](#state-management-with-usecontext-and-usereduser)
+
 ## Install Next project
 
 ```js
@@ -34,6 +49,8 @@ To [create migration](https://www.prisma.io/docs/getting-started/quickstart)
 ```js
 npx prisma migrate dev --name init
 ```
+
+<a href="#top">⬅️ Back to top</a>
 
 ## Tailwind with [shadcn](https://ui.shadcn.com/docs/installation/next) component library
 
@@ -129,6 +146,8 @@ export default function RootLayout({
 7. Add `ThemeToggleDropdownItem` to the `NavMenu` in
    `src/components/Nav/components/NavMenu.tsx`
 
+<a href="#top">⬅️ Back to top</a>
+
 ## Next.js internationalization
 
 [Next.js internationalization docs](https://nextjs.org/docs/app/building-your-application/routing/internationalization)
@@ -188,6 +207,8 @@ export default function RootLayout({
     return <button>{dict.products.cart}</button>;
   }
   ```
+
+<a href="#top">⬅️ Back to top</a>
 
 ## Next.js cookies
 
@@ -269,6 +290,8 @@ settings). Then middleware redirects request accordingly to lang slug and write
 it to the cookie. On the client side `PreferencesProvider` is responsible for
 handling languages changes from menu and store it to cookie for future use.
 
+<a href="#top">⬅️ Back to top</a>
+
 ## Create modal form in Next.js
 
 - Video:
@@ -288,7 +311,7 @@ handling languages changes from menu and store it to cookie for future use.
 3. Create PlayerForm `src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`
    component with `react-hook-form` and Form from `shadcn/ui`
 
-   _Code for debag schema:_
+   _Code for debug schema:_
    _`src/app/[lang]/quiz/players/edit/[id]/PlayerForm.tsx`_
 
    ```js
@@ -406,3 +429,473 @@ handling languages changes from menu and store it to cookie for future use.
      );
    }
    ```
+
+<a href="#top">⬅️ Back to top</a>
+
+## Plain Next.js form with server action
+
+In quiz-admin application I have a few form for csv and image file uploading.
+Most of them located on quiz dashboard page. A few on the other pages. To
+address this file input I've developed server actions and versatile simple form
+component.
+
+[Next.js File Uploads: Server-Side Solutions](https://www.pronextjs.dev/next-js-file-uploads-server-side-solutions)
+|
+
+   <img src='./readme_img/load-file-form.jpg' width="500px">
+
+Create bunch of server actions for each import file form:
+
+_src/app/[lang]/quiz/actions.ts_
+
+```js
+type Action = typeof questionImages;
+
+interface ImportFileActionType {
+  [key: string]: Action;
+}
+
+const importFileAction: ImportFileActionType = {
+  seatInfo,
+  playerData,
+  externalQuestionData,
+  externalPlayerInfo,
+  questionImages,
+};
+
+// Only async function could be exported from action.tsx
+export const getActions = async () => importFileAction;
+```
+
+File input forms are created by map of `importFiles` array from dictionary. In
+quiz page I pass particular action to the each `ImportFileForm` component:
+
+_src/app/[lang]/quiz/page.tsx_
+
+```js
+export default async function QuizDashboard({
+  children,
+  params: { lang },
+}: Readonly<Props>) {
+  const {
+    quiz: {
+      dashboard: { buttons = {}, inputs = {}, importFiles = {} },
+    },
+  } = await getDictionary(lang);
+
+  const importFileActions = await getActions();
+
+  return (
+    <>
+      <h1 className="mb-6">1% Club Dashboard</h1>
+      ...
+      <section id="import-files" className="grid grid-cols-2 gap-6 my-12 w-fit">
+        {Object.keys(importFiles)?.map((field, idx) => ( // <-- map importFiles array from dictionary.
+          <ImportFileForm
+            key={idx}
+            action={importFileActions[field]} // <-- action from actions object
+            idx={idx}
+            field={field}
+            label={importFiles[field].label}
+            buttonText={importFiles[field].buttonText}
+          />
+        ))}
+      </section>
+    </>
+  );
+}
+```
+
+Server action takes form data and returns object with messageType and
+toastMessage fields:
+
+_src/app/[lang]/quiz/actions.ts_
+
+```js
+export async function questionImages(prevState: unknown, formData: FormData) {
+  const files = formData.getAll('file') as File[];
+
+  try {
+    if (!s3Service) {
+      throw new Error("Can't connect to the file storage");
+    }
+    await files.forEach(async file => {
+      await s3Service?.uploadFile(file);
+    });
+    return {
+      messageType: 'success',
+      toastMessage: 'Images uploaded successfully',
+    };
+  } catch (error) {
+    return {
+      messageType: 'error',
+      toastMessage: (error as any).message,
+    };
+  }
+}
+```
+
+Create versatile `ImportFileForm` component that fits for all import file forms
+on quiz page :
+
+_src/app/[lang]/quiz/\_components/ImportFileForm.tsx_
+
+```js
+
+export function ImportFileForm({ action, field, label, buttonText }: Props) {
+  const { toast } = useToast();
+  const [message, formAction, isPending] = useFormState(action, null);
+  const [selectedFile, setSelectedFile] = useState<File[]>([]);
+
+  //Used to disable button until files have been chosen
+  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = event.target.files
+      ? Array.from(event.target.files)
+      : [];
+    setSelectedFile(selectedFiles);
+  };
+
+  //Used to clear Choose Files form on submit
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    setSelectedFile([]);
+    const form = event.currentTarget;
+    setTimeout(() => {
+      form.reset();
+    }, 100);
+  };
+
+  //Used to show toast with submission result
+  useEffect(() => {
+    if (message) {
+      const { messageType, toastMessage } = message as ToastMessageType;
+      toastMessage !== '' &&
+        toast({
+          variant: messageType === 'error' ? 'destructive' : 'default',
+          description: toastMessage,
+        });
+    }
+  }, [message, toast]);
+
+  return (
+    <form
+      action={formAction}
+      onSubmit={handleSubmit}
+      className="flex flex-col justify-around w-fit"
+    >
+      <Label className="mb-1 w-fit" htmlFor="input">
+        {label}
+      </Label>
+      <div className="flex flex-row gap-2">
+        <Input
+          id="input"
+          type="file"
+          name="file"
+          className="w-80 placeholder:background text-inherit"
+          accept={field === 'questionImages' ? '.png' : '.csv'}
+          multiple={field === 'questionImages'}
+          onChange={handleFileChange}
+        />
+        <ButtonWithTooltip className="w-40" disabled={!selectedFile.length}>
+          {buttonText}
+        </ButtonWithTooltip>
+      </div>
+    </form>
+  );
+}
+```
+
+### Loader on button
+
+I've modified `ButtonWithTooltip` so that if instance of button is located
+inside form, it'll react on form pending status by showing loading animation on
+button.
+
+1. Import loader svg from `lucide-react`.
+2. Get pending status from `useFormStatus` hook.
+3. Render `Spinner` component with `animate-spin` class depends on pending
+   status.
+
+_src/components/ui/buttonWithTooltip.tsx_
+
+```js
+'use client';
+
+import { useFormStatus } from 'react-dom';
+import { Button, ButtonProps } from './button';
+// Import loader svg from `lucide-react`.
+import { Loader2 as Spinner } from 'lucide-react';
+
+
+export function ButtonWithTooltip({
+  children,
+  tooltip = '',
+  ...props
+}: IButtonWithTooltip) {
+// Get pending status from `useFormStatus` hook.
+  const { pending } = useFormStatus();
+
+  return (
+    <TooltipProvider delayDuration={1500}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button disabled={pending} {...props}>
+            {/*  Render `Spinner` component with `animate-spin` class depends on pending status. */}
+            {pending ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4 animate-spin" />
+                {'Upload...'}
+              </>
+            ) : (
+              children
+            )}
+          </Button>
+        </TooltipTrigger>
+        {tooltip && <TooltipContent>{tooltip}</TooltipContent>}
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
+```
+
+<a href="#top">⬅️ Back to top</a>
+
+## Shadcn Toast component
+
+[Shadcn Toast component](https://ui.shadcn.com/docs/components/toast)
+
+Install toast:
+
+```js
+npx shadcn@latest add toast
+```
+
+To show toast message over all application, insert `<Toaster/>` component next
+to the `<main>` tag:
+
+_src/app/layout.tsx_:
+
+```js
+import { Toaster } from '@/components/ui/toaster';
+
+export default async function RootLayout({
+  children,
+  params: { lang },
+}: Readonly<Props>) {
+  const theme = await getThemeCookie();
+
+  return (
+    <html lang="en" className={theme || 'dark'}>
+      <body
+        className={cn(' bg-background font-sans antialiased', inter.variable)}
+      >
+        <PreferencesProvider>
+          {children}
+        </PreferencesProvider>
+        <Toaster /> {/* <-- Toast provider component  */}
+      </body>
+    </html>
+  );
+}
+```
+
+Then into a form component receive submission result and display toast with
+result message:
+
+_src/app/[lang]/quiz/\_components/ImportFileForm.tsx_
+
+```js
+'use client';
+import { useFormState } from 'react-dom';
+import { useToast } from '@/hooks/use-toast';
+
+export function ImportFileForm({ action, field, label, buttonText }: Props) {
+  const { toast } = useToast();
+  const [message, formAction, isPending] = useFormState(action, null);
+
+  //Used to show toast with submission result
+  useEffect(() => {
+    if (message) {
+      const { messageType, toastMessage } = message as ToastMessageType;
+      toastMessage !== '' &&
+        toast({
+          variant: messageType === 'error' ? 'destructive' : 'default',
+          description: toastMessage,
+        });
+    }
+  }, [message, toast]);
+
+  return (
+    <form>
+      ...
+    </form>
+  );
+}
+```
+
+<a href="#top">⬅️ Back to top</a>
+
+## `MINIO` container for local S3 file storage
+
+[MINIO API documentation](https://min.io/docs/minio/linux/developers/javascript/minio-javascript.html#examples)
+| [Install in docker](https://min.io/docs/minio/container/index.html)
+
+I've used MINIO docker container for image store and distribution. It's local
+container that runs S3 like API service along with web application for file
+storage.
+
+To install in docker run in bash:
+
+```bash
+mkdir -p ~/minio/data
+
+docker run \
+   -p 9002:9000 \
+   -p 9001:9001 \
+   --name minio \
+   -v ~/minio/data:/data \
+   -e "MINIO_ROOT_USER=minio" \
+   -e "MINIO_ROOT_PASSWORD=miniominio" \
+   quay.io/minio/minio server /data --console-address ":9001"
+```
+
+I've change external API port number to 9002 as 9000 port has been used by
+portainer. After container has started web interface is available by link:
+
+```bash
+http://localhost:9001/browser
+```
+
+Install node package:
+
+```bash
+npm install --save minio
+```
+
+Create .env and config files:
+
+_.env_
+
+```js
+# MinIO local S3 file storage
+S3_END_POINT=localhost
+S3_PORT=9002
+S3_ACCESS_KEY=***
+S3_SECRET_KEY=***
+```
+
+_src/config.ts_
+
+```js
+import dotenv from 'dotenv';
+dotenv.config();
+
+export const config = {
+  S3_PORT: Number(process.env.S3_PORT),
+  S3_END_POINT: process.env.S3_END_POINT as string,
+  S3_ACCESS_KEY: process.env.S3_ACCESS_KEY as string,
+  S3_SECRET_KEY: process.env.S3_SECRET_KEY as string,
+};
+```
+
+To write file to storage, I've created s3Services. On init service will create
+bucket `'questions'` unless it exists. Created bucket has public access so files
+are available by link:
+
+```js
+http://localhost:9002/questions/a1.png
+```
+
+_src/services/s3Services.ts_
+
+```js
+import * as Minio from 'minio';
+
+import { config } from '@/config';
+
+export interface UploadedObjectInfo {
+  etag: string;
+  versionId: string | null;
+}
+
+class S3Service {
+  Bucket;
+  QuestionsBucket: string = 'questions';
+  publicReadPolicy = {
+    Version: '2012-10-17',
+    Statement: [
+      {
+        Effect: 'Allow',
+        Principal: '*',
+        Action: ['s3:GetObject'],
+        Resource: [`arn:aws:s3:::${this.QuestionsBucket}/*`],
+      },
+    ],
+  };
+
+  constructor() {
+    this.Bucket = new Minio.Client({
+      endPoint: config.S3_END_POINT,
+      port: config.S3_PORT,
+      useSSL: false,
+      accessKey: config.S3_ACCESS_KEY,
+      secretKey: config.S3_SECRET_KEY,
+    });
+  }
+
+  async init() {
+    const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
+    if (!exists) {
+      await this.Bucket.makeBucket(this.QuestionsBucket);
+      await this.Bucket.setBucketPolicy(
+        this.QuestionsBucket,
+        JSON.stringify(this.publicReadPolicy)
+      );
+    }
+  }
+
+  async uploadFile(file: File): Promise<UploadedObjectInfo> {
+    return await this.Bucket.putObject(
+      this.QuestionsBucket,
+      file.name,
+      Buffer.from(await file.arrayBuffer())
+    );
+  }
+}
+
+export const s3Service = await (async () => {
+  try {
+    const instance = new S3Service();
+    await instance.init();
+    return instance;
+  } catch (error) {
+    console.log('s3Service error: ', error);
+    return null;
+  }
+})();
+
+```
+
+<a href="#top">⬅️ Back to top</a>
+
+## State management with `useContext` and `useReduser`
+
+Youtube video: [useContext ](https://www.youtube.com/watch?v=05ZM4ymK9Nc&t=5s) |
+[useReduser](https://www.youtube.com/watch?v=lSY5R9ByO6Y)
+
+GitHub example:
+[Context state lesson](https://github.dev/gitdagray/typescript-course/blob/main/lesson15/src/context/CounterContext.tsx)
+
+Project branch `feat/minio-bucket`
+
+1. Create context and context provider `SystemStateProvider` in
+   `./src/context/SystemStateProvider.tsx`
+2. Wrap app with context in `src/app/layout.tsx`
+3. Use hook `useSystemState` where you need it
+
+   ```js
+   import { useSystemState } from '@/context/SystemStateProvider';
+   
+   const [toastMessage, setToastMessage, clearToastMessage] = useSystemState();
+   ```
+
+<a href="#top">⬅️ Back to top</a>

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { ImportFileForm } from './_components/ImportFileForm';
 
-import { questionImages } from './actions';
+import { questionImages, getActions } from './actions';
 
 type Props = {
   children: React.ReactNode;
@@ -22,6 +22,8 @@ export default async function QuizDashboard({
       dashboard: { buttons = {}, inputs = {}, importFiles = {} },
     },
   } = await getDictionary(lang);
+
+  const importFileActions = await getActions();
 
   return (
     <>
@@ -51,7 +53,7 @@ export default async function QuizDashboard({
         {Object.keys(importFiles)?.map((field, idx) => (
           <ImportFileForm
             key={idx}
-            action={questionImages}
+            action={importFileActions[field]}
             idx={idx}
             field={field}
             label={importFiles[field].label}

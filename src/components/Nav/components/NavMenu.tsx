@@ -11,7 +11,7 @@ import Link from 'next/link';
 
 import { IoMdMore, IoMdCheckmark } from 'react-icons/io';
 import { ThemeToggleDropdownItem } from './NavMenuActions';
-import { usePreferencesContext } from '@/context/preferences-provider';
+import { usePreferencesContext } from '@/context/PreferencesProvider';
 import { type MenuType } from '../../../../dictionaries/dictionaries';
 import { cn } from '@/lib/utils';
 

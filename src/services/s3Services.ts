@@ -34,15 +34,12 @@ class S3Service {
 
   async init() {
     const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
-    if (exists) {
-      console.log('Bucket ' + this.QuestionsBucket + ' exists.');
-    } else {
+    if (!exists) {
       await this.Bucket.makeBucket(this.QuestionsBucket);
       await this.Bucket.setBucketPolicy(
         this.QuestionsBucket,
         JSON.stringify(this.publicReadPolicy)
       );
-      console.log('Bucket ' + this.QuestionsBucket + ' created.');
     }
   }
 
@@ -63,7 +60,12 @@ class S3Service {
 }
 
 export const s3Service = await (async () => {
-  const instance = new S3Service();
-  await instance.init();
-  return instance;
+  try {
+    const instance = new S3Service();
+    await instance.init();
+    return instance;
+  } catch (error) {
+    console.log('s3Service error: ', error);
+    return null;
+  }
 })();

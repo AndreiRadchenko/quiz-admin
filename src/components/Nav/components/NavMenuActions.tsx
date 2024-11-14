@@ -1,5 +1,5 @@
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu';
-import { usePreferencesContext } from '@/context/preferences-provider';
+import { usePreferencesContext } from '@/context/PreferencesProvider';
 
 export function ThemeToggleDropdownItem({ menu }: any) {
   const { userPreferences, setUserPreferences } = usePreferencesContext();

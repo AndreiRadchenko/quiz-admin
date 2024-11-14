@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
+import { Toaster } from '@/components/ui/toaster';
 
-import PreferencesProvider from '@/context/preferences-provider';
+import PreferencesProvider from '@/context/PreferencesProvider';
+import SystemStateProvider from '@/context/SystemStateProvider';
 
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -41,7 +43,11 @@ export default async function RootLayout({
       <body
         className={cn(' bg-background font-sans antialiased', inter.variable)}
       >
-        <PreferencesProvider>{children}</PreferencesProvider>
+        <PreferencesProvider>
+          {/* <SystemStateProvider>{children}</SystemStateProvider> */}
+          {children}
+        </PreferencesProvider>
+        <Toaster />
       </body>
     </html>
   );
