@@ -7,9 +7,10 @@ export interface UploadedObjectInfo {
   versionId: string | null;
 }
 
-class S3Service {
-  Bucket;
-  QuestionsBucket: string = 'questions';
+export class S3Service {
+  private static instance: S3Service | null = null;
+  private Bucket: Minio.Client;
+  private QuestionsBucket: string = 'questions';
   publicReadPolicy = {
     Version: '2012-10-17',
     Statement: [
@@ -34,7 +35,8 @@ class S3Service {
 
   async init() {
     const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
-    if (exists){} else {
+    if (exists) {
+    } else {
       await this.Bucket.makeBucket(this.QuestionsBucket);
       await this.Bucket.setBucketPolicy(
         this.QuestionsBucket,
@@ -43,29 +45,32 @@ class S3Service {
     }
   }
 
+  static async getInstance(): Promise<S3Service | null> {
+    if (!S3Service.instance) {
+      try {
+        const instance = new S3Service();
+        await instance.init();
+        S3Service.instance = instance;
+        console.log('S3Service initialized.');
+      } catch (error) {
+        console.error('Error initializing S3Service:', error);
+        return null;
+      }
+    }
+    return S3Service.instance;
+  }
+
   async uploadFile(file: File): Promise<UploadedObjectInfo> {
-    return await this.Bucket.putObject(
-      this.QuestionsBucket,
-      file.name,
-      Buffer.from(await file.arrayBuffer())
-    );
+    try {
+      return await this.Bucket.putObject(
+        this.QuestionsBucket,
+        file.name,
+        Buffer.from(await file.arrayBuffer())
+      );
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw new Error(`Failed to upload file: ${file.name}`);
+    }
   }
 
-  // async deleteImage(url: string): Promise<DeleteObjectOutput> {
-  //   return this.Bucket.deleteObject({
-  //     Bucket: configs.S3_NAME as string,
-  //     Key: url,
-  //   }).promise();
-  // }
 }
-
-export const s3Service = await (async () => {
-  try {
-    const instance = new S3Service();
-    await instance.init();
-    return instance;
-  } catch (error) {
-    console.log('s3Service error: ', error);
-    return null;
-  }
-})();

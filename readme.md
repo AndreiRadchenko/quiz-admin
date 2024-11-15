@@ -765,6 +765,57 @@ portainer. After container has started web interface is available by link:
 http://localhost:9001/browser
 ```
 
+Docker Compose: Add a depends_on rule to ensure your Node.js service waits for
+MinIO:
+
+```yml
+version: '3.8'
+services:
+  minio:
+    image: quay.io/minio/minio
+    container_name: minio
+    ports:
+      - '9002:9000' # MinIO API
+      - '9001:9001' # MinIO Console
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: miniominio
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
+
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node-app
+    ports:
+      - '3000:3000' # Adjust based on your Node.js app's exposed port
+    environment:
+      NODE_ENV: development
+      S3_END_POINT: minio
+      S3_PORT: 9000
+      S3_ACCESS_KEY: minio
+      S3_SECRET_KEY: miniominio
+    depends_on:
+      - minio
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run dev # Adjust based on your project's start script
+    restart: unless-stopped
+
+volumes:
+  minio_data:
+```
+
+Build and start the containers:
+
+```bash
+docker-compose up -d --build
+```
+
 Install node package:
 
 ```bash
@@ -817,9 +868,10 @@ export interface UploadedObjectInfo {
   versionId: string | null;
 }
 
-class S3Service {
-  Bucket;
-  QuestionsBucket: string = 'questions';
+export class S3Service {
+  private static instance: S3Service | null = null;
+  private Bucket: Minio.Client;
+  private QuestionsBucket: string = 'questions';
   publicReadPolicy = {
     Version: '2012-10-17',
     Statement: [
@@ -844,7 +896,8 @@ class S3Service {
 
   async init() {
     const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
-    if (!exists) {
+    if (exists) {
+    } else {
       await this.Bucket.makeBucket(this.QuestionsBucket);
       await this.Bucket.setBucketPolicy(
         this.QuestionsBucket,
@@ -853,26 +906,35 @@ class S3Service {
     }
   }
 
+  static async getInstance(): Promise<S3Service | null> {
+    if (!S3Service.instance) {
+      try {
+        const instance = new S3Service();
+        await instance.init();
+        S3Service.instance = instance;
+        console.log('S3Service initialized.');
+      } catch (error) {
+        console.error('Error initializing S3Service:', error);
+        return null;
+      }
+    }
+    return S3Service.instance;
+  }
+
   async uploadFile(file: File): Promise<UploadedObjectInfo> {
-    return await this.Bucket.putObject(
-      this.QuestionsBucket,
-      file.name,
-      Buffer.from(await file.arrayBuffer())
-    );
+    try {
+      return await this.Bucket.putObject(
+        this.QuestionsBucket,
+        file.name,
+        Buffer.from(await file.arrayBuffer())
+      );
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      throw new Error(`Failed to upload file: ${file.name}`);
+    }
   }
+
 }
-
-export const s3Service = await (async () => {
-  try {
-    const instance = new S3Service();
-    await instance.init();
-    return instance;
-  } catch (error) {
-    console.log('s3Service error: ', error);
-    return null;
-  }
-})();
-
 ```
 
 <a href="#top">⬅️ Back to top</a>
