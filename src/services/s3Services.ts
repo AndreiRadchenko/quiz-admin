@@ -1,6 +1,9 @@
 import * as Minio from 'minio';
+import debounce from 'lodash.debounce';
+import { EventEmitter } from 'events';
 
 import { config } from '@/config';
+import { type QuestionImagesType } from '@/context/SystemStateProvider';
 
 export interface UploadedObjectInfo {
   etag: string;
@@ -8,9 +11,12 @@ export interface UploadedObjectInfo {
 }
 
 export class S3Service {
+  public eventEmitter = new EventEmitter();
   private static instance: S3Service | null = null;
   private Bucket: Minio.Client;
   private QuestionsBucket: string = 'questions';
+  // private debounceGetImages: () => void;
+  // eventEmitter: EventEmitter;
   publicReadPolicy = {
     Version: '2012-10-17',
     Statement: [
@@ -31,6 +37,10 @@ export class S3Service {
       accessKey: config.S3_ACCESS_KEY,
       secretKey: config.S3_SECRET_KEY,
     });
+    // this.debounceGetImages = debounce(async () => {
+    //   await this.getImages();
+    // }, 1000);
+    // this.eventEmitter = new EventEmitter();
   }
 
   async init() {
@@ -43,6 +53,7 @@ export class S3Service {
         JSON.stringify(this.publicReadPolicy)
       );
     }
+    this.startBucketPoller();
   }
 
   static async getInstance(): Promise<S3Service | null> {
@@ -73,4 +84,44 @@ export class S3Service {
     }
   }
 
+  async getImages(): Promise<QuestionImagesType> {
+    const data: Minio.BucketItem[] = [];
+    const stream = this.Bucket.listObjects(this.QuestionsBucket, '', true);
+
+    return new Promise((resolve, reject) => {
+      stream.on('data', obj => data.push(obj));
+      stream.on('end', () => {
+        const bucketImages: QuestionImagesType = {
+          questionImagesURL: data.map(e => e.name),
+        };
+        resolve(bucketImages);
+      });
+      stream.on('error', err => reject(err));
+    });
+  }
+
+  startBucketPoller(): void {
+    const poller = this.Bucket.listenBucketNotification(
+      this.QuestionsBucket,
+      '',
+      '',
+      ['s3:ObjectCreated:*', 's3:ObjectRemoved:*']
+    );
+
+    const debouncedUpdate = debounce(async () => {
+      try {
+        const bucketImages = await this.getImages();
+        this.eventEmitter.emit('bucketUpdate', bucketImages);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    }, 1000);
+
+    poller.on('notification', debouncedUpdate);
+  }
+
+  onBucketUpdate(callback: (images: QuestionImagesType) => void): void {
+    // console.log('call onBucketUpdate');
+    this.eventEmitter.on('bucketUpdate', callback);
+  }
 }

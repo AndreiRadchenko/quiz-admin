@@ -44,8 +44,8 @@ export default async function RootLayout({
         className={cn(' bg-background font-sans antialiased', inter.variable)}
       >
         <PreferencesProvider>
-          {/* <SystemStateProvider>{children}</SystemStateProvider> */}
-          {children}
+          <SystemStateProvider>{children}</SystemStateProvider>
+          {/* {children} */}
         </PreferencesProvider>
         <Toaster />
       </body>

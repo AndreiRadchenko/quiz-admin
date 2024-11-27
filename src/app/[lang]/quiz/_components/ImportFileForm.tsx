@@ -7,6 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { type ToastMessageType } from '@/context/SystemStateProvider';
+import { IoIosImages } from 'react-icons/io';
+import { cn } from '@/lib/utils';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   // action: (prevState: unknown, formData: FormData) => void | Promise<String>;
@@ -21,6 +25,7 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
   const { toast } = useToast();
   const [message, formAction, isPending] = useFormState(action, null);
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
+  const pathname = usePathname();
 
   // Used to disable button until files have been chosen
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -51,28 +56,45 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
   }, [message, toast]);
 
   return (
-    <form
-      action={formAction}
-      onSubmit={handleSubmit}
-      className="flex flex-col justify-around w-fit"
-    >
-      <Label className="mb-1 w-fit" htmlFor="input">
-        {label}
-      </Label>
-      <div className="flex flex-row gap-2">
-        <Input
-          id="input"
-          type="file"
-          name="file"
-          className="w-80 placeholder:background text-inherit"
-          accept={field === 'questionImages' ? '.png' : '.csv'}
-          multiple={field === 'questionImages'}
-          onChange={handleFileChange}
-        />
-        <ButtonWithTooltip className="w-40" disabled={!selectedFile.length}>
-          {buttonText}
+    <div className="flex flex-row gap-2 items-end">
+      {field === 'questionImages' && (
+        <ButtonWithTooltip
+          className="w-14"
+          type="button"
+          tooltip="Show images"
+          asChild
+        >
+          <Link href={pathname + `/question-images`}>
+            <IoIosImages size={24} />
+          </Link>
         </ButtonWithTooltip>
-      </div>
-    </form>
+      )}
+      <form
+        action={formAction}
+        onSubmit={handleSubmit}
+        className="flex flex-col justify-around w-fit items-start"
+      >
+        <Label className="mb-1 w-fit" htmlFor="input">
+          {label}
+        </Label>
+        <div className="flex flex-row gap-2">
+          <Input
+            id="input"
+            type="file"
+            name="file"
+            className={cn(
+              'w-80 placeholder:background text-inherit',
+              field === 'questionImages' && 'w-64'
+            )}
+            accept={field === 'questionImages' ? '.png' : '.csv'}
+            multiple={field === 'questionImages'}
+            onChange={handleFileChange}
+          />
+          <ButtonWithTooltip className="w-40" disabled={!selectedFile.length}>
+            {buttonText}
+          </ButtonWithTooltip>
+        </div>
+      </form>
+    </div>
   );
 }

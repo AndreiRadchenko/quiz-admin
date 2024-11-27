@@ -4,22 +4,19 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { InputWithLabel } from '@/components/modal/inputWithLabel';
-import { InputWithSelect } from '@/components/modal/inputWithSelect';
-import { RadioGroupWithLabel } from '@/components/modal/radioGroupWithLabel';
+import { CheckboxWithLabel } from '@/components/modal/checkboxWithLabel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayerSchema, type Player } from '@/schemas/Player';
-import { QuestionSchema, type Question } from '@/schemas/Question';
 import { savePlayer } from '@/actions/player';
 import { useState, useEffect } from 'react';
-import { usePathname, useRouter } from 'next/navigation';
-import { saveQuestion } from '@/actions/question';
+import { useRouter } from 'next/navigation';
 
 type Props = {
-  id: string;
+  id: number;
   labels: {
     [key: string]: string;
   };
-  radioButtons: {
+  checkBoxes: {
     [key: string]: string;
   };
   buttons: {
@@ -27,33 +24,37 @@ type Props = {
   };
 };
 
-const defaultQuestion: Question = {
-  id: '',
-  label: '',
+const defaultUser: Player = {
+  id: 0,
+  name: 'default user',
+  tier: '',
+  notes: '',
+  occupation: '',
+  prizeSpend: '',
+  relations: '',
+  externalId: '',
   imagePath: '',
-  answerType: '',
-  answerOptions: '',
-  correctAnswer: '',
-  description: '',
+  active: true,
+  usedPass: false,
+  boughtOut: false,
+  boughtOutEndGame: false,
 };
 
-export default function QuestionForm({
+export default function ShowImagesForm({
   id,
   labels,
-  radioButtons,
+  checkBoxes,
   buttons,
 }: Props) {
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
   const router = useRouter();
-  const pathname = usePathname();
 
-  const form = useForm<Question>({
+  const form = useForm<Player>({
     mode: 'onBlur',
-    resolver: zodResolver(QuestionSchema),
-    // you can debug your validation schema here
+    resolver: zodResolver(PlayerSchema),
     // resolver: async (data, context, options) => {
-    //
+    //   // you can debug your validation schema here
     //   console.log('formData', data);
     //   console.log(
     //     'validation result',
@@ -62,9 +63,9 @@ export default function QuestionForm({
     //   return zodResolver(PlayerSchema)(data, context, options);
     // },
     defaultValues: {
-      ...defaultQuestion,
+      ...defaultUser,
       id,
-      label: `Default user ${id}`,
+      name: `Default user ${id}`,
     },
   });
 
@@ -82,7 +83,7 @@ export default function QuestionForm({
     /* No need to validate here because 
         react-hook-form already validates with 
         our Zod schema */
-    const result = await saveQuestion(form.getValues());
+    const result = await savePlayer(form.getValues());
 
     if (result?.errors) {
       setMessage(result.message);
@@ -99,7 +100,7 @@ export default function QuestionForm({
 
   return (
     <div>
-      {message ? <h2 className="text-2xl">{message}</h2> : null}
+      {message ? <h2 className="text-2xl">{'Select question image'}</h2> : null}
 
       {errors ? (
         <div className="text-red-500">
@@ -117,37 +118,6 @@ export default function QuestionForm({
           }}
           className="flex flex-col gap-8"
         >
-          <div className="flex flex-col gap-0">
-            {Object.keys(labels).map((key, idx) =>
-              key !== 'imagePath' ? (
-                key !== 'answerType' ? (
-                  <InputWithLabel
-                    key={idx}
-                    fieldTitle={labels[key]}
-                    nameInSchema={key}
-                    labelLeft
-                  />
-                ) : (
-                  <RadioGroupWithLabel
-                    key={idx}
-                    fieldTitle={labels[key]}
-                    nameInSchema={key}
-                    radioButtons={radioButtons}
-                    labelLeft
-                  />
-                )
-              ) : (
-                <InputWithSelect
-                  key={labels['imagePath']}
-                  fieldTitle={labels['imagePath']}
-                  buttonTooltip={'Choose question image'}
-                  nameInSchema={'imagePath'}
-                  labelLeft
-                  modalLink={pathname.replace(`/edit/${id}`, '')}
-                />
-              )
-            )}
-          </div>
           <div className="flex gap-6 justify-start">
             <Button type="submit">{buttons.save}</Button>
             <Button

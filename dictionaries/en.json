@@ -229,9 +229,9 @@
           "answerType": "Type",
           "label": "Label",
           "description": "Description",
-          "imagePath": "Image Path",
           "answerOptions": "Options",
-          "correctAnswer": "Correct Answer"
+          "correctAnswer": "Correct Answer",
+          "imagePath": "Image Path"
         },
         "radioButtons": {
           "multiple": "Multiple",

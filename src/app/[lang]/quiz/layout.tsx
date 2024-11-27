@@ -6,12 +6,11 @@ import {
   type MenuType,
 } from '../../../../dictionaries/dictionaries';
 
-import { cn } from '@/lib/utils';
-
 export const dynamic = 'force-dynamic';
 
 type Props = {
   children: React.ReactNode;
+  modalShowQuestionImages: React.ReactNode;
   params: { lang: string };
 };
 
