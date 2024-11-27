@@ -1,13 +1,13 @@
 export default function QuestionsDataLayout({
   children,
-  modalEditQuestion,
+  modal,
 }: Readonly<{
   children: React.ReactNode;
-  modalEditQuestion: React.ReactNode;
+  modal: React.ReactNode;
 }>) {
   return (
     <>
-      {modalEditQuestion}
+      {modal}
       {children}
     </>
   );

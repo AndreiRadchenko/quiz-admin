@@ -1,5 +1,6 @@
 'use client';
 
+import { S3Service } from '@/services/s3Services';
 import {
   createContext,
   useReducer,
@@ -8,6 +9,7 @@ import {
   useCallback,
   useContext,
   ReactNode,
+  useEffect,
 } from 'react';
 
 export type MessageType = 'error' | 'warning' | 'success';
@@ -16,22 +18,28 @@ export type ToastMessageType = {
   toastMessage: String;
 };
 
-type StateType = {
+export type QuestionImagesType = {
+  questionImagesURL: (string | undefined)[];
+};
+
+type StateType = QuestionImagesType & {
   toastMessage: ToastMessageType;
 };
 
 const enum REDUCER_ACTION_TYPE {
   MESSAGE_ADD,
   MESSAGE_REMOVE,
+  QUESTIONIMAGES_UPDATE,
 }
 
 type ReducerAction = {
   type: REDUCER_ACTION_TYPE;
-  payload?: ToastMessageType;
+  payload?: ToastMessageType | QuestionImagesType;
 };
 
 const initState: StateType = {
   toastMessage: { messageType: 'error', toastMessage: '' },
+  questionImagesURL: [],
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -40,13 +48,19 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
   switch (action.type) {
     case REDUCER_ACTION_TYPE.MESSAGE_ADD: {
       const toastMessage = {
-        messageType: payload?.messageType ?? 'error',
-        toastMessage: payload?.toastMessage ?? '',
+        messageType: (payload as ToastMessageType).messageType ?? 'error',
+        toastMessage: (payload as ToastMessageType).toastMessage ?? '',
       };
       return { ...state, toastMessage };
     }
     case REDUCER_ACTION_TYPE.MESSAGE_REMOVE: {
       return { ...state, toastMessage: initState.toastMessage };
+    }
+    case REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE: {
+      console.log('QUESTIONIMAGES_UPDATE:', payload);
+      const questionImagesURL =
+        (payload as QuestionImagesType).questionImagesURL || [];
+      return { ...state, questionImagesURL };
     }
     default:
       throw new Error();
@@ -58,7 +72,10 @@ const useSystemStateContext = (initState: StateType) => {
 
   const setToastMessage = useCallback(
     (data: ToastMessageType) =>
-      dispatch({ type: REDUCER_ACTION_TYPE.MESSAGE_ADD, payload: data }),
+      dispatch({
+        type: REDUCER_ACTION_TYPE.MESSAGE_ADD,
+        payload: data,
+      }),
     []
   );
 
@@ -67,7 +84,32 @@ const useSystemStateContext = (initState: StateType) => {
     []
   );
 
-  return { state, setToastMessage, clearToastMessage };
+  const updateQuestionImages = useCallback((data: QuestionImagesType) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE,
+      payload: data,
+    });
+  }, []);
+
+  useEffect(() => {
+    const eventSource = new EventSource('/api/s3-events');
+
+    eventSource.onmessage = event => {
+      const bucketImages = JSON.parse(event.data);
+      updateQuestionImages(bucketImages);
+    };
+
+    eventSource.onerror = error => {
+      console.error('SSE Error:', error);
+      eventSource.close();
+    };
+
+    return () => {
+      eventSource.close();
+    };
+  }, [updateQuestionImages]);
+
+  return { state, setToastMessage, clearToastMessage, updateQuestionImages };
 };
 
 type UseSystemStateContextType = ReturnType<typeof useSystemStateContext>;
@@ -76,6 +118,7 @@ const initContextState: UseSystemStateContextType = {
   state: initState,
   setToastMessage: (data: ToastMessageType) => {},
   clearToastMessage: () => {},
+  updateQuestionImages: (data: QuestionImagesType) => {},
 };
 
 export const SystemStateContext =
@@ -97,19 +140,24 @@ export const SystemStateProvider = ({
   );
 };
 
-type UseSystemStateHookType = {
-  toastMessage: ToastMessageType;
-  setToastMessage: (data: ToastMessageType) => void;
-  clearToastMessage: () => void;
-};
+type UseSystemStateHookType = typeof initContextState;
+
+//   {
+//   toastMessage: ToastMessageType;
+//   setToastMessage: (data: ToastMessageType) => void;
+//   clearToastMessage: () => void;
+//   updateQuestionImages: (data: QuestionImagesType) => void,
+// };
 
 export const useSystemState = (): UseSystemStateHookType => {
-  const {
-    state: { toastMessage },
+  const { state, setToastMessage, clearToastMessage, updateQuestionImages } =
+    useContext(SystemStateContext);
+  return {
+    state,
     setToastMessage,
     clearToastMessage,
-  } = useContext(SystemStateContext);
-  return { toastMessage, setToastMessage, clearToastMessage };
+    updateQuestionImages,
+  };
 };
 
 export default SystemStateProvider;
