@@ -1,6 +1,9 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { InputWithLabel } from '@/components/modal/inputWithLabel';
@@ -8,8 +11,7 @@ import { CheckboxWithLabel } from '@/components/modal/checkboxWithLabel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayerSchema, type Player } from '@/schemas/Player';
 import { savePlayer } from '@/actions/player';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { ShowImages } from '@/components/images/showImages';
 
 type Props = {
   id: number;
@@ -116,8 +118,9 @@ export default function ShowImagesForm({
             e.preventDefault();
             form.handleSubmit(onSubmit)();
           }}
-          className="flex flex-col gap-8"
+          className="flex flex-col gap-8 "
         >
+          <ShowImages />
           <div className="flex gap-6 justify-start">
             <Button type="submit">{buttons.save}</Button>
             <Button

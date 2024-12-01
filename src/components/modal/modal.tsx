@@ -17,12 +17,12 @@ export function Modal({
   children,
   title,
   description,
-  alertConfirmationMessage
+  alertConfirmationMessage,
 }: {
   children: React.ReactNode;
   title?: string;
-    description?: string;
-    alertConfirmationMessage?: string;
+  description?: string;
+  alertConfirmationMessage?: string;
 }) {
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const router = useRouter();

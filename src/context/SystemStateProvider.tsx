@@ -1,6 +1,5 @@
 'use client';
 
-import { S3Service } from '@/services/s3Services';
 import {
   createContext,
   useReducer,
@@ -11,6 +10,8 @@ import {
   ReactNode,
   useEffect,
 } from 'react';
+
+import { getQuestionImages } from '@/actions/question';
 
 export type MessageType = 'error' | 'warning' | 'success';
 export type ToastMessageType = {
@@ -92,6 +93,11 @@ const useSystemStateContext = (initState: StateType) => {
   }, []);
 
   useEffect(() => {
+    (async () => {
+      const bucketImages = await getQuestionImages();
+      updateQuestionImages(bucketImages as QuestionImagesType);
+    })();
+
     const eventSource = new EventSource('/api/s3-events');
 
     eventSource.onmessage = event => {

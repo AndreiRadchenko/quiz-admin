@@ -15,7 +15,7 @@ type Props = {
   searchParams: { seat: string };
 };
 
-export default async function PlayerEdit({
+export default async function QuestionImages({
   params: { id, lang },
   searchParams: { seat },
 }: Props) {
