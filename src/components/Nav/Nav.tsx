@@ -5,29 +5,16 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { ComponentProps, ReactNode, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+
 import NavMenu from './components/NavMenu';
 import { type MenuType } from '../../../dictionaries/dictionaries';
 import logo from '../../../public/1percentclub.png';
-
-import { S3Service } from '@/services/s3Services';
-import { useSystemState } from '@/context/SystemStateProvider';
-
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
   menu: MenuType;
 }
 
 export function Nav({ children, menu, className }: Props) {
-  const { updateQuestionImages } = useSystemState();
-  // S3Service.onUpdateQuestionsImages = updateQuestionImages;
-  // S3Service.getInstance(updateQuestionImages);
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const s3Service = await S3Service.getInstance(updateQuestionImages);
-  //   })();
-  // }, [updateQuestionImages]);
-
   return (
     <nav
       id="navbar"

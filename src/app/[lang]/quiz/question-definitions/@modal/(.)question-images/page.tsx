@@ -15,29 +15,19 @@ type Props = {
   searchParams: { seat: string };
 };
 
-export default async function QuestionImages({
-  params: { id, lang },
-  searchParams: { seat },
-}: Props) {
+export default async function QuestionImages({ params: { id, lang } }: Props) {
   const {
     quiz: {
       players: { playerForm },
     },
   } = await getDictionary(lang);
 
-  const formTitle = replacePlaceholders(playerForm.title, { id, seat });
-
   return (
     <Modal
       title={'Select question image'}
       alertConfirmationMessage={playerForm.alertConfirmationMessage}
     >
-      <ShowImagesForm
-        id={Number(id)}
-        labels={playerForm.labels}
-        checkBoxes={playerForm.checkBoxes}
-        buttons={playerForm.buttons}
-      />
+      <ShowImagesForm buttons={playerForm.buttons} />
     </Modal>
   );
 }

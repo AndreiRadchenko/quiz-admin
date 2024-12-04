@@ -45,7 +45,6 @@ export default async function RootLayout({
       >
         <PreferencesProvider>
           <SystemStateProvider>{children}</SystemStateProvider>
-          {/* {children} */}
         </PreferencesProvider>
         <Toaster />
       </body>
