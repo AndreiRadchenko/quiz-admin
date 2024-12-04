@@ -93,11 +93,13 @@ const useSystemStateContext = (initState: StateType) => {
   }, []);
 
   useEffect(() => {
+    //Update array of images in context on render app
     (async () => {
       const bucketImages = await getQuestionImages();
       updateQuestionImages(bucketImages as QuestionImagesType);
     })();
 
+    //Update array of images in context on change content of bucket
     const eventSource = new EventSource('/api/s3-events');
 
     eventSource.onmessage = event => {

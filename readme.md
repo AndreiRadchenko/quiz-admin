@@ -14,6 +14,9 @@
 7. [Shadcn Toast component](#shadcn-toast-component)
 8. [MINIO container for local S3 file storage](#minio-container-for-local-s3-file-storage)
 9. [State management with useContext and useReduser](#state-management-with-usecontext-and-usereduser)
+10. [Server Send Events (S3 bucket update)](#server-send-events)
+11. [Page Context](#page-context)
+12. [Tailwind scrollbar styling](#tailwind-scrollbar-styling)
 
 ## Install Next project
 
@@ -959,5 +962,354 @@ Project branch `feat/minio-bucket`
    
    const [toastMessage, setToastMessage, clearToastMessage] = useSystemState();
    ```
+
+<a href="#top">⬅️ Back to top</a>
+
+## Server Send Events
+
+I used `questionImagesURL` in SystemStateProvider to hold actual array of images
+name from minio questions bucket. I update this context array every time
+questions bucket content is changed. Additionally I update `questionImagesURL`
+in SystemState when app is rendered at first time.
+
+To do that I utilize SSE technic.
+
+1. In S3Service class I create public `eventEmitter`. In class method
+   `startBucketPoller()` I trigger
+   `this.eventEmitter.emit('bucketUpdate', bucketImages);` every time objects
+   added or deleted from questions bucket. `emit` triggers with 1 sec delay
+   after last notification from poller.
+
+   `startBucketPoller()` is called in S3Service.init().
+
+   _src/services/s3Services.ts_
+
+   ```ts
+     startBucketPoller(): void {
+    const poller = this.Bucket.listenBucketNotification(
+      this.QuestionsBucket,
+      '',
+      '',
+      ['s3:ObjectCreated:*', 's3:ObjectRemoved:*']
+    );
+
+    const debouncedUpdate = debounce(async () => {
+      try {
+        const bucketImages = await this.getImages();
+        this.eventEmitter.emit('bucketUpdate', bucketImages);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    }, 1000);
+
+    poller.on('notification', debouncedUpdate);
+   }
+   ```
+
+2. S3Service has method onBucketUpdate() which accepts callback.
+
+   _src/services/s3Services.ts_
+
+   ```ts
+   onBucketUpdate(callback: (images: QuestionImagesType) => void): void {
+     this.eventEmitter.on('bucketUpdate', callback);
+   }
+   ```
+
+   In _src/app/api/s3-events/route.ts_ I've created route, and onUpdate()
+   function of this route I pass as callback to the
+   `s3Service.onBucketUpdate(onUpdate);`. onUpdate() enqueue data (array of
+   images names) to send from `api/s3-events`
+
+   _src/app/api/s3-events/route.ts_
+
+   ```ts
+   export async function GET(request: Request): Promise<Response> {
+     // Create a new ReadableStream to handle SSE
+     const stream = new ReadableStream({
+       start(controller) {
+         (async () => {
+           const s3Service = await S3Service.getInstance();
+   
+           if (!s3Service) {
+             controller.close();
+             throw new Error('Failed to initialize S3Service');
+           }
+   
+           // Function to send bucket updates to the client
+           const onUpdate = (images: QuestionImagesType) => {
+             const data = `data: ${JSON.stringify(images)}\n\n`;
+             controller.enqueue(new TextEncoder().encode(data));
+           };
+   
+           // Register the event listener
+           s3Service.onBucketUpdate(onUpdate);
+   
+           // Handle cleanup when the client disconnects
+           const cleanup = () => {
+             console.log('Connection closed');
+             s3Service.eventEmitter.removeListener('bucketUpdate', onUpdate);
+             controller.close();
+           };
+   
+           // Listen for client disconnect via AbortSignal
+           request.signal.addEventListener('abort', cleanup);
+         })().catch(err => {
+           console.error('Error in SSE handler:', err);
+           controller.error(err);
+         });
+       },
+     });
+     // Return the Response object with SSE headers
+     return new Response(stream, {
+       headers: {
+         'Content-Type': 'text/event-stream',
+         'Cache-Control': 'no-cache',
+         Connection: 'keep-alive',
+         'X-Accel-Buffering': 'no',
+       },
+     });
+   }
+   ```
+
+3. In _SystemStateProvider.tsx_ => `useSystemStateContext` I've created
+   useEffect which is responsible for update context `questionImagesURL`
+   variable when app have been rendered, and this useEffect creates
+   `const eventSource = new EventSource('/api/s3-events');` - in app listener
+   for synchronous context update with bucket content change.
+
+   _src/context/SystemStateProvider.tsx_
+
+   ```ts
+   const useSystemStateContext = (initState: StateType) => {
+     const [state, dispatch] = useReducer(reducer, initState);
+   
+     const updateQuestionImages = useCallback((data: QuestionImagesType) => {
+       dispatch({
+         type: REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE,
+         payload: data,
+       });
+     }, []);
+   
+     useEffect(() => {
+       //Update array of images in context on render app
+       (async () => {
+         const bucketImages = await getQuestionImages();
+         updateQuestionImages(bucketImages as QuestionImagesType);
+       })();
+   
+       //Update array of images in context on changes content of bucket
+       const eventSource = new EventSource('/api/s3-events');
+       eventSource.onmessage = event => {
+         const bucketImages = JSON.parse(event.data);
+         updateQuestionImages(bucketImages);
+       };
+   
+       eventSource.onerror = error => {
+         console.error('SSE Error:', error);
+         eventSource.close();
+       };
+   
+       return () => {
+         eventSource.close();
+       };
+     }, [updateQuestionImages]);
+   
+     return { state, updateQuestionImages };
+   };
+   ```
+
+<a href="#top">⬅️ Back to top</a>
+
+## Page Context
+
+<img src='./readme_img/select-images.webp' width="600px">
+
+On `Question Dedfinition` page I have 2 modal window: _Edit Question_ and
+_Select Image_. The second window is opened from first one. Modals are opened by
+`next/link` component, so I can't pass dispatch callback as props for store
+state in common windows ancestor (namely question-definition page component). To
+convey image name, selected in the _Select Image_ modal to the _Edit Question_
+input field I used page context.
+
+_src/app/[lang]/quiz/question-definitions/\_context/pageContext.tsx_
+
+```ts
+'use client';
+
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  SetStateAction,
+} from 'react';
+
+export type Preferences = {
+  selectedQuestionImage: string;
+};
+
+interface iPreferencesContext {
+  pagePreferences: Preferences;
+  setPagePreferences: React.Dispatch<SetStateAction<Preferences>>;
+}
+
+const PageContext = createContext<iPreferencesContext>(
+  {} as iPreferencesContext
+);
+
+export default function PageContextProvider({
+  children,
+}: {
+  children: ReactNode;
+}) {
+  const [pagePreferences, setPagePreferences] = useState<Preferences>(() => {
+    const preferences = {
+      selectedQuestionImage: '',
+    } as Preferences;
+    return preferences;
+  });
+
+  return (
+    <PageContext.Provider value={{ pagePreferences, setPagePreferences }}>
+      {children}
+    </PageContext.Provider>
+  );
+}
+
+export function usePageContext() {
+  return useContext(PageContext);
+}
+
+```
+
+_src/app/[lang]/quiz/question-definitions/layout.tsx_
+
+```ts
+import PageContextProvider from './_context/pageContext';
+
+export default function QuestionsDataLayout({
+  children,
+  modal,
+}: Readonly<{
+  children: React.ReactNode;
+  modal: React.ReactNode;
+}>) {
+  return (
+    <PageContextProvider>
+      {modal}
+      {children}
+    </PageContextProvider>
+  );
+}
+```
+
+_src/app/[lang]/quiz/question-definitions/\_components/showImages.tsx_ - This is
+modal window where I select image
+
+```ts
+export function ShowImages({ onSelect }: Props) {
+  const { state } = useSystemState();
+  const imgBasePath =
+    'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
+  const { pagePreferences, setPagePreferences } = usePageContext();
+
+  const onImageClick = (img: string | undefined) => {
+    setPagePreferences({
+      ...pagePreferences,
+      selectedQuestionImage: img ? img : '',
+    });
+    onSelect();
+  };
+```
+
+_src/app/[lang]/quiz/question-definitions/\_components/inputWithSelect.tsx_ -
+It's input component of Edit Question Form where I need image name.
+
+```ts
+export function InputWithSelect({
+
+}: Props) {
+  const form = useFormContext();
+  //Page context
+  const { pagePreferences, setPagePreferences } = usePageContext();
+
+  const { selectedQuestionImage } = pagePreferences;
+
+  const setFieldValue = (fieldValue: any) => {
+    fieldValue =
+      selectedQuestionImage === '' ? fieldValue : selectedQuestionImage;
+    return fieldValue;
+  };
+
+  const onChangeFieldValue = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FieldValues, string>
+  ) => {
+    if (selectedQuestionImage !== '') {
+      setPagePreferences({
+        ...pagePreferences,
+        selectedQuestionImage: '',
+      });
+    }
+    field.onChange(e.target.value);
+  };
+  ...
+  <FormControl>
+     <Input
+       {...field}
+       id={fieldTitleNoSpaces}
+       className="w-full max-w-xl"
+       placeholder={placeholder || ''}
+       readOnly={readOnly}
+       disabled={readOnly}
+       value={setFieldValue(field.value)}
+       onChange={e => onChangeFieldValue(e, field)}
+     />
+  </FormControl>
+```
+
+<a href="#top">⬅️ Back to top</a>
+
+## Tailwind scrollbar styling
+
+<img src='./readme_img/select-images.webp' width="600px">
+
+[Stackowerflow](https://stackoverflow.com/questions/69400560/how-to-change-scrollbar-when-using-tailwind-next-js-react)
+
+To customize application scrollbar I add layer to the global.scc
+
+_src/app/globals.css_
+
+```js
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: var(--background);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    margin-right: 2px;
+    background: var(--primary);
+    border-radius: 100vh;
+    border: 1px solid var(--primary);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-active);
+  }
+}
+```
+
+And add `scrollbar` style to the container className:
+
+```ts
+<div className="overflow-y-auto border max-h-[80vh] scrollbar rounded-md p-2">
+```
 
 <a href="#top">⬅️ Back to top</a>

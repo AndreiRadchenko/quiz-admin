@@ -1,13 +1,12 @@
 'use client';
 
-import { ChangeEvent, useCallback, useEffect } from 'react';
+import { ChangeEvent } from 'react';
 import {
   ControllerRenderProps,
   FieldValues,
   useFormContext,
 } from 'react-hook-form';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { IoIosImages } from 'react-icons/io';
 
 import { Input } from '@/components/ui/input';
