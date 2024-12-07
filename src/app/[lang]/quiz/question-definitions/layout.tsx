@@ -1,3 +1,5 @@
+import PageContextProvider from './_context/pageContext';
+
 export default function QuestionsDataLayout({
   children,
   modal,
@@ -6,9 +8,9 @@ export default function QuestionsDataLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <>
+    <PageContextProvider>
       {modal}
       {children}
-    </>
+    </PageContextProvider>
   );
 }

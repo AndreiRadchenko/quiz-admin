@@ -240,9 +240,19 @@
         },
         "buttons": {
           "save": "Save changes",
-          "cancel": "Cancel"
+          "cancel": "Cancel",
+          "tooltips": {
+            "selectImage": "Choose question image"
+          }
         },
         "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
+      },
+      "showImagesForm": {
+        "title": "Choose question image",
+        "buttons": {
+          "save": "Save changes",
+          "cancel": "Cancel"
+        }
       }
     },
     "answers": {

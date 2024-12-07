@@ -15,8 +15,6 @@ export class S3Service {
   private static instance: S3Service | null = null;
   private Bucket: Minio.Client;
   private QuestionsBucket: string = 'questions';
-  // private debounceGetImages: () => void;
-  // eventEmitter: EventEmitter;
   publicReadPolicy = {
     Version: '2012-10-17',
     Statement: [
@@ -37,10 +35,6 @@ export class S3Service {
       accessKey: config.S3_ACCESS_KEY,
       secretKey: config.S3_SECRET_KEY,
     });
-    // this.debounceGetImages = debounce(async () => {
-    //   await this.getImages();
-    // }, 1000);
-    // this.eventEmitter = new EventEmitter();
   }
 
   async init() {
@@ -121,7 +115,6 @@ export class S3Service {
   }
 
   onBucketUpdate(callback: (images: QuestionImagesType) => void): void {
-    // console.log('call onBucketUpdate');
     this.eventEmitter.on('bucketUpdate', callback);
   }
 }

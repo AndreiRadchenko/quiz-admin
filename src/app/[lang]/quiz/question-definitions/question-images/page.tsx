@@ -1,10 +1,7 @@
 import React from 'react';
 
 import ShowImagesForm from './ShowImagesForm';
-import {
-  getDictionary,
-  replacePlaceholders,
-} from '../../../../../../dictionaries/dictionaries';
+import { getDictionary } from '../../../../../../dictionaries/dictionaries';
 
 type Props = {
   params: {
@@ -14,27 +11,17 @@ type Props = {
   searchParams: { seat: string };
 };
 
-export default async function PlayerEdit({
-  params: { id, lang },
-  searchParams: { seat },
-}: Props) {
+export default async function QuestionImages({ params: { id, lang } }: Props) {
   const {
     quiz: {
-      players: { playerForm },
+      questionDefinitions: { showImagesForm },
     },
   } = await getDictionary(lang);
 
-  const formTitle = replacePlaceholders(playerForm.title, { id, seat });
-
   return (
     <>
-      <h1 className="mb-8">{'Show Question Images'}</h1>
-      <ShowImagesForm
-        id={Number(id)}
-        labels={playerForm.labels}
-        checkBoxes={playerForm.checkBoxes}
-        buttons={playerForm.buttons}
-      />
+      <h1 className="mb-8">{showImagesForm.title}</h1>
+      <ShowImagesForm buttons={showImagesForm.buttons} />
     </>
   );
 }

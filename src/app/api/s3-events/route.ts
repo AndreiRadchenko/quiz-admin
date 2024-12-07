@@ -15,7 +15,6 @@ export async function GET(request: Request): Promise<Response> {
 
         // Function to send bucket updates to the client
         const onUpdate = (images: QuestionImagesType) => {
-          // console.log('Bucket update:', images);
           const data = `data: ${JSON.stringify(images)}\n\n`;
           controller.enqueue(new TextEncoder().encode(data));
         };

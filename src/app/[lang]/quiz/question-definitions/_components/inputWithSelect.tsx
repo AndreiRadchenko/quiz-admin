@@ -1,9 +1,16 @@
 'use client';
 
-import { useFormContext } from 'react-hook-form';
+import { ChangeEvent } from 'react';
+import {
+  ControllerRenderProps,
+  FieldValues,
+  useFormContext,
+} from 'react-hook-form';
+import Link from 'next/link';
+import { IoIosImages } from 'react-icons/io';
+
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-
 import { XIcon } from 'lucide-react';
 import {
   FormField,
@@ -12,10 +19,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { ButtonWithTooltip } from '../ui/buttonWithTooltip';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { IoIosImages } from 'react-icons/io';
+import { ButtonWithTooltip } from '../../../../../components/ui/buttonWithTooltip';
+
+import { usePageContext } from '../_context/pageContext';
 
 type Props = {
   fieldTitle: string;
@@ -37,9 +43,30 @@ export function InputWithSelect({
   buttonTooltip,
 }: Props) {
   const form = useFormContext();
-  const pathname = usePathname();
+  const { pagePreferences, setPagePreferences } = usePageContext();
+
+  const { selectedQuestionImage } = pagePreferences;
 
   const fieldTitleNoSpaces = fieldTitle.replaceAll(' ', '-');
+
+  const setFieldValue = (fieldValue: any) => {
+    fieldValue =
+      selectedQuestionImage === '' ? fieldValue : selectedQuestionImage;
+    return fieldValue;
+  };
+
+  const onChangeFieldValue = (
+    e: ChangeEvent<HTMLInputElement>,
+    field: ControllerRenderProps<FieldValues, string>
+  ) => {
+    if (selectedQuestionImage !== '') {
+      setPagePreferences({
+        ...pagePreferences,
+        selectedQuestionImage: '',
+      });
+    }
+    field.onChange(e.target.value);
+  };
 
   return (
     <FormField
@@ -83,8 +110,8 @@ export function InputWithSelect({
                     placeholder={placeholder || ''}
                     readOnly={readOnly}
                     disabled={readOnly}
-                    value={field.value}
-                    onChange={e => field.onChange(e.target.value)}
+                    value={setFieldValue(field.value)}
+                    onChange={e => onChangeFieldValue(e, field)}
                   />
                 </FormControl>
               </div>
@@ -98,6 +125,10 @@ export function InputWithSelect({
                     hover:text-rose-400"
                   onClick={e => {
                     e.preventDefault();
+                    setPagePreferences({
+                      ...pagePreferences,
+                      selectedQuestionImage: '',
+                    });
                     form.setValue(nameInSchema, '', { shouldDirty: true });
                   }}
                 >

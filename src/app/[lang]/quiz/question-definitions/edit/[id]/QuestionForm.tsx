@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { InputWithLabel } from '@/components/modal/inputWithLabel';
-import { InputWithSelect } from '@/components/modal/inputWithSelect';
+import { InputWithSelect } from '@/app/[lang]/quiz/question-definitions/_components/inputWithSelect';
 import { RadioGroupWithLabel } from '@/components/modal/radioGroupWithLabel';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { PlayerSchema, type Player } from '@/schemas/Player';
@@ -13,6 +13,7 @@ import { savePlayer } from '@/actions/player';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { saveQuestion } from '@/actions/question';
+import { usePageContext } from '../../_context/pageContext';
 
 type Props = {
   id: string;
@@ -23,7 +24,7 @@ type Props = {
     [key: string]: string;
   };
   buttons: {
-    [key: string]: string;
+    [key: string]: string & { [key: string]: string };
   };
 };
 
@@ -47,6 +48,7 @@ export default function QuestionForm({
   const [errors, setErrors] = useState({});
   const router = useRouter();
   const pathname = usePathname();
+  const { pagePreferences, setPagePreferences } = usePageContext();
 
   const form = useForm<Question>({
     mode: 'onBlur',
@@ -77,6 +79,10 @@ export default function QuestionForm({
   }, [form.formState]);
 
   async function onSubmit() {
+    setPagePreferences({
+      ...pagePreferences,
+      selectedQuestionImage: '',
+    });
     setMessage('');
     setErrors({});
     /* No need to validate here because 
@@ -140,7 +146,7 @@ export default function QuestionForm({
                 <InputWithSelect
                   key={labels['imagePath']}
                   fieldTitle={labels['imagePath']}
-                  buttonTooltip={'Choose question image'}
+                  buttonTooltip={buttons.tooltips.selectImage}
                   nameInSchema={'imagePath'}
                   labelLeft
                   modalLink={pathname.replace(`/edit/${id}`, '')}
@@ -153,7 +159,13 @@ export default function QuestionForm({
             <Button
               type="button"
               variant="accent"
-              onClick={() => router.back()}
+              onClick={() => {
+                setPagePreferences({
+                  ...pagePreferences,
+                  selectedQuestionImage: '',
+                });
+                router.back();
+              }}
             >
               {buttons.cancel}
             </Button>

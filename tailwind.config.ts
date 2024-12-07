@@ -19,6 +19,12 @@ const config = {
       },
     },
     extend: {
+      width: {
+        '9/10': '98%',
+      },
+      height: {
+        '1/10': '10%',
+      },
       colors: {
         border: 'var(--border)',
         input: 'var(--input)',

@@ -93,3 +93,26 @@
     @apply text-3xl;
   }
 }
+
+@layer utilities {
+  .scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  .scrollbar::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    background: var(--background);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb {
+    margin-right: 2px;
+    background: var(--primary);
+    border-radius: 100vh;
+    border: 1px solid var(--primary);
+  }
+
+  .scrollbar::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-active);
+  }
+}

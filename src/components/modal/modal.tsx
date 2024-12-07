@@ -17,12 +17,12 @@ export function Modal({
   children,
   title,
   description,
-  alertConfirmationMessage
+  alertConfirmationMessage,
 }: {
   children: React.ReactNode;
   title?: string;
-    description?: string;
-    alertConfirmationMessage?: string;
+  description?: string;
+  alertConfirmationMessage?: string;
 }) {
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const router = useRouter();
@@ -44,7 +44,7 @@ export function Modal({
     <Dialog defaultOpen={true} open={true} onOpenChange={handleOpenChange}>
       <DialogPortal>
         <DialogOverlay className="bg-gray-500 bg-opacity-10">
-          <DialogContent className="overflow-y-hidden xl:w-2/4 w-3/4">
+          <DialogContent className="overflow-y-hidden xl:w-2/4 w-3/4 max-h-screen">
             <AlertConfirmation
               open={showExitConfirmation}
               setOpen={setShowExitConfirmation}
