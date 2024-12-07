@@ -18,16 +18,13 @@ type Props = {
 export default async function QuestionImages({ params: { id, lang } }: Props) {
   const {
     quiz: {
-      players: { playerForm },
+      questionDefinitions: { showImagesForm },
     },
   } = await getDictionary(lang);
 
   return (
-    <Modal
-      title={'Select question image'}
-      alertConfirmationMessage={playerForm.alertConfirmationMessage}
-    >
-      <ShowImagesForm buttons={playerForm.buttons} />
+    <Modal title={showImagesForm.title}>
+      <ShowImagesForm buttons={showImagesForm.buttons} />
     </Modal>
   );
 }

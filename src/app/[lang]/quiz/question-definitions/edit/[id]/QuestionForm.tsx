@@ -24,7 +24,7 @@ type Props = {
     [key: string]: string;
   };
   buttons: {
-    [key: string]: string;
+    [key: string]: string & { [key: string]: string };
   };
 };
 
@@ -146,7 +146,7 @@ export default function QuestionForm({
                 <InputWithSelect
                   key={labels['imagePath']}
                   fieldTitle={labels['imagePath']}
-                  buttonTooltip={'Choose question image'}
+                  buttonTooltip={buttons.tooltips.selectImage}
                   nameInSchema={'imagePath'}
                   labelLeft
                   modalLink={pathname.replace(`/edit/${id}`, '')}

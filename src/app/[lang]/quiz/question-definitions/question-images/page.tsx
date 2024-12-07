@@ -11,17 +11,17 @@ type Props = {
   searchParams: { seat: string };
 };
 
-export default async function PlayerEdit({ params: { id, lang } }: Props) {
+export default async function QuestionImages({ params: { id, lang } }: Props) {
   const {
     quiz: {
-      players: { playerForm },
+      questionDefinitions: { showImagesForm },
     },
   } = await getDictionary(lang);
 
   return (
     <>
-      <h1 className="mb-8">{'Show Question Images'}</h1>
-      <ShowImagesForm buttons={playerForm.buttons} />
+      <h1 className="mb-8">{showImagesForm.title}</h1>
+      <ShowImagesForm buttons={showImagesForm.buttons} />
     </>
   );
 }

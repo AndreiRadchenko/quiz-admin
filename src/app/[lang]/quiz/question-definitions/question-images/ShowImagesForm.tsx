@@ -11,7 +11,7 @@ type Props = {
   };
 };
 
-export default function ShowImagesForm({ buttons }: Props) {
+export default function ShowImagesForm({  buttons }: Props) {
   const router = useRouter();
 
   return (

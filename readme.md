@@ -1123,7 +1123,7 @@ To do that I utilize SSE technic.
 
 ## Page Context
 
-<img src='./readme_img/select-images.webp' width="600px">
+<img src='./readme_img/select-images.webp' width="800px">
 
 On `Question Dedfinition` page I have 2 modal window: _Edit Question_ and
 _Select Image_. The second window is opened from first one. Modals are opened by
@@ -1273,7 +1273,7 @@ export function InputWithSelect({
 
 ## Tailwind scrollbar styling
 
-<img src='./readme_img/select-images.webp' width="600px">
+<img src='./readme_img/select-images.webp' width="800px">
 
 [Stackowerflow](https://stackoverflow.com/questions/69400560/how-to-change-scrollbar-when-using-tailwind-next-js-react)
 
