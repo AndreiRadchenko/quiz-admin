@@ -6,12 +6,32 @@
     "darkTheme": "Dark Theme"
   },
   "quiz": {
+    "navGroupName": {
+      "gamePreferences": "Game Preferences",
+      "turnSummary": "Turn Summary",
+      "imageStore": "Image Store"
+    },
     "nav": {
+      "dashboard": "Dashboard",
       "players": "Players",
       "questions": "Questions",
       "questionDefinitions": "Question Definitions",
       "answers": "Answers",
-      "overview": "Overview"
+      "overview": "Overview",
+      "questionImages": "Question Images",
+      "playerImages": "Player Images",
+      "appearance": "Appearance"
+    },
+    "navTooltip": {
+      "dashboard": "Dashboard",
+      "players": "Players",
+      "questions": "Questions",
+      "questionDefinitions": "Question Definitions",
+      "answers": "Answers",
+      "overview": "Overview",
+      "questionImages": "Question Images",
+      "playerImages": "Player Images",
+      "appearance": "Appearance"
     },
     "dashboard": {
       "title": "1% Club Dashboard",
