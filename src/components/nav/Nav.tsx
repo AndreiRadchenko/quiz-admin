@@ -18,7 +18,7 @@ export function Nav({ children, menu, className }: Props) {
   return (
     <nav
       id="navbar"
-      className="bg-secondary text-secondary-foreground fixed top-0 left-0 z-10 w-screen"
+      className="bg-secondary text-secondary-foreground fixed top-0 left-0 -z-1 w-screen"
     >
       <div className="container flex flex-row justify-start items-center gap-16">
         <Image

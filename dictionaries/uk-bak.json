@@ -6,32 +6,13 @@
     "darkTheme": "Темна тема"
   },
   "quiz": {
-    "navGroupName": {
-      "gamePreferences": "Налаштування гри",
-      "turnSummary": "Результати туру",
-      "imageStore": "Сховище зображень"
-    },
     "nav": {
       "dashboard": "Панель налаштувань",
       "players": "Гравці",
-      "questions": "Запитання",
-      "questionDefinitions": "Визначення запитань",
+      "questions": "Питання",
+      "questionDefinitions": "Визначення питань",
       "answers": "Відповіді",
-      "overview": "Огляд",
-      "questionImages": "Зображення запитань",
-      "playerImages": "Зображення гравців",
-      "appearance": "Вигляд"
-    },
-    "navTooltip": {
-      "dashboard": "Панель налаштувань",
-      "players": "Гравці",
-      "questions": "Запитання",
-      "questionDefinitions": "Визначення запитань",
-      "answers": "Відповіді",
-      "overview": "Огляд",
-      "questionImages": "Зображення запитань",
-      "playerImages": "Зображення гравців",
-      "appearance": "Зовнішній вигляд"
+      "overview": "Огляд"
     },
     "dashboard": {
       "title": "Інформаційна панель клубу 1%.",
@@ -97,13 +78,6 @@
           "label": "Інформація про зовнішнього гравця",
           "buttonText": "Імпорт даних гравця",
           "tooltip": "Імпорт даних гравця"
-        },
-        "questionImages": {
-          "label": "Питання Зображення",
-          "buttonText": "Імпорт зображень",
-          "tooltip": "Імпортуйте зображення запитань",
-          "successMessage": "Зображення успішно завантажено",
-          "errorMessage": "Помилка завантаження зображень"
         }
       }
     },
@@ -143,37 +117,12 @@
           "id": "ID",
           "name": "Ім'я",
           "active": "Активний",
-          "usedPass": "Паспорт б/у",
+          "usedPass": "Паспорт б/в",
           "boughtOut": "Викуплено",
           "camera": "Камера",
           "swapWith": "Поміняти з",
           "commCheck": "Перевірка зв'язку"
         }
-      },
-      "playerForm": {
-        "title": "Редагувати ID гравця {{id}} / місце № {{seat}}",
-        "description": "Редагувати дані гравця",
-        "labels": {
-          "name": "Ім'я",
-          "tier": "Рівень",
-          "notes": "Примітки",
-          "occupation": "Рід занять",
-          "prizeSpend": "Витрати призів",
-          "relations": "Відносини",
-          "externalID": "Зовнішній ID",
-          "imagePath": "Шлях зображення"
-        },
-        "checkBoxes": {
-          "active": "Активний",
-          "usedPass": "Паспорт б/у",
-          "boughtOut": "Викуплено",
-          "boughtOutEndGame": "Викуплено (фінальна гра)"
-        },
-        "buttons": {
-          "save": "Зберегти зміни",
-          "cancel": "Скасувати"
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
       }
     },
     "questions": {
@@ -204,22 +153,10 @@
           "type": "Тип",
           "bindQuestion": "Зв'язане питання"
         }
-      },
-      "bindForm": {
-        "title": "Прив’язка до позиції # {{idx}} / {{legend}}",
-        "description": "Прив'яжіть запитання до ігрової позиції",
-        "labels": {
-          "selectQuestion": "Питання для прив'язки"
-        },
-        "buttons": {
-          "save": "Зберегти зміни",
-          "cancel": "Скасувати"
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
       }
     },
     "questionDefinitions": {
-      "title": "Визначення запитань",
+      "title": "Визначення питань",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Імпорт запитань",
@@ -244,38 +181,6 @@
           "label": "Мітка",
           "type": "Тип",
           "description": "опис"
-        }
-      },
-      "questionForm": {
-        "title": "Редагувати питання",
-        "description": "Редагувати дані питання",
-        "labels": {
-          "answerType": "Тип",
-          "label": "Мітка",
-          "description": "опис",
-          "answerOptions": "Опції",
-          "correctAnswer": "Правильна відповідь",
-          "imagePath": "Шлях зображення"
-        },
-        "radioButtons": {
-          "multiple": "множинний",
-          "text": "текст",
-          "textNumeric": "Текст Числовий"
-        },
-        "buttons": {
-          "save": "Зберегти зміни",
-          "cancel": "Скасувати",
-          "tooltips": {
-            "selectImage": "Виберіть зображення запитання"
-          }
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
-      },
-      "showImagesForm": {
-        "title": "Виберіть зображення запитання",
-        "buttons": {
-          "save": "Зберегти зміни",
-          "cancel": "Скасувати"
         }
       }
     },
@@ -302,34 +207,7 @@
           "answer": "Відповідь",
           "correct": "Правильно",
           "pass": "Пас",
-          "auto": "Авто"
-        }
-      }
-    },
-    "overview": {
-      "title": "Огляд",
-      "buttons": {
-        "importFileBtn": {
-          "buttonText": "Імпортувати відповіді",
-          "tooltip": "Імпортувати відповіді"
-        },
-        "exportAnswers": {
-          "buttonText": "Експортувати відповіді",
-          "tooltip": "Експортувати відповіді"
-        },
-        "refinalize": {
-          "buttonText": "Повторно завершити",
-          "tooltip": ""
-        }
-      },
-      "table": {
-        "header": {
-          "id": "#",
-          "name": "Ім'я",
-          "answer": "Відповідь",
-          "correct": "Правильно",
-          "pass": "Пас",
-          "auto": "Авто"
+          "auto": "Auo"
         }
       }
     }

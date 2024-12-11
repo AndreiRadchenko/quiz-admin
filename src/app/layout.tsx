@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster';
 
 import PreferencesProvider from '@/context/PreferencesProvider';
 import SystemStateProvider from '@/context/SystemStateProvider';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -35,7 +36,10 @@ export default async function RootLayout({
   children,
   params: { lang },
 }: Readonly<Props>) {
-  const dict = await getDictionary(lang);
+  const {
+    quiz: { nav },
+    menu,
+  } = await getDictionary(lang);
   const theme = await getThemeCookie();
 
   return (
@@ -44,7 +48,9 @@ export default async function RootLayout({
         className={cn(' bg-background font-sans antialiased', inter.variable)}
       >
         <PreferencesProvider>
-          <SystemStateProvider>{children}</SystemStateProvider>
+          <SystemStateProvider>
+            <SidebarProvider>{children}</SidebarProvider>
+          </SystemStateProvider>
         </PreferencesProvider>
         <Toaster />
       </body>

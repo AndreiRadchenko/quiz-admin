@@ -14,31 +14,32 @@ import { ThemeToggleDropdownItem } from './NavMenuActions';
 import { usePreferencesContext } from '@/context/PreferencesProvider';
 import { type MenuType } from '../../../../dictionaries/dictionaries';
 import { cn } from '@/lib/utils';
+import { SidebarMenuButton } from '@/components/ui/sidebar';
+import { ChevronUp, Palette } from 'lucide-react';
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   menu: MenuType;
+  nav: { [key: string]: string };
+  navTooltip: { [key: string]: string };
 }
 
-export default function NavMenu({ menu, className }: Props) {
+export default function NavMenu({ menu, nav, navTooltip, className }: Props) {
   const { userPreferences, setUserPreferences } = usePreferencesContext();
 
   return (
     <div className={cn('', className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger>
-          <IoMdMore size={24} />
-          <span className="sr-only">Actions</span>
+        <DropdownMenuTrigger asChild>
+          <SidebarMenuButton
+            size={'lg'}
+            tooltip={navTooltip.appearance}
+            className="[&>svg]:size-7"
+          >
+            <Palette className="pl-1" /> {nav.appearance}
+            <ChevronUp className="ml-auto" />
+          </SidebarMenuButton>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuItem asChild>
-            <a download href={`/quiz`}>
-              Download
-            </a>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={`/quiz/players`}>Edit</Link>
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
+        <DropdownMenuContent className="absolute bottom-14 -left-2">
           <DropdownMenuItem
             onClick={() => {
               setUserPreferences(prevState => ({ ...prevState, lang: 'uk' }));

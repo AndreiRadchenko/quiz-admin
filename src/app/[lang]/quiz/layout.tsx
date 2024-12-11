@@ -1,5 +1,9 @@
-import { Nav, NavLink } from '@/components/Nav/Nav';
+import { Nav, NavLink } from '@/components/nav/Nav';
 import { IoMdHome } from 'react-icons/io';
+
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/nav/app-sidebar';
+import { type Locale } from '../../../../i18n-config';
 
 import {
   getDictionary,
@@ -19,7 +23,7 @@ export default async function QuizLayout({
   params: { lang },
 }: Readonly<Props>) {
   const {
-    quiz: { nav },
+    quiz: { nav, navGroupName, navTooltip },
     menu,
   } = await getDictionary(lang);
 
@@ -30,7 +34,15 @@ export default async function QuizLayout({
 
   return (
     <>
-      <Nav menu={menu}>
+      <AppSidebar
+        nav={nav}
+        navGroupName={navGroupName}
+        navTooltip={navTooltip}
+        menu={menu}
+        lang={lang as Locale}
+      />
+
+      {/* <Nav menu={menu}>
         <NavLink href={`/${lang}/quiz`}>
           <IoMdHome size={24} />
         </NavLink>
@@ -48,8 +60,8 @@ export default async function QuizLayout({
         >
           {nav.overview}
         </NavLink>
-      </Nav>
-      <div className="bg-background container py-6 h-fit mt-16">{children}</div>
+      </Nav> */}
+      <div className="bg-background container py-6 h-fit">{children}</div>
     </>
   );
 }
