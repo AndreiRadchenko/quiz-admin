@@ -34,7 +34,7 @@
       "appearance": "Зовнішній вигляд"
     },
     "dashboard": {
-      "title": "Інформаційна панель клубу 1%.",
+      "title": "Клуб 1% Налаштування.",
       "buttons": {
         "gameFlow": {
           "resetGame": "Скинути гру",
@@ -303,6 +303,43 @@
           "correct": "Правильно",
           "pass": "Пас",
           "auto": "Авто"
+        }
+      }
+    },
+    "buckets": {
+      "importImagesForm": {
+        "label": "Імпортувати зображення запитань",
+        "buttonText": "Завантажити",
+        "tooltip": "Імпортуйте зображення запитань",
+        "successMessage": "Зображення успішно завантажено",
+        "errorMessage": "Помилка завантаження зображень"
+      },
+      "buttons": {
+        "delete": {
+          "buttonText": "Видалити",
+          "tooltip": "Видалити обрані файли"
+        },
+        "changeView": {
+          "buttonText": "",
+          "tooltip": "Показати список"
+        }
+      },
+      "tooltips": {
+        "uploadBtn": "Завантажте файли",
+        "deleteBtn": "Видалити обрані файли",
+        "showList": "Показати список",
+        "showGrid": "Показати сітку"
+      },
+      "title": {
+        "questions": "Зображення запитань",
+        "players": "Зображення гравців"
+      },
+      "table": {
+        "header": {
+          "selectAll": "Обрати всі",
+          "name": "Ім'я",
+          "lastModified": "Остання зміна",
+          "size": "Розмір"
         }
       }
     },

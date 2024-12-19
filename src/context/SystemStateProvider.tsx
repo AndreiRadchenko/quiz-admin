@@ -1,5 +1,7 @@
 'use client';
 
+import * as Minio from 'minio';
+
 import {
   createContext,
   useReducer,
@@ -20,7 +22,7 @@ export type ToastMessageType = {
 };
 
 export type QuestionImagesType = {
-  questionImagesURL: (string | undefined)[];
+  questionImages: Minio.BucketItem[];
 };
 
 type StateType = QuestionImagesType & {
@@ -40,7 +42,7 @@ type ReducerAction = {
 
 const initState: StateType = {
   toastMessage: { messageType: 'error', toastMessage: '' },
-  questionImagesURL: [],
+  questionImages: [],
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -59,9 +61,9 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
     }
     case REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE: {
       console.log('QUESTIONIMAGES_UPDATE:', payload);
-      const questionImagesURL =
-        (payload as QuestionImagesType).questionImagesURL || [];
-      return { ...state, questionImagesURL };
+      const questionImages =
+        (payload as QuestionImagesType).questionImages || [];
+      return { ...state, questionImages };
     }
     default:
       throw new Error();
@@ -132,10 +134,6 @@ const initContextState: UseSystemStateContextType = {
 export const SystemStateContext =
   createContext<UseSystemStateContextType>(initContextState);
 
-// type ChildrenType = {
-//   children?: ReactElement | ReactElement[] | undefined;
-// };
-
 export const SystemStateProvider = ({
   children,
 }: {
@@ -149,13 +147,6 @@ export const SystemStateProvider = ({
 };
 
 type UseSystemStateHookType = typeof initContextState;
-
-//   {
-//   toastMessage: ToastMessageType;
-//   setToastMessage: (data: ToastMessageType) => void;
-//   clearToastMessage: () => void;
-//   updateQuestionImages: (data: QuestionImagesType) => void,
-// };
 
 export const useSystemState = (): UseSystemStateHookType => {
   const { state, setToastMessage, clearToastMessage, updateQuestionImages } =

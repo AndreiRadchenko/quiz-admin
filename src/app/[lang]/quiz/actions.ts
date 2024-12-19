@@ -7,7 +7,7 @@ import { type ToastMessageType } from '@/context/SystemStateProvider';
 // const wait = (duration: number) =>
 //   new Promise(resolve => setTimeout(resolve, duration));
 
-export async function questionImages(prevState: unknown, formData: FormData) {
+export async function importImages(prevState: unknown, formData: FormData) {
   const files = formData.getAll('file') as File[];
   let filesCount = files.length;
 
@@ -34,7 +34,7 @@ export async function questionImages(prevState: unknown, formData: FormData) {
           : 'Image uploaded successfully',
     };
   } catch (error) {
-    console.error('Error in questionImages:', error);
+    console.error('Error in importImages:', error);
 
     return {
       messageType: 'error',
@@ -118,7 +118,7 @@ export async function externalPlayerInfo(
   }
 }
 
-type Action = typeof questionImages;
+type Action = typeof importImages;
 interface ImportFileActionType {
   [key: string]: Action;
 }
@@ -128,7 +128,7 @@ const importFileAction: ImportFileActionType = {
   playerData,
   externalQuestionData,
   externalPlayerInfo,
-  questionImages,
+  importImages,
 };
 
 export const getActions = async () => importFileAction;

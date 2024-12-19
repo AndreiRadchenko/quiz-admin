@@ -967,10 +967,10 @@ Project branch `feat/minio-bucket`
 
 ## Server Send Events
 
-I used `questionImagesURL` in SystemStateProvider to hold actual array of images
+I used `questionImages` in SystemStateProvider to hold actual array of images
 name from minio questions bucket. I update this context array every time
-questions bucket content is changed. Additionally I update `questionImagesURL`
-in SystemState when app is rendered at first time.
+questions bucket content is changed. Additionally I update `questionImages` in
+SystemState when app is rendered at first time.
 
 To do that I utilize SSE technic.
 
@@ -1073,8 +1073,8 @@ To do that I utilize SSE technic.
    ```
 
 3. In _SystemStateProvider.tsx_ => `useSystemStateContext` I've created
-   useEffect which is responsible for update context `questionImagesURL`
-   variable when app have been rendered, and this useEffect creates
+   useEffect which is responsible for update context `questionImages` variable
+   when app have been rendered, and this useEffect creates
    `const eventSource = new EventSource('/api/s3-events');` - in app listener
    for synchronous context update with bucket content change.
 

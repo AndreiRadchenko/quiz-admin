@@ -102,13 +102,13 @@ export function AppSidebar({
   const imageStore = [
     {
       title: nav.questionImages,
-      url: '',
+      url: '/quiz/buckets/questions',
       icon: Images,
       tooltip: navTooltip.questionImages,
     },
     {
       title: nav.playerImages,
-      url: '',
+      url: '/quiz/buckets/players',
       icon: MdPortrait,
       tooltip: navTooltip.playerImages,
     },
@@ -180,7 +180,7 @@ export function AppSidebar({
                         : ''
                     )}
                   >
-                    <Link href={item.url} className="w-8">
+                    <Link href={'/' + lang + item.url} className="w-8">
                       <item.icon size={32} className="pl-1" />
                       <span>{item.title}</span>
                     </Link>

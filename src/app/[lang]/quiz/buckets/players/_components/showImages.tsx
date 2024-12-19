@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 import { useSystemState } from '@/context/SystemStateProvider';
 import { config } from '@/config';
-import { usePageContext } from '../_context/pageContext';
+import { usePageContext } from '../../_context/pageContext';
 
 type Props = {
   onSelect: () => void;

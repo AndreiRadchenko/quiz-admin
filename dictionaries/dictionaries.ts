@@ -2,8 +2,13 @@ import 'server-only';
 
 import dict from './en.json';
 
-const { menu } = dict;
+const {
+  menu,
+  quiz: { buckets },
+} = dict;
+
 export type MenuType = typeof menu;
+export type BucketsType = Partial<typeof buckets>;
 
 // We enumerate all dictionaries here for better linting and typescript support
 // We also get the default import for cleaner types

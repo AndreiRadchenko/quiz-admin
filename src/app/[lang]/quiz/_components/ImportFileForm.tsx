@@ -15,9 +15,8 @@ import { usePathname } from 'next/navigation';
 type Props = {
   // action: (prevState: unknown, formData: FormData) => void | Promise<String>;
   action: any;
-  idx: number;
   field: string;
-  label: string;
+  label?: string;
   buttonText: string;
 };
 
@@ -57,26 +56,16 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
 
   return (
     <div className="flex flex-row gap-2 items-end">
-      {field === 'questionImages' && (
-        <ButtonWithTooltip
-          className="w-14"
-          type="button"
-          tooltip="Show images"
-          asChild
-        >
-          <Link href={pathname + `/question-images`}>
-            <IoIosImages size={24} />
-          </Link>
-        </ButtonWithTooltip>
-      )}
       <form
         action={formAction}
         onSubmit={handleSubmit}
         className="flex flex-col justify-around w-fit items-start"
       >
-        <Label className="mb-1 w-fit" htmlFor="input">
-          {label}
-        </Label>
+        {label && (
+          <Label className="mb-1 w-fit" htmlFor="input">
+            {label}
+          </Label>
+        )}
         <div className="flex flex-row gap-2">
           <Input
             id="input"
@@ -84,10 +73,10 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
             name="file"
             className={cn(
               'w-80 placeholder:background text-inherit',
-              field === 'questionImages' && 'w-64'
+              field === 'importImages' && 'w-64'
             )}
-            accept={field === 'questionImages' ? '.png' : '.csv'}
-            multiple={field === 'questionImages'}
+            accept={field === 'importImages' ? '.png' : '.csv'}
+            multiple={field === 'importImages'}
             onChange={handleFileChange}
           />
           <ButtonWithTooltip className="w-40" disabled={!selectedFile.length}>
