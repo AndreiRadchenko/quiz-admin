@@ -1,8 +1,6 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
 import { S3Service } from '@/services/s3Services';
-import { type ToastMessageType } from '@/context/SystemStateProvider';
 
 // const wait = (duration: number) =>
 //   new Promise(resolve => setTimeout(resolve, duration));
@@ -35,6 +33,37 @@ export async function importImages(prevState: unknown, formData: FormData) {
     };
   } catch (error) {
     console.error('Error in importImages:', error);
+
+    return {
+      messageType: 'error',
+      toastMessage:
+        (error as { message: string }).message || 'An unknown error occurred',
+    };
+  }
+}
+
+export async function removeImages(files: string[]) {
+  let filesCount = files.length;
+
+  try {
+    const s3Service = await S3Service.getInstance();
+    if (!s3Service) {
+      throw new Error(
+        "Can't connect to the file storage. Please start it first."
+      );
+    }
+
+    await s3Service.removeImages(files);
+
+    return {
+      messageType: 'success',
+      toastMessage:
+        filesCount !== 1
+          ? `${filesCount} images removed successfully`
+          : 'Image removed successfully',
+    };
+  } catch (error) {
+    console.error('Error in removeImages:', error);
 
     return {
       messageType: 'error',

@@ -89,6 +89,15 @@ export class S3Service {
     });
   }
 
+  async removeImages(objectsList: string[]) {
+    try {
+      await this.Bucket.removeObjects(this.QuestionsBucket, objectsList);
+    } catch (error) {
+      console.error('Error removing files:', error);
+      throw new Error('Failed to remove files');
+    }
+  }
+
   startBucketPoller(): void {
     const poller = this.Bucket.listenBucketNotification(
       this.QuestionsBucket,

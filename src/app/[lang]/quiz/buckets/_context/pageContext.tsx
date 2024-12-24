@@ -11,9 +11,12 @@ import React, {
 import { type BucketsType } from '../../../../../../dictionaries/dictionaries';
 import { useSystemState } from '@/context/SystemStateProvider';
 
+export type SortType = 'a-z' | 'z-a' | 'newest' | 'oldest';
+
 export type StateType = {
   selectedQuestionImages: string[];
   selectedPlayerImages: string[];
+  sort: SortType;
 };
 
 const enum REDUCER_ACTION_TYPE {
@@ -25,16 +28,18 @@ const enum REDUCER_ACTION_TYPE {
   PLAYER_DESELECT,
   PLAYER_SELECT_ALL,
   PLAYER_DESELECT_ALL,
+  CHANGE_SORT,
 }
 
 type ReducerAction = {
   type: REDUCER_ACTION_TYPE;
-  payload?: string[];
+  payload?: string[] | SortType;
 };
 
 const initState: StateType = {
   selectedQuestionImages: [],
   selectedPlayerImages: [],
+  sort: 'a-z',
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -58,13 +63,19 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
     case REDUCER_ACTION_TYPE.QUESTION_SELECT_ALL: {
       return {
         ...state,
-        selectedQuestionImages: payload!,
+        selectedQuestionImages: payload as string[],
       };
     }
     case REDUCER_ACTION_TYPE.QUESTION_DESELECT_ALL: {
       return {
         ...state,
         selectedQuestionImages: [],
+      };
+    }
+    case REDUCER_ACTION_TYPE.CHANGE_SORT: {
+      return {
+        ...state,
+        sort: payload as SortType,
       };
     }
     default:
@@ -110,12 +121,22 @@ const usePageStateContext = (initState: StateType) => {
     });
   }, []);
 
+  const changeSortType = useCallback(
+    (data: SortType) =>
+      dispatch({
+        type: REDUCER_ACTION_TYPE.CHANGE_SORT,
+        payload: data,
+      }),
+    []
+  );
+
   return {
     state,
     selectQuestion,
     deselectQuestion,
     selectAllQuestions,
     deselectAllQuestions,
+    changeSortType,
   };
 };
 
@@ -130,6 +151,7 @@ const initContextState: PageContextType = {
   deselectQuestion: (data: string) => {},
   selectAllQuestions: () => {},
   deselectAllQuestions: () => {},
+  changeSortType: () => {},
 };
 
 const PageContext = createContext<PageContextType>(initContextState);

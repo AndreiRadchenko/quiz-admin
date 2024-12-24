@@ -11,6 +11,7 @@ import {
   useContext,
   ReactNode,
   useEffect,
+  useState,
 } from 'react';
 
 import { getQuestionImages } from '@/actions/question';
@@ -42,7 +43,20 @@ type ReducerAction = {
 
 const initState: StateType = {
   toastMessage: { messageType: 'error', toastMessage: '' },
-  questionImages: [],
+  questionImages: [
+    {
+      name: 'init1.img',
+      size: 10,
+      etag: '',
+      lastModified: new Date('1995-12-17T03:24:00'),
+    },
+    {
+      name: 'init2.img',
+      size: 10,
+      etag: '',
+      lastModified: new Date('1995-12-17T03:24:10'),
+    },
+  ],
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -60,9 +74,8 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       return { ...state, toastMessage: initState.toastMessage };
     }
     case REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE: {
-      console.log('QUESTIONIMAGES_UPDATE:', payload);
-      const questionImages =
-        (payload as QuestionImagesType).questionImages || [];
+      const { questionImages: images } = payload as QuestionImagesType;
+      const questionImages = images || [];
       return { ...state, questionImages };
     }
     default:
@@ -106,7 +119,15 @@ const useSystemStateContext = (initState: StateType) => {
 
     eventSource.onmessage = event => {
       const bucketImages = JSON.parse(event.data);
-      updateQuestionImages(bucketImages);
+      const bucketImagesWithDate = {
+        questionImages: (bucketImages as QuestionImagesType).questionImages.map(
+          e => ({
+            ...e,
+            lastModified: new Date(e.lastModified as Date),
+          })
+        ),
+      };
+      updateQuestionImages(bucketImagesWithDate as QuestionImagesType);
     };
 
     eventSource.onerror = error => {

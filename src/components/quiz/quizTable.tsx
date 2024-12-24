@@ -21,7 +21,10 @@ export function QuizTable<T extends { index?: number }>({
   TableHeaderComponent,
 }: TableProps<T>) {
   return (
-    <div className="h-[78vh] relative overflow-auto">
+    <div
+      className="h-[78vh] relative overflow-auto overflow-y-auto border scrollbar rounded-md
+        border-background"
+    >
       <Table className="">
         {TableHeaderComponent ? (
           <TableHeaderComponent />

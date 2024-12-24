@@ -7,9 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { type ToastMessageType } from '@/context/SystemStateProvider';
-import { IoIosImages } from 'react-icons/io';
 import { cn } from '@/lib/utils';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type Props = {
@@ -24,7 +22,6 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
   const { toast } = useToast();
   const [message, formAction, isPending] = useFormState(action, null);
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
-  const pathname = usePathname();
 
   // Used to disable button until files have been chosen
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {

@@ -1,5 +1,4 @@
 import { type Locale } from '../../../../../i18n-config';
-
 import { getDictionary } from '../../../../../dictionaries/dictionaries';
 import { BucketButtons } from './_components/BucketButtons';
 import PageHeader from './_components/PageHeader';
