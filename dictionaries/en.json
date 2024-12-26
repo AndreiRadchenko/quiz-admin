@@ -326,6 +326,10 @@
           "name": "Name",
           "lastModified": "Last Modified",
           "size": "Size"
+        },
+        "headerTooltips": {
+          "sortByName": "Sort by name",
+          "sortByTime": "Sort by upload time"
         }
       }
     },

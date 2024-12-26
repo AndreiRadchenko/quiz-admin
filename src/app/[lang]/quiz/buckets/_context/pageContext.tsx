@@ -10,6 +10,7 @@ import React, {
 
 import { type BucketsType } from '../../../../../../dictionaries/dictionaries';
 import { useSystemState } from '@/context/SystemStateProvider';
+import { useUnmount } from '@/hooks/useUnmount';
 
 export type SortType = 'a-z' | 'z-a' | 'newest' | 'oldest';
 
@@ -84,10 +85,18 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 };
 
 const usePageStateContext = (initState: StateType) => {
-  const [state, dispatch] = useReducer(reducer, initState);
+  // Initialize state from sessionStorage or fallback to initState
+  const storedState = sessionStorage.getItem('bucketsContext');
+  const initialState = storedState ? JSON.parse(storedState) : initState;
+
+  const [state, dispatch] = useReducer(reducer, initialState);
   const {
     state: { questionImages },
   } = useSystemState();
+
+  useUnmount(() => {
+    sessionStorage.setItem('bucketsContext', JSON.stringify(state));
+  });
 
   const selectQuestion = useCallback(
     (data: string) =>

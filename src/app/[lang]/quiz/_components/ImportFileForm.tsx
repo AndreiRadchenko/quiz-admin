@@ -16,9 +16,16 @@ type Props = {
   field: string;
   label?: string;
   buttonText: string;
+  tooltip: string;
 };
 
-export function ImportFileForm({ action, field, label, buttonText }: Props) {
+export function ImportFileForm({
+  action,
+  field,
+  label,
+  buttonText,
+  tooltip,
+}: Props) {
   const { toast } = useToast();
   const [message, formAction, isPending] = useFormState(action, null);
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
@@ -76,7 +83,11 @@ export function ImportFileForm({ action, field, label, buttonText }: Props) {
             multiple={field === 'importImages'}
             onChange={handleFileChange}
           />
-          <ButtonWithTooltip className="w-40" disabled={!selectedFile.length}>
+          <ButtonWithTooltip
+            className="w-40"
+            tooltip={tooltip}
+            disabled={!selectedFile.length}
+          >
             {buttonText}
           </ButtonWithTooltip>
         </div>

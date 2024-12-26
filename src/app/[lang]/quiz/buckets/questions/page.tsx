@@ -66,7 +66,10 @@ export default function QuestionImages({
       QuizTableRow={ImagesTableRow}
       header={table!.header}
       TableHeaderComponent={() => (
-        <TableHeaderComponent header={table!.header} />
+        <TableHeaderComponent
+          header={table!.header}
+          headerTooltips={table!.headerTooltips}
+        />
       )}
       rowsData={questionImages!.map((e, idx) => {
         const isoDate = new Date(e.lastModified as Date);

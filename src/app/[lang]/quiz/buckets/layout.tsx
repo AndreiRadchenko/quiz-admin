@@ -5,6 +5,7 @@ import PageHeader from './_components/PageHeader';
 import { ImportFileForm } from '../_components/ImportFileForm';
 import { getActions } from '../actions';
 import PageContextProvider from './_context/pageContext';
+import { type BucketsType } from '../../../../../dictionaries/dictionaries';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,7 +22,7 @@ export default async function BucketsLayout({
     quiz: { buckets },
   } = await getDictionary(lang);
 
-  const { importImagesForm: importForm, table } = buckets;
+  const { importImagesForm: importForm, table } = buckets as BucketsType;
   const importFileActions = await getActions();
 
   return (
@@ -31,8 +32,9 @@ export default async function BucketsLayout({
         <ImportFileForm
           action={importFileActions['importImages']}
           field={'importImages'}
-          label={importForm.label}
-          buttonText={importForm.buttonText}
+          label={importForm!.label}
+          buttonText={importForm!.buttonText}
+          tooltip={importForm!.tooltip}
         />
       </BucketButtons>
       <div id="bucket-content" className="w-full h-auto min-h-24">

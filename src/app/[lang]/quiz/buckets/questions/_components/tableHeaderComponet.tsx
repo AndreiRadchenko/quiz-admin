@@ -10,9 +10,10 @@ import { useSystemState } from '@/context/SystemStateProvider';
 
 type HeaderProps = {
   header: { [key: string]: string };
+  headerTooltips: { [key: string]: string };
 };
 
-export function TableHeaderComponent({ header }: HeaderProps) {
+export function TableHeaderComponent({ header, headerTooltips }: HeaderProps) {
   const {
     state: { questionImages },
   } = useSystemState();
@@ -54,6 +55,7 @@ export function TableHeaderComponent({ header }: HeaderProps) {
             variant="header_switch"
             className="border w-[6rem]"
             onClick={onNameClick}
+            tooltip={headerTooltips!.sortByName}
           >
             {header['name']}
             <SortArrow sortDir={sort} start="a-z" finish="z-a" />
@@ -64,6 +66,7 @@ export function TableHeaderComponent({ header }: HeaderProps) {
             variant="header_switch"
             className="w-[10rem]"
             onClick={onModifiedClick}
+            tooltip={headerTooltips!.sortByTime}
           >
             {header['lastModified']}
             <SortArrow sortDir={sort} start="newest" finish="oldest" />

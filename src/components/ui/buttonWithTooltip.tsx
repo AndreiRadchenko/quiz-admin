@@ -25,18 +25,27 @@ export function ButtonWithTooltip({
     <TooltipProvider delayDuration={1500}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button disabled={pending} {...props}>
-            {pending ? (
-              <>
-                <Spinner className="mr-2 h-4 w-4 animate-spin" />
-                {'Upload...'}
-              </>
-            ) : (
-              children
-            )}
-          </Button>
+          <span
+            className="group cursor-auto focus:outline-none"
+            tabIndex={0}
+            role="button"
+            aria-disabled="true"
+          >
+            <Button disabled={pending} {...props}>
+              {pending ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4 animate-spin" />
+                  {'Upload...'}
+                </>
+              ) : (
+                children
+              )}
+            </Button>
+          </span>
         </TooltipTrigger>
-        {tooltip && <TooltipContent>{tooltip}</TooltipContent>}
+        {tooltip && (
+          <TooltipContent className="font-normal">{tooltip}</TooltipContent>
+        )}
       </Tooltip>
     </TooltipProvider>
   );
