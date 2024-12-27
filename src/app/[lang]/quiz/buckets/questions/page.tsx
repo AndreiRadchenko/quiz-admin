@@ -6,6 +6,7 @@ import ImagesTableRow from './_components/ImagesTableRow';
 import { usePageContext } from '../_context/pageContext';
 import { useSystemState } from '@/context/SystemStateProvider';
 import { TableHeaderComponent } from './_components/tableHeaderComponet';
+import { ShowImages } from './_components/showImages';
 
 import { sortItemsByField } from '@/utils/SortFunc';
 
@@ -20,7 +21,7 @@ export default function QuestionImages({
 }: Readonly<Props>) {
   const {
     bucketsLocale: { table },
-    state: { sort },
+    state: { sort, view },
   } = usePageContext();
   const {
     state: { questionImages },
@@ -61,7 +62,7 @@ export default function QuestionImages({
     }
   }, [questionImages, sort, updateQuestionImages]);
 
-  return (
+  return view === 'list' ? (
     <QuizTable
       QuizTableRow={ImagesTableRow}
       header={table!.header}
@@ -81,5 +82,7 @@ export default function QuestionImages({
         };
       })}
     />
+  ) : (
+    <ShowImages />
   );
 }

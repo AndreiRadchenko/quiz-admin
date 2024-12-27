@@ -13,11 +13,13 @@ import { useSystemState } from '@/context/SystemStateProvider';
 import { useUnmount } from '@/hooks/useUnmount';
 
 export type SortType = 'a-z' | 'z-a' | 'newest' | 'oldest';
+export type ViewType = 'list' | 'grid';
 
 export type StateType = {
   selectedQuestionImages: string[];
   selectedPlayerImages: string[];
   sort: SortType;
+  view: ViewType;
 };
 
 const enum REDUCER_ACTION_TYPE {
@@ -30,17 +32,19 @@ const enum REDUCER_ACTION_TYPE {
   PLAYER_SELECT_ALL,
   PLAYER_DESELECT_ALL,
   CHANGE_SORT,
+  CHANGE_VIEW,
 }
 
 type ReducerAction = {
   type: REDUCER_ACTION_TYPE;
-  payload?: string[] | SortType;
+  payload?: string[] | SortType | ViewType;
 };
 
 const initState: StateType = {
   selectedQuestionImages: [],
   selectedPlayerImages: [],
   sort: 'a-z',
+  view: 'list',
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -77,6 +81,12 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       return {
         ...state,
         sort: payload as SortType,
+      };
+    }
+    case REDUCER_ACTION_TYPE.CHANGE_VIEW: {
+      return {
+        ...state,
+        view: payload as ViewType,
       };
     }
     default:
@@ -138,6 +148,15 @@ const usePageStateContext = (initState: StateType) => {
     []
   );
 
+  const changeViewType = useCallback(
+    (data: ViewType) =>
+      dispatch({
+        type: REDUCER_ACTION_TYPE.CHANGE_VIEW,
+        payload: data,
+      }),
+    []
+  );
+
   return {
     state,
     selectQuestion,
@@ -145,6 +164,7 @@ const usePageStateContext = (initState: StateType) => {
     selectAllQuestions,
     deselectAllQuestions,
     changeSortType,
+    changeViewType,
   };
 };
 
@@ -160,6 +180,7 @@ const initContextState: PageContextType = {
   selectAllQuestions: () => {},
   deselectAllQuestions: () => {},
   changeSortType: () => {},
+  changeViewType: () => {},
 };
 
 const PageContext = createContext<PageContextType>(initContextState);

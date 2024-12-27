@@ -6,23 +6,29 @@ import Image from 'next/image';
 import { useSystemState } from '@/context/SystemStateProvider';
 import { config } from '@/config';
 import { usePageContext } from '../../_context/pageContext';
+import { Checkbox } from '@/components/ui/checkbox';
 
 type Props = {
-  onSelect: () => void;
+  // onSelect: () => void;
 };
 
-export function ShowImages({ onSelect }: Props) {
+export function ShowImages({}: Props) {
   const { state } = useSystemState();
+  const {
+    state: { selectedQuestionImages },
+    selectQuestion,
+    deselectQuestion,
+  } = usePageContext();
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
-  const { pagePreferences, setPagePreferences } = usePageContext();
+  // const { pagePreferences, setPagePreferences } = usePageContext();
 
   const onImageClick = (img: string | undefined) => {
-    setPagePreferences({
-      ...pagePreferences,
-      selectedQuestionImage: img ? img : '',
-    });
-    onSelect();
+    // setPagePreferences({
+    //   ...pagePreferences,
+    //   selectedQuestionImage: img ? img : '',
+    // });
+    // onSelect();
   };
 
   return (
@@ -31,8 +37,8 @@ export function ShowImages({ onSelect }: Props) {
         {state.questionImages.map(({ name: img }, idx) => (
           <div
             key={idx}
-            className="w-full h-full aspect-video relative cursor-pointer group"
-            onClick={() => onImageClick(img)}
+            className="w-full h-full aspect-video relative cursor-auto group"
+            // onClick={() => onImageClick(img)}
           >
             <div
               className="absolute w-full h-full top-0 left-0 border-2 border-primary
@@ -49,10 +55,16 @@ export function ShowImages({ onSelect }: Props) {
               />
             </div>
             <div
-              className="absolute bottom-0 left-0 w-full h-1/10 bg-primary z-10
-                group-hover:bg-primary-hover group-active:bg-primary-active transform transition
-                blur-md duration-300 ease-in-out"
+              className="absolute bottom-0 left-0 w-full h-1/10 bg-primary z-10 group-hover:bg-primary
+                group-active:bg-primary transform transition blur-md duration-300 ease-in-out"
             ></div>
+            <Checkbox
+              className="w-7 h-7 absolute top-2 left-2"
+              checked={selectedQuestionImages.some(e => e === img)}
+              onCheckedChange={checked => {
+                checked ? selectQuestion(img!) : deselectQuestion(img!);
+              }}
+            />
             <p
               className="absolute bottom-0 -translate-x-1/2 left-1/2 text-center z-20
                 text-primary-foreground"
