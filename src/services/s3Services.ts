@@ -84,14 +84,18 @@ export class S3Service {
 
     return new Promise((resolve, reject) => {
       stream.on('data', obj => data.push(obj));
-      stream.on('end', () => {
-        const bucketImages: QuestionImagesType = {
-          questionImagesURL: data.map(e => e.name),
-        };
-        resolve(bucketImages);
-      });
+      stream.on('end', () => resolve({ questionImages: data }));
       stream.on('error', err => reject(err));
     });
+  }
+
+  async removeImages(objectsList: string[]) {
+    try {
+      await this.Bucket.removeObjects(this.QuestionsBucket, objectsList);
+    } catch (error) {
+      console.error('Error removing files:', error);
+      throw new Error('Failed to remove files');
+    }
   }
 
   startBucketPoller(): void {

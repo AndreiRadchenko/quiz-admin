@@ -949,6 +949,7 @@ Youtube video: [useContext ](https://www.youtube.com/watch?v=05ZM4ymK9Nc&t=5s) |
 
 GitHub example:
 [Context state lesson](https://github.dev/gitdagray/typescript-course/blob/main/lesson15/src/context/CounterContext.tsx)
+| [useUnmount](https://usehooks-ts.com/react-hook/use-unmount)
 
 Project branch `feat/minio-bucket`
 
@@ -963,14 +964,34 @@ Project branch `feat/minio-bucket`
    const [toastMessage, setToastMessage, clearToastMessage] = useSystemState();
    ```
 
+In buckets page context I use sessionStorage for save state when page is being
+unmounted. To achieve that I use useUnmount hook.
+
+_src/app/[lang]/quiz/buckets/\_context/pageContext.tsx_
+
+```ts
+const usePageStateContext = (initState: StateType) => {
+  const storedState = sessionStorage.getItem('bucketsContext');
+  const initialState = storedState ? JSON.parse(storedState) : initState;
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    state: { questionImages },
+  } = useSystemState();
+
+  useUnmount(() => {
+    sessionStorage.setItem('bucketsContext', JSON.stringify(state));
+  });
+```
+
 <a href="#top">⬅️ Back to top</a>
 
 ## Server Send Events
 
-I used `questionImagesURL` in SystemStateProvider to hold actual array of images
+I used `questionImages` in SystemStateProvider to hold actual array of images
 name from minio questions bucket. I update this context array every time
-questions bucket content is changed. Additionally I update `questionImagesURL`
-in SystemState when app is rendered at first time.
+questions bucket content is changed. Additionally I update `questionImages` in
+SystemState when app is rendered at first time.
 
 To do that I utilize SSE technic.
 
@@ -1073,8 +1094,8 @@ To do that I utilize SSE technic.
    ```
 
 3. In _SystemStateProvider.tsx_ => `useSystemStateContext` I've created
-   useEffect which is responsible for update context `questionImagesURL`
-   variable when app have been rendered, and this useEffect creates
+   useEffect which is responsible for update context `questionImages` variable
+   when app have been rendered, and this useEffect creates
    `const eventSource = new EventSource('/api/s3-events');` - in app listener
    for synchronous context update with bucket content change.
 

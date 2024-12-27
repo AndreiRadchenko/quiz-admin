@@ -21,6 +21,7 @@ const buttonVariants = cva(
           'bg-destructive text-destructive-foreground hover:bg-destructive-hover active:bg-destructive-active',
         ghost: 'hover:bg-accent hover:text-accent-foreground',
         link: 'text-primary underline-offset-4 hover:underline',
+        header_switch: 'bg-secondary-hover text-secondary-foreground border',
       },
       size: {
         default: 'h-10 px-4 py-2',

@@ -1,5 +1,7 @@
 'use client';
 
+import * as Minio from 'minio';
+
 import {
   createContext,
   useReducer,
@@ -9,6 +11,7 @@ import {
   useContext,
   ReactNode,
   useEffect,
+  useState,
 } from 'react';
 
 import { getQuestionImages } from '@/actions/question';
@@ -20,7 +23,7 @@ export type ToastMessageType = {
 };
 
 export type QuestionImagesType = {
-  questionImagesURL: (string | undefined)[];
+  questionImages: Minio.BucketItem[];
 };
 
 type StateType = QuestionImagesType & {
@@ -40,7 +43,20 @@ type ReducerAction = {
 
 const initState: StateType = {
   toastMessage: { messageType: 'error', toastMessage: '' },
-  questionImagesURL: [],
+  questionImages: [
+    {
+      name: 'init1.img',
+      size: 10,
+      etag: '',
+      lastModified: new Date('1995-12-17T03:24:00'),
+    },
+    {
+      name: 'init2.img',
+      size: 10,
+      etag: '',
+      lastModified: new Date('1995-12-17T03:24:10'),
+    },
+  ],
 };
 
 const reducer = (state: StateType, action: ReducerAction): StateType => {
@@ -58,10 +74,9 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       return { ...state, toastMessage: initState.toastMessage };
     }
     case REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE: {
-      console.log('QUESTIONIMAGES_UPDATE:', payload);
-      const questionImagesURL =
-        (payload as QuestionImagesType).questionImagesURL || [];
-      return { ...state, questionImagesURL };
+      const { questionImages: images } = payload as QuestionImagesType;
+      const questionImages = images || [];
+      return { ...state, questionImages };
     }
     default:
       throw new Error();
@@ -104,7 +119,15 @@ const useSystemStateContext = (initState: StateType) => {
 
     eventSource.onmessage = event => {
       const bucketImages = JSON.parse(event.data);
-      updateQuestionImages(bucketImages);
+      const bucketImagesWithDate = {
+        questionImages: (bucketImages as QuestionImagesType).questionImages.map(
+          e => ({
+            ...e,
+            lastModified: new Date(e.lastModified as Date),
+          })
+        ),
+      };
+      updateQuestionImages(bucketImagesWithDate as QuestionImagesType);
     };
 
     eventSource.onerror = error => {
@@ -132,10 +155,6 @@ const initContextState: UseSystemStateContextType = {
 export const SystemStateContext =
   createContext<UseSystemStateContextType>(initContextState);
 
-// type ChildrenType = {
-//   children?: ReactElement | ReactElement[] | undefined;
-// };
-
 export const SystemStateProvider = ({
   children,
 }: {
@@ -149,13 +168,6 @@ export const SystemStateProvider = ({
 };
 
 type UseSystemStateHookType = typeof initContextState;
-
-//   {
-//   toastMessage: ToastMessageType;
-//   setToastMessage: (data: ToastMessageType) => void;
-//   clearToastMessage: () => void;
-//   updateQuestionImages: (data: QuestionImagesType) => void,
-// };
 
 export const useSystemState = (): UseSystemStateHookType => {
   const { state, setToastMessage, clearToastMessage, updateQuestionImages } =

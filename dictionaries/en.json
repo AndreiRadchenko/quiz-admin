@@ -97,13 +97,6 @@
           "label": "External Player Info",
           "buttonText": "Import player data",
           "tooltip": "Import player data"
-        },
-        "questionImages": {
-          "label": "Question Images",
-          "buttonText": "Import Images",
-          "tooltip": "Import question images",
-          "successMessage": "Images uploaded successfully",
-          "errorMessage": "Error images upload"
         }
       }
     },
@@ -299,6 +292,44 @@
           "correct": "Correct",
           "pass": "Pass",
           "auto": "Auto"
+        }
+      }
+    },
+    "buckets": {
+      "importImagesForm": {
+        "label": "Import Question Images",
+        "buttonText": "Upload",
+        "tooltip": "Import question images",
+        "successMessage": "Images uploaded successfully",
+        "errorMessage": "Error images upload"
+      },
+      "buttons": {
+        "delete": {
+          "buttonText": "Delete",
+          "tooltip": "Delete selected files"
+        },
+        "changeView": {
+          "buttonText": "",
+          "tooltip": "Show list"
+        }
+      },
+      "tooltips": {
+        "uploadBtn": "Upload files",
+        "deleteBtn": "Delete selected files",
+        "showList": "Show list",
+        "showGrid": "Show grid"
+      },
+      "title": { "questions": "Question images", "players": "Player images" },
+      "table": {
+        "header": {
+          "selectAll": "Select All",
+          "name": "Name",
+          "lastModified": "Last Modified",
+          "size": "Size"
+        },
+        "headerTooltips": {
+          "sortByName": "Sort by name",
+          "sortByTime": "Sort by upload time"
         }
       }
     },
