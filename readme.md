@@ -949,6 +949,7 @@ Youtube video: [useContext ](https://www.youtube.com/watch?v=05ZM4ymK9Nc&t=5s) |
 
 GitHub example:
 [Context state lesson](https://github.dev/gitdagray/typescript-course/blob/main/lesson15/src/context/CounterContext.tsx)
+| [useUnmount](https://usehooks-ts.com/react-hook/use-unmount)
 
 Project branch `feat/minio-bucket`
 
@@ -962,6 +963,26 @@ Project branch `feat/minio-bucket`
    
    const [toastMessage, setToastMessage, clearToastMessage] = useSystemState();
    ```
+
+In buckets page context I use sessionStorage for save state when page is being
+unmounted. To achieve that I use useUnmount hook.
+
+_src/app/[lang]/quiz/buckets/\_context/pageContext.tsx_
+
+```ts
+const usePageStateContext = (initState: StateType) => {
+  const storedState = sessionStorage.getItem('bucketsContext');
+  const initialState = storedState ? JSON.parse(storedState) : initState;
+
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const {
+    state: { questionImages },
+  } = useSystemState();
+
+  useUnmount(() => {
+    sessionStorage.setItem('bucketsContext', JSON.stringify(state));
+  });
+```
 
 <a href="#top">⬅️ Back to top</a>
 

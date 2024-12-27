@@ -85,7 +85,6 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
 };
 
 const usePageStateContext = (initState: StateType) => {
-  // Initialize state from sessionStorage or fallback to initState
   const storedState = sessionStorage.getItem('bucketsContext');
   const initialState = storedState ? JSON.parse(storedState) : initState;
 
