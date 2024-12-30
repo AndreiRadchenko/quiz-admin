@@ -1,14 +1,18 @@
 'use client';
 import React from 'react';
+import { usePathname } from 'next/navigation';
 
-import { ButtonsSection } from '../../_components/ButtonsSection';
-import { type ButtonsProps } from '../../_components/ButtonsSection';
-import { usePageContext } from '../_context/pageContext';
-import { removeImages } from '../../actions';
-import { toast } from '@/hooks/use-toast';
 import { List, LayoutGrid } from 'lucide-react';
+import { ButtonsSection } from '../../_components/ButtonsSection';
+
+import { usePageContext } from '../_context/pageContext';
+import { removeImages } from '@/actions/buckets';
+import { toast } from '@/hooks/use-toast';
+import { type ButtonsProps } from '../../_components/ButtonsSection';
 
 export function BucketButtons({ children, buttons }: ButtonsProps) {
+  const pathname = usePathname();
+  const page = pathname.match(/[^/]+$/)?.[0] || '';
   const {
     bucketsLocale: { tooltips },
     state: { selectedQuestionImages, selectedPlayerImages, view },
@@ -21,7 +25,8 @@ export function BucketButtons({ children, buttons }: ButtonsProps) {
   ) => {
     (async () => {
       const { messageType, toastMessage } = await removeImages(
-        selectedQuestionImages
+        selectedQuestionImages,
+        page
       );
       toastMessage !== '' &&
         toast({

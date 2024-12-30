@@ -14,7 +14,8 @@ import {
   useState,
 } from 'react';
 
-import { getQuestionImages } from '@/actions/question';
+import { getImages } from '@/actions/buckets';
+import { config } from '@/config';
 
 export type MessageType = 'error' | 'warning' | 'success';
 export type ToastMessageType = {
@@ -22,23 +23,22 @@ export type ToastMessageType = {
   toastMessage: String;
 };
 
-export type QuestionImagesType = {
-  questionImages: Minio.BucketItem[];
-};
-
-type StateType = QuestionImagesType & {
+type StateType = {
   toastMessage: ToastMessageType;
+  questionImages: Minio.BucketItem[];
+  playerImages: Minio.BucketItem[];
 };
 
 const enum REDUCER_ACTION_TYPE {
   MESSAGE_ADD,
   MESSAGE_REMOVE,
   QUESTIONIMAGES_UPDATE,
+  PLAYERIMAGES_UPDATE,
 }
 
 type ReducerAction = {
   type: REDUCER_ACTION_TYPE;
-  payload?: ToastMessageType | QuestionImagesType;
+  payload?: ToastMessageType | Minio.BucketItem[];
 };
 
 const initState: StateType = {
@@ -50,6 +50,8 @@ const initState: StateType = {
       etag: '',
       lastModified: new Date('1995-12-17T03:24:00'),
     },
+  ],
+  playerImages: [
     {
       name: 'init2.img',
       size: 10,
@@ -74,9 +76,14 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
       return { ...state, toastMessage: initState.toastMessage };
     }
     case REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE: {
-      const { questionImages: images } = payload as QuestionImagesType;
+      const images = payload as Minio.BucketItem[];
       const questionImages = images || [];
       return { ...state, questionImages };
+    }
+    case REDUCER_ACTION_TYPE.PLAYERIMAGES_UPDATE: {
+      const images = payload as Minio.BucketItem[];
+      const playerImages = images || [];
+      return { ...state, playerImages };
     }
     default:
       throw new Error();
@@ -100,9 +107,16 @@ const useSystemStateContext = (initState: StateType) => {
     []
   );
 
-  const updateQuestionImages = useCallback((data: QuestionImagesType) => {
+  const updateQuestionImages = useCallback((data: Minio.BucketItem[]) => {
     dispatch({
       type: REDUCER_ACTION_TYPE.QUESTIONIMAGES_UPDATE,
+      payload: data,
+    });
+  }, []);
+
+  const updatePlayerImages = useCallback((data: Minio.BucketItem[]) => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.PLAYERIMAGES_UPDATE,
       payload: data,
     });
   }, []);
@@ -110,24 +124,32 @@ const useSystemStateContext = (initState: StateType) => {
   useEffect(() => {
     //Update array of images in context on render app
     (async () => {
-      const bucketImages = await getQuestionImages();
-      updateQuestionImages(bucketImages as QuestionImagesType);
+      const questionImages = await getImages(config.S3_BUCKET_QUESTIONS);
+      const playerImages = await getImages(config.S3_BUCKET_PLAYERS);
+      updateQuestionImages(questionImages as Minio.BucketItem[]);
+      updatePlayerImages(playerImages as Minio.BucketItem[]);
     })();
 
     //Update array of images in context on change content of bucket
     const eventSource = new EventSource('/api/s3-events');
 
     eventSource.onmessage = event => {
-      const bucketImages = JSON.parse(event.data);
-      const bucketImagesWithDate = {
-        questionImages: (bucketImages as QuestionImagesType).questionImages.map(
-          e => ({
-            ...e,
-            lastModified: new Date(e.lastModified as Date),
-          })
-        ),
-      };
-      updateQuestionImages(bucketImagesWithDate as QuestionImagesType);
+      const { bucket, images } = JSON.parse(event.data);
+      // console.log('bucket, images: ', bucket, images);
+      const bucketImagesWithDate = (images as Minio.BucketItem[]).map(e => ({
+        ...e,
+        lastModified: new Date(e.lastModified as Date),
+      }));
+      switch (bucket) {
+        case config.S3_BUCKET_QUESTIONS:
+          updateQuestionImages(bucketImagesWithDate as Minio.BucketItem[]);
+          break;
+        case config.S3_BUCKET_PLAYERS:
+          updatePlayerImages(bucketImagesWithDate as Minio.BucketItem[]);
+          break;
+        default:
+          break;
+      }
     };
 
     eventSource.onerror = error => {
@@ -138,7 +160,7 @@ const useSystemStateContext = (initState: StateType) => {
     return () => {
       eventSource.close();
     };
-  }, [updateQuestionImages]);
+  }, [updateQuestionImages, updatePlayerImages]);
 
   return { state, setToastMessage, clearToastMessage, updateQuestionImages };
 };
@@ -149,7 +171,7 @@ const initContextState: UseSystemStateContextType = {
   state: initState,
   setToastMessage: (data: ToastMessageType) => {},
   clearToastMessage: () => {},
-  updateQuestionImages: (data: QuestionImagesType) => {},
+  updateQuestionImages: (data: Minio.BucketItem[]) => {},
 };
 
 export const SystemStateContext =

@@ -9,10 +9,11 @@ import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { type ToastMessageType } from '@/context/SystemStateProvider';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
+import { importImages } from '@/actions/buckets';
 
 type Props = {
   // action: (prevState: unknown, formData: FormData) => void | Promise<String>;
-  action: any;
+  // action: (state: null) => Promise<null>;
   field: string;
   label?: string;
   buttonText: string;
@@ -20,14 +21,22 @@ type Props = {
 };
 
 export function ImportFileForm({
-  action,
+  // action,
   field,
   label,
   buttonText,
   tooltip,
 }: Props) {
+  const pathname = usePathname();
+  const page = pathname.match(/[^/]+$/)?.[0] || '';
+  const importImagesAction = async (previousState: any, formData: FormData) =>
+    await importImages(formData, page);
+
   const { toast } = useToast();
-  const [message, formAction, isPending] = useFormState(action, null);
+  const [message, formAction, isPending] = useFormState(
+    importImagesAction,
+    null
+  );
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
 
   // Used to disable button until files have been chosen

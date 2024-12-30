@@ -31,32 +31,20 @@ export default function QuestionImages({
   useEffect(() => {
     switch (sort) {
       case 'a-z':
-        updateQuestionImages({
-          questionImages: sortItemsByField(questionImages, 'name', 'asc'),
-        });
+        updateQuestionImages(sortItemsByField(questionImages, 'name', 'asc'));
         break;
       case 'z-a':
-        updateQuestionImages({
-          questionImages: sortItemsByField(questionImages, 'name', 'desc'),
-        });
+        updateQuestionImages(sortItemsByField(questionImages, 'name', 'desc'));
         break;
       case 'newest':
-        updateQuestionImages({
-          questionImages: sortItemsByField(
-            questionImages,
-            'lastModified',
-            'asc'
-          ),
-        });
+        updateQuestionImages(
+          sortItemsByField(questionImages, 'lastModified', 'asc')
+        );
         break;
       case 'oldest':
-        updateQuestionImages({
-          questionImages: sortItemsByField(
-            questionImages,
-            'lastModified',
-            'desc'
-          ),
-        });
+        updateQuestionImages(
+          sortItemsByField(questionImages, 'lastModified', 'desc')
+        );
         break;
       default:
     }

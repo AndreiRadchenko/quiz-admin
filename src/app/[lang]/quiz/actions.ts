@@ -1,77 +1,10 @@
 'use server';
 
 import { S3Service } from '@/services/s3Services';
+import { config } from '@/config';
 
 // const wait = (duration: number) =>
 //   new Promise(resolve => setTimeout(resolve, duration));
-
-export async function importImages(prevState: unknown, formData: FormData) {
-  const files = formData.getAll('file') as File[];
-  let filesCount = files.length;
-
-  // await wait(3000);
-  try {
-    const s3Service = await S3Service.getInstance();
-    if (!s3Service) {
-      throw new Error(
-        "Can't connect to the file storage. Please start it first."
-      );
-    }
-
-    await Promise.all(
-      files.map(async file => {
-        await s3Service.uploadFile(file);
-      })
-    );
-
-    return {
-      messageType: 'success',
-      toastMessage:
-        filesCount !== 1
-          ? `${filesCount} images uploaded successfully`
-          : 'Image uploaded successfully',
-    };
-  } catch (error) {
-    console.error('Error in importImages:', error);
-
-    return {
-      messageType: 'error',
-      toastMessage:
-        (error as { message: string }).message || 'An unknown error occurred',
-    };
-  }
-}
-
-export async function removeImages(files: string[]) {
-  let filesCount = files.length;
-
-  try {
-    const s3Service = await S3Service.getInstance();
-    if (!s3Service) {
-      throw new Error(
-        "Can't connect to the file storage. Please start it first."
-      );
-    }
-
-    await s3Service.removeImages(files);
-
-    return {
-      messageType: 'success',
-      toastMessage:
-        filesCount !== 1
-          ? `${filesCount} images removed successfully`
-          : 'Image removed successfully',
-    };
-  } catch (error) {
-    console.error('Error in removeImages:', error);
-
-    return {
-      messageType: 'error',
-      toastMessage:
-        (error as { message: string }).message || 'An unknown error occurred',
-    };
-  }
-}
 
 export async function seatInfo(prevState: unknown, formData: FormData) {
   const file = formData.get('file') as File;
@@ -147,7 +80,7 @@ export async function externalPlayerInfo(
   }
 }
 
-type Action = typeof importImages;
+type Action = typeof externalPlayerInfo;
 interface ImportFileActionType {
   [key: string]: Action;
 }
@@ -157,7 +90,6 @@ const importFileAction: ImportFileActionType = {
   playerData,
   externalQuestionData,
   externalPlayerInfo,
-  importImages,
 };
 
 export const getActions = async () => importFileAction;
