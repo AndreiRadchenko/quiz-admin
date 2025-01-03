@@ -9,6 +9,7 @@ import { usePageContext } from '../_context/pageContext';
 import { removeImages } from '@/actions/buckets';
 import { toast } from '@/hooks/use-toast';
 import { type ButtonsProps } from '../../_components/ButtonsSection';
+import { config } from '@/config';
 
 export function BucketButtons({ children, buttons }: ButtonsProps) {
   const pathname = usePathname();
@@ -17,15 +18,23 @@ export function BucketButtons({ children, buttons }: ButtonsProps) {
     bucketsLocale: { tooltips },
     state: { selectedQuestionImages, selectedPlayerImages, view },
     deselectQuestion,
+    deselectPlayer,
     changeViewType,
   } = usePageContext();
+
+  const selectedImages =
+    page === config.S3_BUCKET_QUESTIONS
+      ? selectedQuestionImages
+      : selectedPlayerImages;
+  const deselectImages =
+    page === config.S3_BUCKET_QUESTIONS ? deselectQuestion : deselectPlayer;
 
   const deleteSelected = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     (async () => {
       const { messageType, toastMessage } = await removeImages(
-        selectedQuestionImages,
+        selectedImages,
         page
       );
       toastMessage !== '' &&
@@ -35,10 +44,10 @@ export function BucketButtons({ children, buttons }: ButtonsProps) {
           description: toastMessage,
         });
     })();
-    selectedQuestionImages.map(img => deselectQuestion(img));
+    selectedImages.map(img => deselectImages(img));
   };
 
-  const disableDelete = () => selectedQuestionImages.length === 0;
+  const disableDelete = () => selectedImages.length === 0;
 
   const changeView = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     view === 'list' ? changeViewType('grid') : changeViewType('list');

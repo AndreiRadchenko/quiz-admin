@@ -3,42 +3,31 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { useSystemState } from '@/context/SystemStateProvider';
-import { config } from '@/config';
-import { usePageContext } from '../../_context/pageContext';
 import { Checkbox } from '@/components/ui/checkbox';
+import { BucketItem } from 'minio';
 
 type Props = {
-  // onSelect: () => void;
+  images: BucketItem[];
+  imgBasePath: string;
+  selectedImages: string[];
+  selectImage: (data: string) => void;
+  deselectImage: (data: string) => void;
 };
 
-export function ShowImages({}: Props) {
-  const { state } = useSystemState();
-  const {
-    state: { selectedQuestionImages },
-    selectQuestion,
-    deselectQuestion,
-  } = usePageContext();
-  const imgBasePath =
-    'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
-  // const { pagePreferences, setPagePreferences } = usePageContext();
-
-  const onImageClick = (img: string | undefined) => {
-    // setPagePreferences({
-    //   ...pagePreferences,
-    //   selectedQuestionImage: img ? img : '',
-    // });
-    // onSelect();
-  };
-
+export function ShowImages({
+  images,
+  imgBasePath,
+  selectedImages,
+  selectImage,
+  deselectImage,
+}: Props) {
   return (
     <div className="overflow-y-auto border max-h-[80vh] scrollbar rounded-md p-2">
       <div className="grid grid-cols-2 gap-2">
-        {state.questionImages.map(({ name: img }, idx) => (
+        {images.map(({ name: img }, idx) => (
           <div
             key={idx}
             className="w-full h-full aspect-video relative cursor-auto group"
-            // onClick={() => onImageClick(img)}
           >
             <div
               className="absolute w-full h-full top-0 left-0 border-2 border-primary
@@ -60,9 +49,9 @@ export function ShowImages({}: Props) {
             ></div>
             <Checkbox
               className="w-7 h-7 absolute top-2 left-2"
-              checked={selectedQuestionImages.some(e => e === img)}
+              checked={selectedImages.some(e => e === img)}
               onCheckedChange={checked => {
-                checked ? selectQuestion(img!) : deselectQuestion(img!);
+                checked ? selectImage(img!) : deselectImage(img!);
               }}
             />
             <p
@@ -77,7 +66,3 @@ export function ShowImages({}: Props) {
     </div>
   );
 }
-
-// {state.questionImages.map((img, idx) => (
-//   <Image key={idx} src={`${imgBasePath + img}`} alt={'question image'} />
-// ))}

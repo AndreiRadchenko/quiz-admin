@@ -28,8 +28,15 @@ import {
   useSidebar,
   SidebarRail,
   SidebarSeparator,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from '@/components/ui/sidebar';
-import { usePathname } from 'next/navigation';
+import {
+  Collapsible,
+  CollapsibleTrigger,
+  CollapsibleContent,
+} from '@/components/ui/collapsible';
+import { usePathname, useRouter } from 'next/navigation';
 import logo from '../../../public/1percentclub.png';
 
 import { type MenuType } from '../../../dictionaries/dictionaries';
@@ -37,6 +44,7 @@ import { type Locale } from '../../../i18n-config';
 import Link from 'next/link';
 import NavMenu from './components/NavMenu';
 import { cn } from '@/lib/utils';
+import { useState } from 'react';
 
 type Props = {
   nav: { [key: string]: string };
@@ -54,7 +62,26 @@ export function AppSidebar({
   lang,
 }: Props) {
   const pathName = usePathname();
-  const { toggleSidebar } = useSidebar();
+  const {
+    toggleSidebar,
+    state,
+    open: isSidebarOpen,
+    setOpen: setSidebarOpen,
+  } = useSidebar();
+  const router = useRouter();
+  const [isImageStorOpen, setIsImageStorOpen] = useState(true);
+
+  const toggleImageStor = (open: boolean) => {
+    isSidebarOpen && setIsImageStorOpen(open);
+  };
+
+  const onImageStoreBtnPress = () => {
+    if (!isSidebarOpen) {
+      // setSidebarOpen(true);
+      // setIsImageStorOpen(true);
+      router.push('/' + lang + imageStore[0].url);
+    }
+  };
 
   // Menu items.
   const gamePreferences = [
@@ -166,27 +193,50 @@ export function AppSidebar({
           <SidebarGroupLabel>{navGroupName.imageStore}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {imageStore.map((item, idx) => (
-                <SidebarMenuItem key={idx}>
-                  <SidebarMenuButton
-                    asChild
-                    size={'lg'}
-                    tooltip={item.tooltip}
-                    className={cn(
-                      '[&>svg]:size-7',
-                      pathName === '/' + lang + item.url
-                        ? `hover:bg-primary-active bg-primary-active text-primary-foreground
-                          hover:text-primary-foreground`
-                        : ''
-                    )}
-                  >
-                    <Link href={'/' + lang + item.url} className="w-8">
-                      <item.icon size={32} className="pl-1" />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
+              <Collapsible
+                open={isImageStorOpen}
+                onOpenChange={toggleImageStor}
+                className="group/collapsible"
+              >
+                <SidebarMenuItem>
+                  <CollapsibleTrigger asChild>
+                    <SidebarMenuButton
+                      size={'lg'}
+                      className={cn(
+                        '[&>svg]:size-7 pl-0',
+                        pathName.includes('buckets')
+                          ? `hover:bg-primary-active bg-primary-active text-primary-foreground
+                            hover:text-primary-foreground`
+                          : ''
+                      )}
+                      tooltip={imageStore[0].tooltip}
+                      onClick={onImageStoreBtnPress}
+                    >
+                      <Images className="pl-1" />
+                      <span>{nav.imageFolders}</span>
+                      <CollapsableArrow />
+                    </SidebarMenuButton>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <SidebarMenuSub>
+                      {imageStore.map((item, idx) => (
+                        <SidebarMenuSubItem key={idx}>
+                          <SidebarMenuButton
+                            asChild
+                            size={'lg'}
+                            tooltip={item.tooltip}
+                            className={cn('[&>svg]:size-7')}
+                          >
+                            <Link href={'/' + lang + item.url} className="w-8">
+                              <span>{item.title}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  </CollapsibleContent>
                 </SidebarMenuItem>
-              ))}
+              </Collapsible>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -239,5 +289,25 @@ export function AppSidebar({
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
+  );
+}
+
+export function CollapsableArrow() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      className="lucide lucide-chevron-right transition-transform ml-auto
+        group-data-[state=open]/collapsible:rotate-90"
+    >
+      <path d="m9 18 6-6-6-6"></path>
+    </svg>
   );
 }

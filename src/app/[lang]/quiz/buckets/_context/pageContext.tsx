@@ -77,6 +77,32 @@ const reducer = (state: StateType, action: ReducerAction): StateType => {
         selectedQuestionImages: [],
       };
     }
+    case REDUCER_ACTION_TYPE.PLAYER_SELECT: {
+      return {
+        ...state,
+        selectedPlayerImages: [...state.selectedPlayerImages, payload![0]],
+      };
+    }
+    case REDUCER_ACTION_TYPE.PLAYER_DESELECT: {
+      const idx = state.selectedPlayerImages.indexOf(payload![0]);
+      idx !== -1 && state.selectedPlayerImages.splice(idx, 1);
+      return {
+        ...state,
+        selectedPlayerImages: state.selectedPlayerImages,
+      };
+    }
+    case REDUCER_ACTION_TYPE.PLAYER_SELECT_ALL: {
+      return {
+        ...state,
+        selectedPlayerImages: payload as string[],
+      };
+    }
+    case REDUCER_ACTION_TYPE.PLAYER_DESELECT_ALL: {
+      return {
+        ...state,
+        selectedPlayerImages: [],
+      };
+    }
     case REDUCER_ACTION_TYPE.CHANGE_SORT: {
       return {
         ...state,
@@ -100,7 +126,7 @@ const usePageStateContext = (initState: StateType) => {
 
   const [state, dispatch] = useReducer(reducer, initialState);
   const {
-    state: { questionImages },
+    state: { questionImages, playerImages },
   } = useSystemState();
 
   useUnmount(() => {
@@ -139,6 +165,38 @@ const usePageStateContext = (initState: StateType) => {
     });
   }, []);
 
+  const selectPlayer = useCallback(
+    (data: string) =>
+      dispatch({
+        type: REDUCER_ACTION_TYPE.PLAYER_SELECT,
+        payload: [data],
+      }),
+    []
+  );
+
+  const deselectPlayer = useCallback(
+    (data: string) =>
+      dispatch({
+        type: REDUCER_ACTION_TYPE.PLAYER_DESELECT,
+        payload: [data],
+      }),
+    []
+  );
+
+  const selectAllPlayers = useCallback(() => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.PLAYER_SELECT_ALL,
+      payload: playerImages.map(e => e.name) as string[],
+    });
+  }, [playerImages]);
+
+  const deselectAllPlayers = useCallback(() => {
+    dispatch({
+      type: REDUCER_ACTION_TYPE.PLAYER_DESELECT_ALL,
+      payload: [],
+    });
+  }, []);
+
   const changeSortType = useCallback(
     (data: SortType) =>
       dispatch({
@@ -163,6 +221,10 @@ const usePageStateContext = (initState: StateType) => {
     deselectQuestion,
     selectAllQuestions,
     deselectAllQuestions,
+    selectPlayer,
+    deselectPlayer,
+    selectAllPlayers,
+    deselectAllPlayers,
     changeSortType,
     changeViewType,
   };
@@ -179,6 +241,10 @@ const initContextState: PageContextType = {
   deselectQuestion: (data: string) => {},
   selectAllQuestions: () => {},
   deselectAllQuestions: () => {},
+  selectPlayer: (data: string) => {},
+  deselectPlayer: (data: string) => {},
+  selectAllPlayers: () => {},
+  deselectAllPlayers: () => {},
   changeSortType: () => {},
   changeViewType: () => {},
 };

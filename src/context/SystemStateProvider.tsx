@@ -162,7 +162,13 @@ const useSystemStateContext = (initState: StateType) => {
     };
   }, [updateQuestionImages, updatePlayerImages]);
 
-  return { state, setToastMessage, clearToastMessage, updateQuestionImages };
+  return {
+    state,
+    setToastMessage,
+    clearToastMessage,
+    updateQuestionImages,
+    updatePlayerImages,
+  };
 };
 
 type UseSystemStateContextType = ReturnType<typeof useSystemStateContext>;
@@ -172,6 +178,7 @@ const initContextState: UseSystemStateContextType = {
   setToastMessage: (data: ToastMessageType) => {},
   clearToastMessage: () => {},
   updateQuestionImages: (data: Minio.BucketItem[]) => {},
+  updatePlayerImages: (data: Minio.BucketItem[]) => {},
 };
 
 export const SystemStateContext =
@@ -192,13 +199,19 @@ export const SystemStateProvider = ({
 type UseSystemStateHookType = typeof initContextState;
 
 export const useSystemState = (): UseSystemStateHookType => {
-  const { state, setToastMessage, clearToastMessage, updateQuestionImages } =
-    useContext(SystemStateContext);
+  const {
+    state,
+    setToastMessage,
+    clearToastMessage,
+    updateQuestionImages,
+    updatePlayerImages,
+  } = useContext(SystemStateContext);
   return {
     state,
     setToastMessage,
     clearToastMessage,
     updateQuestionImages,
+    updatePlayerImages,
   };
 };
 

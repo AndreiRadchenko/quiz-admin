@@ -7,14 +7,14 @@ import { TableRow, TableCell } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
 
-import { usePageContext } from '../../_context/pageContext';
-
-type QuestionProps = {
+type ImagesRowProps = {
   id: string;
   name: string;
   lastModified: string;
   size: number;
   index: number;
+  isRowSelected: boolean;
+  onChange: (checked: CheckboxPrimitive.CheckedState) => void;
 };
 
 function ImagesTableRow({
@@ -23,18 +23,9 @@ function ImagesTableRow({
   lastModified,
   size,
   index,
-}: QuestionProps) {
-  const {
-    state: { selectedQuestionImages },
-    selectQuestion,
-    deselectQuestion,
-  } = usePageContext();
-
-  const isRowSelected = selectedQuestionImages.some(e => e === name);
-
-  const onChange = (checked: CheckboxPrimitive.CheckedState) => {
-    checked ? selectQuestion(name) : deselectQuestion(name);
-  };
+  isRowSelected = false,
+  onChange,
+}: ImagesRowProps) {
 
   return (
     <TableRow
