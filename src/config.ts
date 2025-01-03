@@ -10,4 +10,6 @@ export const config = {
   S3_END_POINT: 'localhost',
   S3_ACCESS_KEY: 'd94sewIw2EciOt9qJfWT',
   S3_SECRET_KEY: 'jurJBIaoulo8LWjXiqmEjL7TQMMnDRcs7NdtvN7Z',
+  S3_BUCKET_QUESTIONS: 'questions',
+  S3_BUCKET_PLAYERS: 'players',
 };

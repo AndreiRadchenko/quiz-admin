@@ -2,11 +2,11 @@
 import { useEffect } from 'react';
 
 import { QuizTable } from '@/components/quiz';
-import ImagesTableRow from './_components/ImagesTableRow';
+import QuestionTableRow from './_components/QuestionTableRow';
 import { usePageContext } from '../_context/pageContext';
 import { useSystemState } from '@/context/SystemStateProvider';
-import { TableHeaderComponent } from './_components/tableHeaderComponet';
-import { ShowImages } from './_components/showImages';
+import { QuestionTableHeader } from './_components/QuestionTableHeader';
+import { QuestionImages } from './_components/QuestionImages';
 
 import { sortItemsByField } from '@/utils/SortFunc';
 
@@ -15,7 +15,7 @@ type Props = {
   params: { lang: string };
 };
 
-export default function QuestionImages({
+export default function QuestionImagesPage({
   children,
   params: { lang },
 }: Readonly<Props>) {
@@ -31,32 +31,20 @@ export default function QuestionImages({
   useEffect(() => {
     switch (sort) {
       case 'a-z':
-        updateQuestionImages({
-          questionImages: sortItemsByField(questionImages, 'name', 'asc'),
-        });
+        updateQuestionImages(sortItemsByField(questionImages, 'name', 'asc'));
         break;
       case 'z-a':
-        updateQuestionImages({
-          questionImages: sortItemsByField(questionImages, 'name', 'desc'),
-        });
+        updateQuestionImages(sortItemsByField(questionImages, 'name', 'desc'));
         break;
       case 'newest':
-        updateQuestionImages({
-          questionImages: sortItemsByField(
-            questionImages,
-            'lastModified',
-            'asc'
-          ),
-        });
+        updateQuestionImages(
+          sortItemsByField(questionImages, 'lastModified', 'asc')
+        );
         break;
       case 'oldest':
-        updateQuestionImages({
-          questionImages: sortItemsByField(
-            questionImages,
-            'lastModified',
-            'desc'
-          ),
-        });
+        updateQuestionImages(
+          sortItemsByField(questionImages, 'lastModified', 'desc')
+        );
         break;
       default:
     }
@@ -64,10 +52,10 @@ export default function QuestionImages({
 
   return view === 'list' ? (
     <QuizTable
-      QuizTableRow={ImagesTableRow}
+      QuizTableRow={QuestionTableRow}
       header={table!.header}
       TableHeaderComponent={() => (
-        <TableHeaderComponent
+        <QuestionTableHeader
           header={table!.header}
           headerTooltips={table!.headerTooltips}
         />
@@ -83,6 +71,6 @@ export default function QuestionImages({
       })}
     />
   ) : (
-    <ShowImages />
+    <QuestionImages />
   );
 }

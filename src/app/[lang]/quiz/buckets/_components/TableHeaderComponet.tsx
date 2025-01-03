@@ -5,41 +5,27 @@ import { TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 
-import { SortType, usePageContext } from '../../_context/pageContext';
-import { useSystemState } from '@/context/SystemStateProvider';
+import { SortType } from '../_context/pageContext';
 
 type HeaderProps = {
   header: { [key: string]: string };
   headerTooltips: { [key: string]: string };
+  isChecked: boolean;
+  sort: SortType;
+  onChange: (checked: CheckboxPrimitive.CheckedState) => void;
+  onNameClick: () => void;
+  onModifiedClick: () => void;
 };
 
-export function TableHeaderComponent({ header, headerTooltips }: HeaderProps) {
-  const {
-    state: { questionImages },
-  } = useSystemState();
-  const {
-    state: { selectedQuestionImages, sort },
-    selectAllQuestions,
-    deselectAllQuestions,
-    changeSortType,
-  } = usePageContext();
-
-  const isChecked =
-    selectedQuestionImages.length === questionImages.length &&
-    questionImages.length !== 0;
-
-  const onChange = (checked: CheckboxPrimitive.CheckedState) => {
-    checked ? selectAllQuestions() : deselectAllQuestions();
-  };
-
-  const onNameClick = () => {
-    sort === 'a-z' ? changeSortType('z-a') : changeSortType('a-z');
-  };
-
-  const onModifiedClick = () => {
-    sort === 'newest' ? changeSortType('oldest') : changeSortType('newest');
-  };
-
+export function TableHeaderComponent({
+  header,
+  headerTooltips,
+  isChecked,
+  sort,
+  onChange,
+  onNameClick,
+  onModifiedClick,
+}: HeaderProps) {
   return (
     <TableHeader className="bg-secondary-hover sticky top-0">
       <TableRow>

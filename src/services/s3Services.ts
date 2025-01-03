@@ -3,7 +3,6 @@ import debounce from 'lodash.debounce';
 import { EventEmitter } from 'events';
 
 import { config } from '@/config';
-import { type QuestionImagesType } from '@/context/SystemStateProvider';
 
 export interface UploadedObjectInfo {
   etag: string;
@@ -12,22 +11,35 @@ export interface UploadedObjectInfo {
 
 export class S3Service {
   public eventEmitter = new EventEmitter();
-  private static instance: S3Service | null = null;
+  private static instances: Map<string, S3Service> = new Map();
   private Bucket: Minio.Client;
-  private QuestionsBucket: string = 'questions';
-  publicReadPolicy = {
+  private bucketName: string;
+
+  // private publicReadPolicy = {
+  //   Version: '2012-10-17',
+  //   Statement: [
+  //     {
+  //       Effect: 'Allow',
+  //       Principal: '*',
+  //       Action: ['s3:GetObject'],
+  //       Resource: [], // To be updated dynamically
+  //     },
+  //   ],
+  // };
+  private publicReadPolicy = () => ({
     Version: '2012-10-17',
     Statement: [
       {
         Effect: 'Allow',
         Principal: '*',
         Action: ['s3:GetObject'],
-        Resource: [`arn:aws:s3:::${this.QuestionsBucket}/*`],
+        Resource: [`arn:aws:s3:::${this.bucketName}/*`],
       },
     ],
-  };
+  });
 
-  constructor() {
+  private constructor(bucketName: string) {
+    this.bucketName = bucketName;
     this.Bucket = new Minio.Client({
       endPoint: config.S3_END_POINT,
       port: config.S3_PORT,
@@ -35,40 +47,39 @@ export class S3Service {
       accessKey: config.S3_ACCESS_KEY,
       secretKey: config.S3_SECRET_KEY,
     });
+
+    // Update the publicReadPolicy with the current bucket name
+    // this.publicReadPolicy.Statement[0].Resource = [
+    //   `arn:aws:s3:::${this.bucketName}/*`,
+    // ];
   }
 
-  async init() {
-    const exists = await this.Bucket.bucketExists(this.QuestionsBucket);
-    if (exists) {
-    } else {
-      await this.Bucket.makeBucket(this.QuestionsBucket);
+  private async init(): Promise<void> {
+    const exists = await this.Bucket.bucketExists(this.bucketName);
+    if (!exists) {
+      await this.Bucket.makeBucket(this.bucketName);
       await this.Bucket.setBucketPolicy(
-        this.QuestionsBucket,
-        JSON.stringify(this.publicReadPolicy)
+        this.bucketName,
+        JSON.stringify(this.publicReadPolicy())
       );
     }
     this.startBucketPoller();
   }
 
-  static async getInstance(): Promise<S3Service | null> {
-    if (!S3Service.instance) {
-      try {
-        const instance = new S3Service();
-        await instance.init();
-        S3Service.instance = instance;
-        console.log('S3Service initialized.');
-      } catch (error) {
-        console.error('Error initializing S3Service:', error);
-        return null;
-      }
+  public static async getInstance(bucketName: string): Promise<S3Service> {
+    if (!S3Service.instances.has(bucketName)) {
+      const instance = new S3Service(bucketName);
+      await instance.init();
+      S3Service.instances.set(bucketName, instance);
+      console.log(`S3Service for bucket "${bucketName}" initialized.`);
     }
-    return S3Service.instance;
+    return S3Service.instances.get(bucketName)!;
   }
 
-  async uploadFile(file: File): Promise<UploadedObjectInfo> {
+  public async uploadFile(file: File): Promise<UploadedObjectInfo> {
     try {
       return await this.Bucket.putObject(
-        this.QuestionsBucket,
+        this.bucketName,
         file.name,
         Buffer.from(await file.arrayBuffer())
       );
@@ -78,29 +89,29 @@ export class S3Service {
     }
   }
 
-  async getImages(): Promise<QuestionImagesType> {
+  public async getImages(): Promise<Minio.BucketItem[]> {
     const data: Minio.BucketItem[] = [];
-    const stream = this.Bucket.listObjects(this.QuestionsBucket, '', true);
+    const stream = this.Bucket.listObjects(this.bucketName, '', true);
 
     return new Promise((resolve, reject) => {
       stream.on('data', obj => data.push(obj));
-      stream.on('end', () => resolve({ questionImages: data }));
+      stream.on('end', () => resolve(data));
       stream.on('error', err => reject(err));
     });
   }
 
-  async removeImages(objectsList: string[]) {
+  public async removeImages(objectsList: string[]): Promise<void> {
     try {
-      await this.Bucket.removeObjects(this.QuestionsBucket, objectsList);
+      await this.Bucket.removeObjects(this.bucketName, objectsList);
     } catch (error) {
       console.error('Error removing files:', error);
       throw new Error('Failed to remove files');
     }
   }
 
-  startBucketPoller(): void {
+  private startBucketPoller(): void {
     const poller = this.Bucket.listenBucketNotification(
-      this.QuestionsBucket,
+      this.bucketName,
       '',
       '',
       ['s3:ObjectCreated:*', 's3:ObjectRemoved:*']
@@ -109,7 +120,7 @@ export class S3Service {
     const debouncedUpdate = debounce(async () => {
       try {
         const bucketImages = await this.getImages();
-        this.eventEmitter.emit('bucketUpdate', bucketImages);
+        this.eventEmitter.emit('bucketUpdate', this.bucketName, bucketImages);
       } catch (error) {
         console.error('Error fetching images:', error);
       }
@@ -118,7 +129,9 @@ export class S3Service {
     poller.on('notification', debouncedUpdate);
   }
 
-  onBucketUpdate(callback: (images: QuestionImagesType) => void): void {
+  public onBucketUpdate(
+    callback: (bucket: string, images: Minio.BucketItem[]) => void
+  ): void {
     this.eventEmitter.on('bucketUpdate', callback);
   }
 }

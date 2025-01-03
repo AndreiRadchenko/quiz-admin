@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useActionState, useEffect, useState } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import { useFormState } from 'react-dom';
 import { useToast } from '@/hooks/use-toast';
 
@@ -12,16 +12,13 @@ import { usePathname } from 'next/navigation';
 import { importImages } from '@/actions/buckets';
 
 type Props = {
-  // action: (prevState: unknown, formData: FormData) => void | Promise<String>;
-  // action: (state: null) => Promise<null>;
   field: string;
   label?: string;
   buttonText: string;
   tooltip: string;
 };
 
-export function ImportFileForm({
-  // action,
+export function ImportImagesForm({
   field,
   label,
   buttonText,

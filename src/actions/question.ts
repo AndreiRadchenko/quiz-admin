@@ -3,8 +3,6 @@
 import { QuestionSchema } from '@/schemas/Question';
 import type { Question } from '@/schemas/Question';
 import type { BindQuestion } from '@/app/[lang]/quiz/questions/bind/[idx]/bindQuestionForm';
-import { S3Service } from '@/services/s3Services';
-import { QuestionImagesType } from '@/context/SystemStateProvider';
 
 type ReturnType = {
   message: string;
@@ -67,25 +65,4 @@ export async function saveQuestionBinding(
   // });
 
   return { message: 'Question binded! 🎉' };
-}
-
-export async function getQuestionImages() {
-  try {
-    const s3Service = await S3Service.getInstance();
-    if (!s3Service) {
-      throw new Error(
-        "Can't connect to the file storage. Please start it first."
-      );
-    }
-    const result = await s3Service.getImages();
-    return result;
-  } catch (error) {
-    console.error('Error in questionImages:', error);
-
-    return {
-      messageType: 'error',
-      toastMessage:
-        (error as { message: string }).message || 'An unknown error occurred',
-    };
-  }
 }
