@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Locale } from '../../i18n-config';
+import { useUnmount } from '@/hooks/useUnmount';
 
 export type Preferences = {
   mode: 'dark' | 'light';
@@ -60,6 +61,8 @@ export default function PreferencesProvider({
   });
 
   const [isMounted, setIsMounted] = useState(false);
+
+  useUnmount(() => sessionStorage.clear());
 
   useEffect(() => {
     const pathNameLocale = pathName.split('/')[1] as Locale;

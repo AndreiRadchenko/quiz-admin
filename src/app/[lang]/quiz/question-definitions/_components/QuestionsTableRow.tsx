@@ -3,9 +3,9 @@
 import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
+import { PencilLine, Eye } from 'lucide-react';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
-import { IoMdCreate } from 'react-icons/io';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -35,11 +35,21 @@ function QuestionsTableRow({
         <ButtonWithTooltip
           size={'sm'}
           variant={'default'}
+          tooltip="View question"
+          asChild
+        >
+          <Link href={pathname + `/${id}`}>
+            <Eye size={16} />
+          </Link>
+        </ButtonWithTooltip>
+        <ButtonWithTooltip
+          size={'sm'}
+          variant={'default'}
           tooltip="Edit question"
           asChild
         >
           <Link href={pathname + `/edit/${id}`}>
-            <IoMdCreate />
+            <PencilLine size={16} />
           </Link>
         </ButtonWithTooltip>
       </TableCell>

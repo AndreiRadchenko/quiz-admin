@@ -13,7 +13,7 @@ import { savePlayer } from '@/actions/player';
 import { useState, useEffect } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { saveQuestion } from '@/actions/question';
-import { usePageContext } from '../../_context/pageContext';
+import { usePageContext } from '../_context/pageContext';
 
 type Props = {
   id: string;
@@ -85,6 +85,7 @@ export default function QuestionForm({
     });
     setMessage('');
     setErrors({});
+    sessionStorage.setItem('formModified', 'false');
     /* No need to validate here because 
         react-hook-form already validates with 
         our Zod schema */

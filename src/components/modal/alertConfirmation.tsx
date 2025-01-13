@@ -8,31 +8,44 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { type AlertConfirmationDialogType } from '../../../dictionaries/dictionaries';
+import { useUnmount } from '@/hooks/useUnmount';
 
 type Props = {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   confirmationAction: () => void;
-  message: string;
+  confirmationDialog: AlertConfirmationDialogType;
 };
 
 export function AlertConfirmation({
   open,
   setOpen,
   confirmationAction,
-  message,
+  confirmationDialog,
 }: Props) {
+  const buttons = confirmationDialog?.buttons;
+  useUnmount(() => {
+    setTimeout(() => (document.body.style.pointerEvents = ''), 0);
+  });
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
+    <AlertDialog
+      open={open}
+      onOpenChange={open => {
+        setOpen(open);
+      }}
+    >
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-          <AlertDialogDescription>{message}</AlertDialogDescription>
+          <AlertDialogTitle>{confirmationDialog?.title}</AlertDialogTitle>
+          <AlertDialogDescription>
+            {confirmationDialog?.message}
+          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{buttons?.cancel.buttonText}</AlertDialogCancel>
           <AlertDialogAction onClick={confirmationAction}>
-            Continue
+            {buttons?.continue.buttonText}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

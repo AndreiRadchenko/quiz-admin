@@ -4,6 +4,7 @@ import Image from 'next/image';
 import {
   Home,
   ChevronLeft,
+  ChevronRight,
   Users,
   Files,
   FileQuestion,
@@ -11,6 +12,7 @@ import {
   Images,
   Baby,
   Shapes,
+  Play,
 } from 'lucide-react';
 import { MdPortrait } from 'react-icons/md';
 
@@ -98,16 +100,16 @@ export function AppSidebar({
       tooltip: navTooltip.players,
     },
     {
-      title: nav.questions,
-      url: '/quiz/questions',
-      icon: Files,
-      tooltip: navTooltip.questions,
-    },
-    {
       title: nav.questionDefinitions,
       url: '/quiz/question-definitions',
-      icon: FileQuestion,
+      icon: Files,
       tooltip: navTooltip.questionDefinitions,
+    },
+    {
+      title: nav.questions,
+      url: '/quiz/questions',
+      icon: Play,
+      tooltip: navTooltip.questions,
     },
     {
       title: nav.answers,
@@ -214,7 +216,10 @@ export function AppSidebar({
                     >
                       <Images className="pl-1" />
                       <span>{nav.imageFolders}</span>
-                      <CollapsableArrow />
+                      <ChevronRight
+                        color="white"
+                        className="transition-transform ml-auto group-data-[state=open]/collapsible:rotate-90"
+                      />
                     </SidebarMenuButton>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
@@ -289,25 +294,5 @@ export function AppSidebar({
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
-}
-
-export function CollapsableArrow() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      className="lucide lucide-chevron-right transition-transform ml-auto
-        group-data-[state=open]/collapsible:rotate-90"
-    >
-      <path d="m9 18 6-6-6-6"></path>
-    </svg>
   );
 }

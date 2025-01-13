@@ -22,6 +22,7 @@ export default async function BindQuestion({
   const {
     quiz: {
       questions: { bindForm },
+      alertConfirmationDialog,
     },
   } = await getDictionary(lang);
 
@@ -31,7 +32,7 @@ export default async function BindQuestion({
     <Modal
       title={formTitle}
       description={bindForm.description}
-      alertConfirmationMessage={bindForm.alertConfirmationMessage}
+      confirmationDialog={alertConfirmationDialog}
     >
       <BindQuestionForm
         idx={idx}

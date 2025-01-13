@@ -14,8 +14,8 @@
     "nav": {
       "dashboard": "Dashboard",
       "players": "Players",
-      "questions": "Questions",
       "questionDefinitions": "Question Definitions",
+      "questions": "Play Question",
       "answers": "Answers",
       "overview": "Overview",
       "imageFolders": "Folders",
@@ -26,13 +26,27 @@
     "navTooltip": {
       "dashboard": "Dashboard",
       "players": "Players",
-      "questions": "Questions",
+      "questions": "Play Question",
       "questionDefinitions": "Question Definitions",
       "answers": "Answers",
       "overview": "Overview",
       "questionImages": "Question Images",
       "playerImages": "Player Images",
       "appearance": "Appearance"
+    },
+    "alertConfirmationDialog": {
+      "title": "Are you sure?",
+      "message": "You haven't saved your changes. Please confirm you want to exit without saving.",
+      "buttons": {
+        "continue": {
+          "buttonText": "Continue",
+          "tooltip": "Continue"
+        },
+        "cancel": {
+          "buttonText": "Cancel",
+          "tooltip": "Cancel"
+        }
+      }
     },
     "dashboard": {
       "title": "1% Club Dashboard",
@@ -192,7 +206,7 @@
           "index": "Index",
           "legend": "Legend",
           "type": "Type",
-          "bindQuestion": "Binded Question"
+          "bindQuestion": "Bound Question"
         }
       },
       "bindForm": {
@@ -234,6 +248,30 @@
           "label": "Label",
           "type": "Type",
           "description": "Description"
+        }
+      },
+      "slider": {
+        "labels": {
+          "questionLabel": "Question label",
+          "boundToNumber": "Bound to number",
+          "type": "Type",
+          "passAllowed": "Pass allowed",
+          "options": "Options",
+          "answers": "Answers"
+        },
+        "buttons": {
+          "edit": {
+            "buttonText": "Edit",
+            "tooltip": "Edit question"
+          },
+          "addNew": {
+            "buttonText": "Add New",
+            "tooltip": "Add New Question"
+          },
+          "delete": {
+            "buttonText": "Delete",
+            "tooltip": "Delete question"
+          }
         }
       },
       "questionForm": {

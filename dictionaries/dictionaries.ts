@@ -4,10 +4,17 @@ import dict from './en.json';
 
 const {
   menu,
-  quiz: { buckets },
+  quiz: { buckets, questionDefinitions, alertConfirmationDialog },
 } = dict;
 
+export type NestedType<T, K extends keyof T> = T[K];
+export type ArrayElementType<T> = T extends Array<infer U> ? U : never;
+
 export type MenuType = typeof menu;
+export type AlertConfirmationDialogType = Partial<
+  typeof alertConfirmationDialog
+>;
+export type QuestionDefinitionsType = typeof questionDefinitions;
 export type BucketsType = Partial<typeof buckets>;
 
 // We enumerate all dictionaries here for better linting and typescript support

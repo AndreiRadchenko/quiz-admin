@@ -1,11 +1,7 @@
 import React from 'react';
 
-import { Modal } from '@/components/modal/modal';
-import ShowImagesForm from '../../question-images/ShowImagesForm';
-import {
-  getDictionary,
-  replacePlaceholders,
-} from '../../../../../../../dictionaries/dictionaries';
+import ShowImagesForm from './ShowImagesForm';
+import { getDictionary } from '../../../../../../dictionaries/dictionaries';
 
 type Props = {
   params: {
@@ -19,16 +15,13 @@ export default async function QuestionImages({ params: { id, lang } }: Props) {
   const {
     quiz: {
       questionDefinitions: { showImagesForm },
-      alertConfirmationDialog,
     },
   } = await getDictionary(lang);
 
   return (
-    <Modal
-      title={showImagesForm.title}
-      confirmationDialog={alertConfirmationDialog}
-    >
+    <>
+      <h1 className="mb-8">{showImagesForm.title}</h1>
       <ShowImagesForm buttons={showImagesForm.buttons} />
-    </Modal>
+    </>
   );
 }

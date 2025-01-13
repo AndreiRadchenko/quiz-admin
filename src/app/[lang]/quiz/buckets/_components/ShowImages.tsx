@@ -27,7 +27,7 @@ export function ShowImages({
         {images.map(({ name: img }, idx) => (
           <div
             key={idx}
-            className="w-full h-full aspect-video relative cursor-auto group"
+            className="w-full h-full aspect-video relative cursor-auto group overflow-hidden"
           >
             <div
               className="absolute w-full h-full top-0 left-0 border-2 border-primary

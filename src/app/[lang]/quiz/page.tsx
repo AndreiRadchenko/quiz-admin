@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { ImportFileForm } from './_components/ImportFileForm';
 
-import { importImages, getActions } from './actions';
+import { getActions } from './actions';
 
 type Props = {
   children: React.ReactNode;
