@@ -150,7 +150,7 @@ export default function QuestionForm({
                   buttonTooltip={buttons.tooltips.selectImage}
                   nameInSchema={'imagePath'}
                   labelLeft
-                  modalLink={pathname.replace(`/edit/${id}`, '')}
+                  modalLink={pathname.replace(/\/(edit\/\d+|\d+\/edit)$/, '')}
                 />
               )
             )}

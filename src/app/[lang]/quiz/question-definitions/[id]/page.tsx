@@ -15,6 +15,8 @@ import {
 } from '../../../../../../dictionaries/dictionaries';
 import { Locale } from '../../../../../../i18n-config';
 import { config } from '@/config';
+import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 export type SliderType = NestedType<QuestionDefinitionsType, 'slider'>;
 export type LabelsType = NestedType<SliderType, 'labels'>;
@@ -52,7 +54,13 @@ export default async function QuizQuestionSlide({
 
   return (
     <>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between gap-10">
+        <Link
+          href={'/' + lang + '/quiz/question-definitions'}
+          className="self-start mt-1"
+        >
+          <ArrowLeft />
+        </Link>
         <SliderHeader
           locale={lang as Locale}
           labels={(slider as SliderType).labels}
@@ -60,8 +68,7 @@ export default async function QuizQuestionSlide({
         />
         <QuestionButtons buttons={slider.buttons} className="my-0" />
       </div>
-      <div className="flex flex-col gap-5 mt-3 mb-5">
-        <QuestionData labels={(slider as SliderType).labels} data={slideData} />
+      <div className="flex flex-col gap-5 mt-5 mb-5">
         <QuestionImage img={img} imgBasePath={imgBasePath} />
       </div>
       <QuestionPagination questions={questionsData} id={id} />

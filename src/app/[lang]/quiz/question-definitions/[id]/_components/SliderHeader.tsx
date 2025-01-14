@@ -7,6 +7,7 @@ import { Combobox } from './Combobox';
 
 import { type Locale } from '../../../../../../../i18n-config';
 import { type LabelsType, type QuestionsDataType } from '../page';
+import QuestionData from './QuestionData';
 
 type Props = {
   locale: Locale;
@@ -16,13 +17,7 @@ type Props = {
 
 export default function SliderHeader({ locale, labels, data }: Props) {
   return (
-    <div className="relative">
-      <Link
-        href={'/' + locale + '/quiz/question-definitions'}
-        className="absolute top-1 -left-12"
-      >
-        <ArrowLeft />
-      </Link>
+    <div className="flex flex-row gap-5 flex-grow">
       <div className="flex flex-col gap-3">
         <div className="flex gap-5 items-center">
           <Label variant="default" size="sm" className="w-40">
@@ -39,6 +34,7 @@ export default function SliderHeader({ locale, labels, data }: Props) {
           </Label>
           <Combobox />
         </div>
+        <QuestionData labels={labels} data={data} />
       </div>
     </div>
   );
