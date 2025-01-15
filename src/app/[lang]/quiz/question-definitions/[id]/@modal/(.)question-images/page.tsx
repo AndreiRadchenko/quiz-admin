@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Modal } from '@/components/modal/modal';
-import ShowImagesForm from '../../question-images/ShowImagesForm';
+import ShowImagesForm from '../../../question-images/ShowImagesForm';
 import {
   getDictionary,
   replacePlaceholders,
-} from '../../../../../../../dictionaries/dictionaries';
+} from '../../../../../../../../dictionaries/dictionaries';
 
 type Props = {
   params: {

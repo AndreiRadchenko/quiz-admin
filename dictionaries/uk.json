@@ -34,6 +34,20 @@
       "playerImages": "Зображення гравців",
       "appearance": "Зовнішній вигляд"
     },
+    "alertConfirmationDialog": {
+      "title": "Ви впевнені?",
+      "message": "Ви не зберегли свої зміни. Будь ласка, підтвердьте, що ви хочете вийти, не зберігши зміни.",
+      "buttons": {
+        "continue": {
+          "buttonText": "Продовжити",
+          "tooltip": "Продовжити"
+        },
+        "cancel": {
+          "buttonText": "Скасувати",
+          "tooltip": "Скасувати"
+        }
+      }
+    },
     "dashboard": {
       "title": "Клуб 1% Налаштування.",
       "buttons": {
@@ -98,13 +112,6 @@
           "label": "Інформація про зовнішнього гравця",
           "buttonText": "Імпорт даних гравця",
           "tooltip": "Імпорт даних гравця"
-        },
-        "questionImages": {
-          "label": "Питання Зображення",
-          "buttonText": "Імпорт зображень",
-          "tooltip": "Імпортуйте зображення запитань",
-          "successMessage": "Зображення успішно завантажено",
-          "errorMessage": "Помилка завантаження зображень"
         }
       }
     },
@@ -173,8 +180,7 @@
         "buttons": {
           "save": "Зберегти зміни",
           "cancel": "Скасувати"
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
+        }
       }
     },
     "questions": {
@@ -215,8 +221,7 @@
         "buttons": {
           "save": "Зберегти зміни",
           "cancel": "Скасувати"
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
+        }
       }
     },
     "questionDefinitions": {
@@ -247,6 +252,30 @@
           "description": "опис"
         }
       },
+      "slider": {
+        "labels": {
+          "questionLabel": "Мітка питання",
+          "boundToNumber": "Прив'язка до номера",
+          "type": "Тип",
+          "passAllowed": "Пропуск дозволений",
+          "options": "Опції",
+          "answers": "Відповіді"
+        },
+        "buttons": {
+          "edit": {
+            "buttonText": "Редагувати",
+            "tooltip": "Редагувати питання"
+          },
+          "addNew": {
+            "buttonText": "Додати",
+            "tooltip": "Додати нове запитання"
+          },
+          "delete": {
+            "buttonText": "Видалити",
+            "tooltip": "Видалити запитання"
+          }
+        }
+      },
       "questionForm": {
         "title": "Редагувати питання",
         "description": "Редагувати дані питання",
@@ -269,8 +298,7 @@
           "tooltips": {
             "selectImage": "Виберіть зображення запитання"
           }
-        },
-        "alertConfirmationMessage": "Ви не зберегли свої зміни. "
+        }
       },
       "showImagesForm": {
         "title": "Виберіть зображення запитання",

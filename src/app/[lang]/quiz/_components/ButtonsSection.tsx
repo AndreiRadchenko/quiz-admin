@@ -37,7 +37,7 @@ export function ButtonsSection({
   tooltips = undefined,
 }: ButtonsProps) {
   return (
-    <section className={cn('flex my-6 items-end gap-2 justify-end', className)}>
+    <section className={cn('flex items-end gap-2 justify-end', className)}>
       <div className="flex flex-row gap-1">{children}</div>
       {Object.keys(buttons).map((key, idx) => {
         const Icon = IconComponent && IconComponent[idx];

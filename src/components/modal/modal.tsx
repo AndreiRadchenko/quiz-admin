@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { type AlertConfirmationDialogType } from '../../../dictionaries/dictionaries';
 
 import {
   Dialog,
@@ -17,26 +18,30 @@ export function Modal({
   children,
   title,
   description,
-  alertConfirmationMessage,
+  confirmationDialog,
+  backUrl,
 }: {
   children: React.ReactNode;
   title?: string;
   description?: string;
-  alertConfirmationMessage?: string;
+  confirmationDialog: AlertConfirmationDialogType;
+  backUrl?: string;
 }) {
   const [showExitConfirmation, setShowExitConfirmation] = useState(false);
   const router = useRouter();
 
   const closeModal = () => {
+    sessionStorage.setItem('formModified', 'false');
+    setShowExitConfirmation(false);
     router.back();
   };
 
-  const handleOpenChange = () => {
+  const handleOpenChange = (open: boolean) => {
     const isFormModified = sessionStorage.getItem('formModified');
     if (isFormModified && JSON.parse(isFormModified)) {
       setShowExitConfirmation(true);
     } else {
-      router.back();
+      closeModal();
     }
   };
 
@@ -49,7 +54,7 @@ export function Modal({
               open={showExitConfirmation}
               setOpen={setShowExitConfirmation}
               confirmationAction={closeModal}
-              message={alertConfirmationMessage ?? ''}
+              confirmationDialog={confirmationDialog}
             />
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>

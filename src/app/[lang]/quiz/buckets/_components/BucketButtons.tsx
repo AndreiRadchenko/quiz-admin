@@ -59,7 +59,7 @@ export function BucketButtons({ children, buttons }: ButtonsProps) {
 
   return (
     <ButtonsSection
-      className="mt-2"
+      className="my-6 mt-2"
       buttons={buttons}
       variants={['destructive', 'default']}
       onClickCallbacks={[deleteSelected, changeView]}

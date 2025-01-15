@@ -22,16 +22,14 @@ export default async function PlayerEdit({
   const {
     quiz: {
       players: { playerForm },
+      alertConfirmationDialog,
     },
   } = await getDictionary(lang);
 
   const formTitle = replacePlaceholders(playerForm.title, { id, seat });
 
   return (
-    <Modal
-      title={formTitle}
-      alertConfirmationMessage={playerForm.alertConfirmationMessage}
-    >
+    <Modal title={formTitle} confirmationDialog={alertConfirmationDialog}>
       <PlayerForm
         id={Number(id)}
         labels={playerForm.labels}

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 import { IoMdCreate, IoMdFlash, IoMdVolumeOff } from 'react-icons/io';
+import { PencilLine } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 
 export type PlayerProps = {
@@ -39,7 +40,7 @@ function PlayersTableRow({
       <TableCell id="edit-button">
         <ButtonWithTooltip size={'sm'} tooltip="edit player data" asChild>
           <Link href={pathname + `/edit/${id}?seat=${index + 1}`}>
-            <IoMdCreate />
+            <PencilLine size={16} />
           </Link>
         </ButtonWithTooltip>
       </TableCell>
