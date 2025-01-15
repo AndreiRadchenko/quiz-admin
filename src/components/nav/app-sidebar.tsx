@@ -47,6 +47,7 @@ import Link from 'next/link';
 import NavMenu from './components/NavMenu';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
+import { containsExactPath } from '@/utils/RegEx';
 
 type Props = {
   nav: { [key: string]: string };
@@ -174,7 +175,7 @@ export function AppSidebar({
                     tooltip={item.tooltip}
                     className={cn(
                       '[&>svg]:size-7 pl-0',
-                      pathName === '/' + lang + item.url
+                      containsExactPath(pathName, '/' + lang + item.url)
                         ? `hover:bg-primary-active bg-primary-active text-primary-foreground
                           hover:text-primary-foreground`
                         : ''
