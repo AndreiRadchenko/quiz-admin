@@ -4,8 +4,8 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost',
-        port: '9002',
+        hostname: process.env.NEXT_PUBLIC_S3_END_POINT || 'minio-compose',
+        port: process.env.NEXT_PUBLIC_S3_PORT || '9000',
         pathname: '/**',
       },
     ],

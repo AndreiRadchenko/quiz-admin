@@ -5,12 +5,10 @@ import AnswersTableRow from './_components/AnswersTableRow';
 import answersData from './_template/tableTemplate.json' assert { type: 'json' };
 
 type Props = {
-  children: React.ReactNode;
   params: { lang: string };
 };
 
 export default async function QuizAnswers({
-  children,
   params: { lang },
 }: Readonly<Props>) {
   const {

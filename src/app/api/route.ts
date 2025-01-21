@@ -2,6 +2,8 @@ import * as Minio from 'minio';
 import { S3Service } from '@/services/s3Services';
 import { config } from '@/config';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request): Promise<Response> {
   // Create a new ReadableStream to handle SSE
   const stream = new ReadableStream({

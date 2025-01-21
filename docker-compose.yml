@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  minio-compose:
+    image: quay.io/minio/minio
+    container_name: minio-compose
+    ports:
+      - "9002:9000" # MinIO API port (external to internal)
+      - "9001:9001" # MinIO Console port
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: miniominio
+    volumes:
+      - minio-backup:/data # Persist data
+    command: server /data --console-address ":9001"
+    networks:
+      - quiz-network
+
+  nextjs:
+    build:
+      context: ./quiz-admin # Path to your Next.js project
+      args:
+        NEXT_PUBLIC_S3_END_POINT: minio-compose
+        NEXT_PUBLIC_S3_PORT: 9000
+    container_name: nextjs
+    ports:
+      - "3000:3000" # Expose Next.js app
+    environment:
+      NEXT_PUBLIC_S3_END_POINT: minio-compose
+      NEXT_PUBLIC_S3_PORT: 9000
+      # NEXT_PUBLIC_S3_ACCESS_KEY: y2eanMNkQea5Z3hw2ohz
+      # NEXT_PUBLIC_S3_SECRET_KEY: zHxniNHPJ0v8eoTalVRo9hG4OQXmHZpZczGqg1sm
+      NEXT_PUBLIC_S3_ACCESS_KEY: minio
+      NEXT_PUBLIC_S3_SECRET_KEY: miniominio
+      NEXT_PUBLIC_S3_BUCKET_QUESTIONS: questions
+      NEXT_PUBLIC_S3_BUCKET_PLAYERS: players
+#    volumes:
+#      - ./quiz-admin:/app # Mount project files
+#      - /app/node_modules # Ensure node_modules isn't overwritten
+    working_dir: /app
+    depends_on:
+      - minio-compose
+    networks:
+      - quiz-network
+
+networks:
+  quiz-network:
+    driver: bridge    
+
+volumes:
+  minio-backup:
+    driver: local 

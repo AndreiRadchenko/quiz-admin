@@ -131,7 +131,7 @@ const useSystemStateContext = (initState: StateType) => {
     })();
 
     //Update array of images in context on change content of bucket
-    const eventSource = new EventSource('/api/s3-events');
+    const eventSource = new EventSource('/api');
 
     eventSource.onmessage = event => {
       const { bucket, images } = JSON.parse(event.data);

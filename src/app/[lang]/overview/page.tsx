@@ -18,22 +18,17 @@ const players = Array.from({ length: 100 }, (_, i) => {
 export type Players = typeof players;
 
 type Props = {
-  children: React.ReactNode;
   params: { lang: string };
 };
 
 const offset = [125, 225, 330];
 
-export default async function Overview({
-  children,
-  params: { lang },
-}: Readonly<Props>) {
+export default async function Overview({ params: { lang } }: Readonly<Props>) {
   const {
     quiz: { answers },
   } = await getDictionary(lang);
 
   return (
-    // <div className="bg-background object-center m-auto py-8 w-fit h-auto">
     <div className="mt-10 flex flex-row justify-around gap-24">
       <div id="seats_sectors" className="relative w-[950px] h-[900px]">
         <div
@@ -63,6 +58,5 @@ export default async function Overview({
         answers={{ correct: 5, pass: 15, incorrect: 55 }}
       />
     </div>
-    // </div>
   );
 }

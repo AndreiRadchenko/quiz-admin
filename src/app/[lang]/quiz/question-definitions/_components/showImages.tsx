@@ -15,6 +15,7 @@ export function ShowImages({ onSelect }: Props) {
   const { state } = useSystemState();
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
+
   const { pagePreferences, setPagePreferences } = usePageContext();
 
   const onImageClick = (img: string | undefined) => {

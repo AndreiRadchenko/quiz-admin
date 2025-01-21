@@ -5,12 +5,10 @@ import PlayersTableRow from './_components/PlayersTableRow';
 import playersData from '@/moc/players.json' assert { type: 'json' };
 
 type Props = {
-  children: React.ReactNode;
   params: { lang: string };
 };
 
 export default async function QuizPlayers({
-  children,
   params: { lang },
 }: Readonly<Props>) {
   const {

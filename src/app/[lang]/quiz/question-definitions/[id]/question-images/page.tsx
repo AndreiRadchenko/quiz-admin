@@ -1,7 +1,7 @@
 import React from 'react';
 
 import ShowImagesForm from './ShowImagesForm';
-import { getDictionary } from '../../../../../../dictionaries/dictionaries';
+import { getDictionary } from '../../../../../../../dictionaries/dictionaries';
 
 type Props = {
   params: {

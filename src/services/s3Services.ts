@@ -68,6 +68,8 @@ export class S3Service {
 
   public static async getInstance(bucketName: string): Promise<S3Service> {
     if (!S3Service.instances.has(bucketName)) {
+      console.log('config.S3_END_POINT: ', config.S3_END_POINT);
+      console.log('config.S3_PORT: ', config.S3_PORT);
       const instance = new S3Service(bucketName);
       await instance.init();
       S3Service.instances.set(bucketName, instance);

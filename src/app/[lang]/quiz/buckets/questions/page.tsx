@@ -11,12 +11,10 @@ import { QuestionImages } from './_components/QuestionImages';
 import { sortItemsByField } from '@/utils/SortFunc';
 
 type Props = {
-  children: React.ReactNode;
   params: { lang: string };
 };
 
 export default function QuestionImagesPage({
-  children,
   params: { lang },
 }: Readonly<Props>) {
   const {

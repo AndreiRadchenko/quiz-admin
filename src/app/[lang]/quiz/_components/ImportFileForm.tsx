@@ -17,7 +17,7 @@ type Props = {
   field: string;
   label?: string;
   buttonText: string;
-  tooltip: string;
+  tooltip?: string;
 };
 
 export function ImportFileForm({

@@ -23,12 +23,10 @@ export type LabelsType = NestedType<SliderType, 'labels'>;
 export type QuestionsDataType = ArrayElementType<typeof questionsData>;
 
 type Props = {
-  children: React.ReactNode;
   params: { lang: string; id: string };
 };
 
 export default async function QuizQuestionSlide({
-  children,
   params: { lang, id },
 }: Readonly<Props>) {
   const {
