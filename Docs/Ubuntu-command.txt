@@ -1,0 +1,140 @@
+# Most Usable 100 Ubuntu Server Commands
+
+## 1. Basic File and Folder Actions
+- `ls` - List directory contents.
+- `ls -l` - List with detailed information.
+- `ls -a` - List hidden files.
+- `cd /path/to/dir` - Change directory.
+- `pwd` - Show current directory path.
+- `mkdir dir_name` - Create a new directory.
+- `mkdir -p /path/to/dir` - Create nested directories.
+- `touch file_name` - Create an empty file.
+- `cp file1 file2` - Copy a file.
+- `cp -r dir1 dir2` - Copy a directory recursively.
+- `mv file1 file2` - Move or rename a file.
+- `rm file_name` - Remove a file.
+- `rm -r dir_name` - Remove a directory and its contents.
+- `cat file_name` - Display file content.
+- `less file_name` - View file content page by page.
+- `head -n 10 file_name` - Display the first 10 lines of a file.
+- `tail -n 10 file_name` - Display the last 10 lines of a file.
+- `find /path -name file_name` - Search for a file by name.
+- `du -h file_or_dir` - Show disk usage of a file or directory.
+- `df -h` - Display available disk space.
+
+## 2. Permissions for Files and Users
+- `chmod 644 file_name` - Set file permissions (read/write for owner, read-only for others).
+- `chmod -R 755 dir_name` - Set directory permissions recursively.
+- `chown user file_name` - Change file owner.
+- `chown user:group file_name` - Change file owner and group.
+- `chown -R user:group dir_name` - Change ownership recursively.
+- `ls -l` - View permissions and ownership.
+- `umask 022` - Set default file permissions.
+
+## 3. User and Group Management
+- `adduser username` - Add a new user.
+- `passwd username` - Change a user's password.
+- `deluser username` - Delete a user.
+- `usermod -aG group username` - Add a user to a group.
+- `groupadd group_name` - Create a new group.
+- `groupdel group_name` - Delete a group.
+- `groups username` - Show groups for a user.
+- `id username` - Display user ID and group ID.
+- `who` - Show logged-in users.
+- `w` - Display active users and their activities.
+- `last` - Show login history.
+- `sudo visudo` - Edit sudoers file.
+
+## 4. Network Diagnostics and Adjustments
+- `ifconfig` - Display network interfaces.
+- `ip addr` - Show IP addresses.
+- `ping host` - Test network connectivity to a host.
+- `traceroute host` - Show route to a host.
+- `netstat -tuln` - Display active connections.
+- `ss -tuln` - Show listening ports and services.
+- `curl http://example.com` - Fetch a URL.
+- `wget http://example.com` - Download a file from a URL.
+- `scp file user@host:/path` - Securely copy a file to a remote host.
+- `scp user@host:/path/file .` - Securely copy a file from a remote host.
+- `rsync -av source/ dest/` - Synchronize files between locations.
+- `nmcli dev status` - Display network status.
+- `nmcli con show` - Show active network connections.
+- `systemctl restart networking` - Restart networking service.
+
+## 5. System Monitoring and Process Management
+- `top` - Display running processes.
+- `htop` - Interactive process viewer (install with `sudo apt install htop`).
+- `ps aux` - Show detailed process list.
+- `kill PID` - Terminate a process by PID.
+- `killall process_name` - Terminate all processes with a specific name.
+- `uptime` - Show system uptime.
+- `free -h` - Display memory usage.
+- `vmstat` - View system performance.
+- `iostat` - Show CPU and I/O stats.
+- `df -h` - Show disk usage.
+- `du -sh /path` - Show directory size.
+- `journalctl -xe` - View detailed system logs.
+- `dmesg` - Display kernel logs.
+- `sysctl -a` - Show system configuration.
+
+## 6. Package Management
+- `sudo apt update` - Update package list.
+- `sudo apt upgrade` - Upgrade installed packages.
+- `sudo apt install package_name` - Install a package.
+- `sudo apt remove package_name` - Remove a package.
+- `sudo apt autoremove` - Remove unnecessary packages.
+- `dpkg -l` - List installed packages.
+- `dpkg -s package_name` - Show package details.
+- `apt-cache search package_name` - Search for a package.
+
+## 7. System Administration
+- `sudo systemctl start service_name` - Start a service.
+- `sudo systemctl stop service_name` - Stop a service.
+- `sudo systemctl restart service_name` - Restart a service.
+- `sudo systemctl enable service_name` - Enable a service to start on boot.
+- `sudo systemctl disable service_name` - Disable a service from starting on boot.
+- `sudo systemctl status service_name` - Check the status of a service.
+- `reboot` - Restart the system.
+- `shutdown now` - Shut down immediately.
+- `shutdown -r +5` - Restart the system in 5 minutes.
+- `hostnamectl` - Manage the hostname.
+- `timedatectl` - Show or set system time and date.
+
+## 8. File Compression and Archiving
+- `tar -cvf archive.tar /path` - Create a tar archive.
+- `tar -xvf archive.tar` - Extract a tar archive.
+- `tar -czvf archive.tar.gz /path` - Create a compressed tarball.
+- `tar -xzvf archive.tar.gz` - Extract a compressed tarball.
+- `gzip file_name` - Compress a file.
+- `gunzip file_name.gz` - Decompress a file.
+- `zip archive.zip file1 file2` - Create a zip archive.
+- `unzip archive.zip` - Extract a zip archive.
+
+## 9. Disk Management
+- `lsblk` - List block devices.
+- `fdisk -l` - Display disk partitions.
+- `parted /dev/sdX` - Partition a disk interactively.
+- `mkfs.ext4 /dev/sdX1` - Format a partition as ext4.
+- `mount /dev/sdX1 /mnt` - Mount a partition.
+- `umount /mnt` - Unmount a partition.
+- `blkid` - Show UUIDs of devices.
+- `df -h` - Check disk usage.
+- `du -sh /path` - Show size of a directory.
+- `fsck /dev/sdX1` - Check and repair filesystem.
+
+## 10. Security and Firewall
+- `ufw enable` - Enable the firewall.
+- `ufw disable` - Disable the firewall.
+- `ufw status` - Check firewall status.
+- `ufw allow 22` - Allow SSH (port 22).
+- `ufw deny 80` - Deny HTTP (port 80).
+- `sudo fail2ban-client status` - Check Fail2Ban status.
+- `sudo fail2ban-client restart` - Restart Fail2Ban.
+
+## 11. Backup and Restore
+- `rsync -av /source /destination` - Sync files for backup.
+- `tar -czvf backup.tar.gz /path` - Archive and compress files.
+- `scp user@host:/path/to/backup.tar.gz .` - Retrieve a backup.
+- `dd if=/dev/sdX of=/path/backup.img` - Create a disk image.
+- `dd if=/path/backup.img of=/dev/sdX` - Restore a disk image.
+

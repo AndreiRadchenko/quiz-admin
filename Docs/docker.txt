@@ -1,0 +1,190 @@
+#install docker:
+    sudo apt install docker docker-compose
+
+#add user pi to docker admin group:
+    sudo usermod -aG docker pi
+
+#start docker demon:
+    systemctl start docker
+
+#To automatically start Docker and Containerd on boot for other distros, use the commands below:
+    sudo systemctl enable docker.service
+    sudo systemctl enable containerd.service
+#To disable this behavior, use disable instead.
+    sudo systemctl disable docker.service
+    sudo systemctl disable containerd.service
+
+#download portainer:
+    sudo docker pull portainer/portainer-ce:linux-arm
+
+#start portainer container:
+    sudo docker run --restart always -d -p 9000:9000 -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:linux-arm
+
+#portainer user: admin pass: MishaDimaVika
+
+#start web_recognition container with volume /examples for "dataset_faces.dat"
+    docker run --restart always -d --name=web_face --mount source=data,destination=/root/face_recognition/examples/data -p 5001:5001 web_recognition:210515
+
+docker run -it --name=web_face --mount source=data,destination=/root/face_recognition/examples/data -p 5001:5001 andriiradchenko/web_recognition:210515
+
+#docker commands:
+
+    #list of images
+        docker images
+
+    #run container from tomcat iamge daemon mod, port forwarding from container port 8080 to server port 1234
+        docker run -d -p 1234:8080 tomcat
+
+    #list of running container
+        docker ps    
+
+    #cill container
+        docker rm [cont id]
+
+    #remuve image
+        docker rmi tomcat
+
+    #build image named 'web_recognition' with tag '210514' from local Dockerfile. Notice DOT '.' at the end of string
+        docker build -t web_recognition_v01:amd64 . --load
+        
+    #to remove intermediate image in multistage build run
+        docker image prune -f --filter label=stage=build-step    
+        or
+        docker image prune -f //видалити всі імаджі що не використовуються
+
+    #For build on amd64 machine images for arm architecture use buildx
+         docker buildx create --platform linux/arm64,linux/arm/v7
+         docker buildx use [OPTIONS] NAME
+
+            What actually solved my problem after two painful days was creating the following custom builder:
+
+            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+            docker buildx create --name multiarch --driver docker-container --use
+            docker buildx inspect --bootstrap
+            Now I can successfully run:
+
+            docker buildx build --platform linux/arm64 -t user/repo --no-cache --pull .
+            on my linux/amd64 machine.
+
+    #build image named 'web_recognition' with tag 'armv7' for arm-v7 platform (RPI3B+ 32 bit OS)
+        docker buildx build --platform linux/arm/v7 -t web_recognition:armv7 . --load
+    #build image named 'web_recognition' with tag 'arm64' for arm-v7 platform (RPI3B+ 64 bit OS)
+        docker buildx build --platform linux/arm64 -t web_recognition:arm64 .
+
+    #Запустить интерактивно /bin/bash на контейнере с ID 5267e21d140
+        docker exec -it 5267e21d140 /bin/bash
+
+    #Выйти из контейнера
+        exit
+
+    #Создать Image с именем newimage_v2:latest из контейнера с ID 5267e21d140
+        docker commit 5267e21d140  newimage_v2:latest
+
+    #команда зупиняє і видаляє всі контейнери
+        docker rm -f $(docker ps -aq)
+
+#docker volume commands:
+    docker volume ls
+    docker volume inspect data
+
+#push image to docker.hub
+    docker image tag web_recognition_v02:amd64 andriiradchenko/web_recognition:amd64
+    docker login -u andriiradchenko -p Grushevskogo8a docker.io
+    docker image push andriiradchenko/web_recognition:amd64
+
+#reinstall web_face container
+
+docker pull andriiradchenko/web_recognition:armv702
+
+docker run --restart always -d --name=web_face --mount source=data,destination=/root/face_recognition/examples/data -p 5001:5001 web_recognition:armv702
+
+docker run --restart always -d --name=web_face --mount source=data,destination=/root/face_recognition/examples/data -p 5001:5001 andriiradchenko/web_recognition
+
+docker run --restart always -d --name=web_face -v face_data:/root/face_recognition/examples -p 5001:5001 andriiradchenko/web_recognition
+                                                     /\
+                                                     ||
+                                    persist data between container creation
+
+docker run --restart always -d --name=web_face -v data:/data -p 5001:5001 web_recognition_v02:amd64
+
+"map": ["examples:rw", "examples/data:rw"],
+
+#docker-compose
+#Creates stack of container services. Here yuo can setup environment variables (context) for docker images, common network, start mode, volumes - all parameters that you normally use in "docker run" command
+
+Run "docker-compose" from folder where docker-compose.yml is located.
+
+#build containers:
+ docker-compose build --no-cache
+
+ #build and run:
+ docker-compose up
+
+ #stop and remove container (if you made change to docker-compose.yml and need rebuild)
+ docker-compose down
+
+ #build and start in demon (detach) mode (no logs output)
+ docker-compose up -d
+
+#start/stop containers
+docker-compose start
+docker-compose stop
+
+docker-compose ps
+docker-compose images
+
+#To build containers that will be start always when host server will start (reboot) set start policy in docker-compose.yml services:
+
+  nextjs:
+    build:
+      context: ./quiz-admin # Path to your Next.js project
+      args:
+        NEXT_PUBLIC_S3_END_POINT: minio-compose
+        NEXT_PUBLIC_S3_PORT: 9000
+    container_name: nextjs
+    restart: unless-stopped
+
+#and then start with -d OPTIONS
+docker-compose up -d
+
+#If you map local project directory to the container, it will overwrite folder inside a container after all building stages:
+
+ nextjs:
+    build:
+      context: ./quiz-admin # Path to your Next.js project
+      args:
+        NEXT_PUBLIC_S3_END_POINT: minio-compose
+        NEXT_PUBLIC_S3_PORT: 9000
+    container_name: nextjs
+    restart: unless-stopped
+    ports:
+      - "3000:3000" # Expose Next.js app
+    environment:
+      NEXT_PUBLIC_S3_END_POINT: minio-compose
+      NEXT_PUBLIC_S3_PORT: 9000
+      NEXT_PUBLIC_S3_ACCESS_KEY: minio
+      NEXT_PUBLIC_S3_SECRET_KEY: miniominio
+      NEXT_PUBLIC_S3_BUCKET_QUESTIONS: questions
+      NEXT_PUBLIC_S3_BUCKET_PLAYERS: players
+  #  volumes:
+  #    - ./quiz-admin:/app # Mount project files
+  #    - /app/node_modules # Ensure node_modules isn't overwritten
+    working_dir: /app
+    depends_on:
+      - minio-compose
+    networks:
+      - quiz-network
+
+#Don't do it, unless you want to test you code change on running container (you project folder will be literally mapped to the container)
+
+
+#To use env variables from .env file of from "docker-compose.yml" you should add them to "Dockerfile" before build and run stages:
+
+# Build arguments
+ARG NEXT_PUBLIC_S3_END_POINT
+ARG NEXT_PUBLIC_S3_PORT
+
+# Export environment variables for build
+ENV NEXT_PUBLIC_S3_END_POINT=$NEXT_PUBLIC_S3_END_POINT
+ENV NEXT_PUBLIC_S3_PORT=$NEXT_PUBLIC_S3_PORT
+
