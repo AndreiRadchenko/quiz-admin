@@ -4,6 +4,7 @@ services:
   minio-compose:
     image: quay.io/minio/minio
     container_name: minio-compose
+    restart: unless-stopped
     ports:
       - "9002:9000" # MinIO API port (external to internal)
       - "9001:9001" # MinIO Console port
@@ -23,6 +24,7 @@ services:
         NEXT_PUBLIC_S3_END_POINT: minio-compose
         NEXT_PUBLIC_S3_PORT: 9000
     container_name: nextjs
+    restart: unless-stopped
     ports:
       - "3000:3000" # Expose Next.js app
     environment:
