@@ -1,4 +1,6 @@
-export default function QuestionsLayout({
+import PageContextProvider from './_context/pageContext';
+
+export default function QuestionsDataLayout({
   children,
   modal,
 }: Readonly<{
@@ -6,9 +8,9 @@ export default function QuestionsLayout({
   modal: React.ReactNode;
 }>) {
   return (
-    <>
+    <PageContextProvider>
       {modal}
       {children}
-    </>
+    </PageContextProvider>
   );
 }
