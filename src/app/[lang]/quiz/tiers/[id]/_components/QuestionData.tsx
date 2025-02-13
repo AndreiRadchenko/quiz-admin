@@ -17,7 +17,7 @@ export default function QuestionData({ labels, data }: Props) {
           {labels.type + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          {data.answerType}
+          --Answer Type--
         </Label>
       </div>
       <div className="flex gap-5 items-center">
@@ -32,7 +32,7 @@ export default function QuestionData({ labels, data }: Props) {
           {labels.options + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          {data.answerOptions}
+          --Answer Options--
         </Label>
       </div>
       <div className="flex gap-5 items-center">
@@ -40,7 +40,7 @@ export default function QuestionData({ labels, data }: Props) {
           {labels.answers + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          {data.correctAnswer}
+          --Correct Answer--
         </Label>
       </div>
     </div>

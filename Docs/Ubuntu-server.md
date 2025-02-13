@@ -1,6 +1,7 @@
 # Most Usable 100 Ubuntu Server Commands
 
 <a name="top"></a>
+
 1. [Basic File and Folder Actions](#1-basic-file-and-folder-actions)
 2. [Permissions for Files and Users](#2-permissions-for-files-and-users)
 3. [User and Group Management](#3-user-and-group-management)
@@ -13,8 +14,46 @@
 10. [Security and Firewall](#10-security-and-firewall)
 11. [Backup and Restore](#11-backup-and-restore)
 
+## ssh connection
+
+<a href="#top">⬅️ Back to top</a> Generate a rsa keypair: (no file name needed)
+
+`ssh-keygen`
+
+then copy it on the server with one simple command:
+
+`ssh-copy-id hassio@192.168.0.2`
+
+you can now log in without password:
+
+`ssh root@192.168.0.2`
+
+connect to remote server:
+
+`ssh andrii@176.126.62.89 -p 2822`
+
+### You can use SSHFS instead of NFS.
+
+1. Install SSH Server addon
+
+2. Configure it to make a successful ssh root@hassio.local
+3. `mkdir ~/hassio-sshfs; cd ~/hassio-sshfs`
+4. `sshfs root@192.168.0.2:/config ~/hassio-sshfs`
+
+`sshfs root@176.126.62.89:/ ~/hassio-sshfs`
+
+`#password: andrei`
+
+`fusermount -u ~/hassio-sshfs` -> unmount
+
+5. ls # it works!
+
+`/home/username/.ssh` - if authentification problem occur delete known-host file
+
 ## 1. Basic File and Folder Actions
+
 <a href="#top">⬅️ Back to top</a>
+
 - `ls` - List directory contents.
 - `ls -l` - List with detailed information.
 - `ls -a` - List hidden files.
@@ -37,8 +76,11 @@
 - `df -h` - Display available disk space.
 
 ## 2. Permissions for Files and Users
+
 <a href="#top">⬅️ Back to top</a>
-- `chmod 644 file_name` - Set file permissions (read/write for owner, read-only for others).
+
+- `chmod 644 file_name` - Set file permissions (read/write for owner, read-only
+  for others).
 - `chmod -R 755 dir_name` - Set directory permissions recursively.
 - `chown user file_name` - Change file owner.
 - `chown user:group file_name` - Change file owner and group.
@@ -47,7 +89,9 @@
 - `umask 022` - Set default file permissions.
 
 ## 3. User and Group Management
+
 <a href="#top">⬅️ Back to top</a>
+
 - `adduser username` - Add a new user.
 - `passwd username` - Change a user's password.
 - `deluser username` - Delete a user.
@@ -62,7 +106,9 @@
 - `sudo visudo` - Edit sudoers file.
 
 ## 4. Network Diagnostics and Adjustments
+
 <a href="#top">⬅️ Back to top</a>
+
 - `ifconfig` - Display network interfaces.
 - `ip addr` - Show IP addresses.
 - `ping host` - Test network connectivity to a host.
@@ -79,7 +125,9 @@
 - `systemctl restart networking` - Restart networking service.
 
 ## 5. System Monitoring and Process Management
+
 <a href="#top">⬅️ Back to top</a>
+
 - `top` - Display running processes.
 - `htop` - Interactive process viewer (install with `sudo apt install htop`).
 - `ps aux` - Show detailed process list.
@@ -96,7 +144,9 @@
 - `sysctl -a` - Show system configuration.
 
 ## 6. Package Management
+
 <a href="#top">⬅️ Back to top</a>
+
 - `sudo apt update` - Update package list.
 - `sudo apt upgrade` - Upgrade installed packages.
 - `sudo apt install package_name` - Install a package.
@@ -107,12 +157,15 @@
 - `apt-cache search package_name` - Search for a package.
 
 ## 7. System Administration
+
 <a href="#top">⬅️ Back to top</a>
+
 - `sudo systemctl start service_name` - Start a service.
 - `sudo systemctl stop service_name` - Stop a service.
 - `sudo systemctl restart service_name` - Restart a service.
 - `sudo systemctl enable service_name` - Enable a service to start on boot.
-- `sudo systemctl disable service_name` - Disable a service from starting on boot.
+- `sudo systemctl disable service_name` - Disable a service from starting on
+  boot.
 - `sudo systemctl status service_name` - Check the status of a service.
 - `reboot` - Restart the system.
 - `shutdown now` - Shut down immediately.
@@ -121,7 +174,9 @@
 - `timedatectl` - Show or set system time and date.
 
 ## 8. File Compression and Archiving
+
 <a href="#top">⬅️ Back to top</a>
+
 - `tar -cvf archive.tar /path` - Create a tar archive.
 - `tar -xvf archive.tar` - Extract a tar archive.
 - `tar -czvf archive.tar.gz /path` - Create a compressed tarball.
@@ -132,7 +187,9 @@
 - `unzip archive.zip` - Extract a zip archive.
 
 ## 9. Disk Management
+
 <a href="#top">⬅️ Back to top</a>
+
 - `lsblk` - List block devices.
 - `fdisk -l` - Display disk partitions.
 - `parted /dev/sdX` - Partition a disk interactively.
@@ -145,7 +202,9 @@
 - `fsck /dev/sdX1` - Check and repair filesystem.
 
 ## 10. Security and Firewall
+
 <a href="#top">⬅️ Back to top</a>
+
 - `ufw enable` - Enable the firewall.
 - `ufw disable` - Disable the firewall.
 - `ufw status` - Check firewall status.
@@ -154,12 +213,12 @@
 - `sudo fail2ban-client status` - Check Fail2Ban status.
 - `sudo fail2ban-client restart` - Restart Fail2Ban.
 
-## 11. Backup and Restore 
+## 11. Backup and Restore
+
 <a href="#top">⬅️ Back to top</a>
+
 - `rsync -av /source /destination` - Sync files for backup.
 - `tar -czvf backup.tar.gz /path` - Archive and compress files.
 - `scp user@host:/path/to/backup.tar.gz .` - Retrieve a backup.
 - `dd if=/dev/sdX of=/path/backup.img` - Create a disk image.
 - `dd if=/path/backup.img of=/dev/sdX` - Restore a disk image.
-
-

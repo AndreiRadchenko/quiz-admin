@@ -24,7 +24,7 @@ export default function SliderHeader({ locale, labels, data }: Props) {
             {labels.questionLabel + ':'}
           </Label>
           <Label variant="bold" size="default" className="text-accent">
-            {data.label}
+            {data.legend}
           </Label>
         </div>
         <div className="flex gap-5 items-center">

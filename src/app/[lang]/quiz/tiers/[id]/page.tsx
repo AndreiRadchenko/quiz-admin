@@ -36,19 +36,16 @@ export default async function QuizQuestionSlide({
   } = await getDictionary(lang);
 
   const defaultData = {
-    id: 'Unknown',
-    label: 'Not found',
-    imagePath: '',
-    answerType: '',
-    answerOptions: '',
-    correctAnswer: '',
-    description: '',
+    idx: 'Unknown',
+    legend: '50% Question',
+    bindType: '',
+    bindQuestion: '',
   };
 
-  const slideData = questionsData.find(e => e.id === id) || defaultData;
+  const slideData = questionsData.find(e => e.idx === id) || defaultData;
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
-  const img = extractFileName(slideData.imagePath);
+  const img = '';
 
   return (
     <>

@@ -8,7 +8,6 @@ import {
   ButtonsSection,
 } from '../../../_components/ButtonsSection';
 
-import { usePageContext } from '../../_context/pageContext';
 import { removeImages } from '@/actions/buckets';
 import { toast } from '@/hooks/use-toast';
 import { config } from '@/config';
