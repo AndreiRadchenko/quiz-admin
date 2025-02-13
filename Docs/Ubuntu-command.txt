@@ -2,11 +2,11 @@
 
 ## 1. Basic File and Folder Actions
 - `ls` - List directory contents.
-- `ls -l` - List with detailed information.
-- `ls -a` - List hidden files.
+- `ls -l` - List with detailed information.docker --version
+- `ls -a` - List hidden files.docker --version
 - `cd /path/to/dir` - Change directory.
 - `pwd` - Show current directory path.
-- `mkdir dir_name` - Create a new directory.
+- `mkdir dir_name` - Create a new directory.V
 - `mkdir -p /path/to/dir` - Create nested directories.
 - `touch file_name` - Create an empty file.
 - `cp file1 file2` - Copy a file.

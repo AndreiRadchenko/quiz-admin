@@ -14,24 +14,24 @@
     "nav": {
       "dashboard": "Dashboard",
       "players": "Players",
-      "questionDefinitions": "Question Definitions",
-      "questions": "Play Question",
+      "questionBank": "Question Bank",
+      "quizTiers": "Quiz Tiers",
       "answers": "Answers",
       "overview": "Overview",
       "imageFolders": "Folders",
       "questionImages": "Question Images",
-      "playerImages": "Player Images",
+      "playerImages": "Player Photos",
       "appearance": "Appearance"
     },
     "navTooltip": {
       "dashboard": "Dashboard",
       "players": "Players",
-      "questions": "Play Question",
-      "questionDefinitions": "Question Definitions",
+      "quizTiers": "Quiz Tiers",
+      "questionBank": "Question Bank",
       "answers": "Answers",
       "overview": "Overview",
       "questionImages": "Question Images",
-      "playerImages": "Player Images",
+      "playerImages": "Player Photos",
       "appearance": "Appearance"
     },
     "alertConfirmationDialog": {
@@ -180,8 +180,8 @@
         "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
       }
     },
-    "questions": {
-      "title": "Questions",
+    "quizTiers": {
+      "title": "Quiz Tiers",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Import Bindings",
@@ -222,8 +222,8 @@
         "alertConfirmationMessage": "You haven't saved your changes. Please confirm you want to exit without saving."
       }
     },
-    "questionDefinitions": {
-      "title": "Question Definitions",
+    "questionBank": {
+      "title": "Question Bank",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Import Questions",
@@ -358,7 +358,7 @@
         "showList": "Show list",
         "showGrid": "Show grid"
       },
-      "title": { "questions": "Question images", "players": "Player images" },
+      "title": { "questions": "Question Images", "players": "Player Photos" },
       "table": {
         "header": {
           "selectAll": "Select All",

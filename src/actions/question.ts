@@ -2,7 +2,7 @@
 
 import { QuestionSchema } from '@/schemas/Question';
 import type { Question } from '@/schemas/Question';
-import type { BindQuestion } from '@/app/[lang]/quiz/questions/bind/[idx]/bindQuestionForm';
+import type { BindQuestion } from '@/app/[lang]/quiz/tiers/bind/[idx]/bindQuestionForm';
 
 type ReturnType = {
   message: string;

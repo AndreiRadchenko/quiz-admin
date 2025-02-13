@@ -3,25 +3,26 @@
 import React from 'react';
 import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
-import { PencilLine, Eye } from 'lucide-react';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
+import { IoMdLink, IoMdEye, IoMdClose } from 'react-icons/io';
+import { IoUnlinkOutline } from 'react-icons/io5';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 type QuestionProps = {
-  id: string;
-  label: string;
-  answerType: string;
-  description: string;
+  idx: string;
+  legend: string;
+  bindType: string;
+  bindQuestion: string;
   index: number;
 };
 
 function QuestionsTableRow({
-  id,
-  label,
-  answerType,
-  description,
+  idx,
+  legend,
+  bindType,
+  bindQuestion,
   index,
 }: QuestionProps) {
   const pathname = usePathname();
@@ -34,28 +35,33 @@ function QuestionsTableRow({
       <TableCell id="edit-button" className="flex gap-1">
         <ButtonWithTooltip
           size={'sm'}
-          variant={'default'}
-          tooltip="View question"
+          variant={'outline'}
+          tooltip="Open question"
+        >
+          <IoMdEye />
+        </ButtonWithTooltip>
+        <ButtonWithTooltip
+          size={'sm'}
+          variant={'outline'}
+          tooltip="Bind question"
           asChild
         >
-          <Link href={pathname + `/${id}`}>
-            <Eye size={16} />
+          <Link href={pathname + `/bind/${idx}?legend=${legend}`}>
+            <IoMdLink />
           </Link>
         </ButtonWithTooltip>
         <ButtonWithTooltip
           size={'sm'}
           variant={'default'}
-          tooltip="Edit question"
-          asChild
+          tooltip="Unbind question"
         >
-          <Link href={pathname + `/edit/${id}`}>
-            <PencilLine size={16} />
-          </Link>
+          <IoMdClose />
         </ButtonWithTooltip>
       </TableCell>
-      <TableCell id="idx">{label}</TableCell>
-      <TableCell id="legend">{answerType}</TableCell>
-      <TableCell id="type">{description}</TableCell>
+      <TableCell id="idx">{idx}</TableCell>
+      <TableCell id="legend">{legend}</TableCell>
+      <TableCell id="type">{bindType}</TableCell>
+      <TableCell id="question">{bindQuestion}</TableCell>
     </TableRow>
   );
 }

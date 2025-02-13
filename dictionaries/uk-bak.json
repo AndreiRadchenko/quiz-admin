@@ -10,7 +10,7 @@
       "dashboard": "Панель налаштувань",
       "players": "Гравці",
       "questions": "Питання",
-      "questionDefinitions": "Визначення питань",
+      "questionBank": "Визначення питань",
       "answers": "Відповіді",
       "overview": "Огляд"
     },
@@ -155,7 +155,7 @@
         }
       }
     },
-    "questionDefinitions": {
+    "questionBank": {
       "title": "Визначення питань",
       "buttons": {
         "importFileBtn": {

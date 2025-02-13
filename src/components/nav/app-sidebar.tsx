@@ -101,16 +101,16 @@ export function AppSidebar({
       tooltip: navTooltip.players,
     },
     {
-      title: nav.questionDefinitions,
-      url: '/quiz/question-definitions',
+      title: nav.questionBank,
+      url: '/quiz/questions',
       icon: Files,
-      tooltip: navTooltip.questionDefinitions,
+      tooltip: navTooltip.questionBank,
     },
     {
-      title: nav.questions,
-      url: '/quiz/questions',
+      title: nav.quizTiers,
+      url: '/quiz/tiers',
       icon: Play,
-      tooltip: navTooltip.questions,
+      tooltip: navTooltip.quizTiers,
     },
     {
       title: nav.answers,

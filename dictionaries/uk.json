@@ -14,24 +14,24 @@
     "nav": {
       "dashboard": "Панель налаштувань",
       "players": "Гравці",
-      "questions": "Запитання",
-      "questionDefinitions": "Визначення запитань",
+      "quizTiers": "Щаблі вікторини",
+      "questionBank": "Банк запитань",
       "answers": "Відповіді",
       "overview": "Огляд",
       "imageFolders": "Теки",
       "questionImages": "Зображення запитань",
-      "playerImages": "Зображення гравців",
+      "playerImages": "Фото гравців",
       "appearance": "Вигляд"
     },
     "navTooltip": {
       "dashboard": "Панель налаштувань",
       "players": "Гравці",
-      "questions": "Запитання",
-      "questionDefinitions": "Визначення запитань",
+      "quizTiers": "Щаблі вікторини",
+      "questionBank": "Банк запитань",
       "answers": "Відповіді",
       "overview": "Огляд",
       "questionImages": "Зображення запитань",
-      "playerImages": "Зображення гравців",
+      "playerImages": "Фото гравців",
       "appearance": "Зовнішній вигляд"
     },
     "alertConfirmationDialog": {
@@ -183,8 +183,8 @@
         }
       }
     },
-    "questions": {
-      "title": "Питання",
+    "quizTiers": {
+      "title": "Щаблі вікторини",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Імпорт прив'язок",
@@ -224,8 +224,8 @@
         }
       }
     },
-    "questionDefinitions": {
-      "title": "Визначення запитань",
+    "questionBank": {
+      "title": "Банк запитань",
       "buttons": {
         "importFileBtn": {
           "buttonText": "Імпорт запитань",
