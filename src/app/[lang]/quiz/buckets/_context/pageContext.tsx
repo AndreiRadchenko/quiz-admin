@@ -9,7 +9,7 @@ import React, {
 } from 'react';
 
 import { type BucketsType } from '../../../../../../dictionaries/dictionaries';
-import { useSystemState } from '@/context/SystemStateProvider';
+import { useAppStore } from '@/context/appStoreProvider';
 import { useUnmount } from '@/hooks/useUnmount';
 
 export type SortType = 'a-z' | 'z-a' | 'newest' | 'oldest';
@@ -125,9 +125,9 @@ const usePageStateContext = (initState: StateType) => {
   const initialState = storedState ? JSON.parse(storedState) : initState;
 
   const [state, dispatch] = useReducer(reducer, initialState);
-  const {
-    state: { questionImages, playerImages },
-  } = useSystemState();
+
+  const questionImages = useAppStore(state => state.questionImages);
+  const playerImages = useAppStore(store => store.playerImages);
 
   useUnmount(() => {
     sessionStorage.setItem('bucketsContext', JSON.stringify(state));

@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-import { useSystemState } from '@/context/SystemStateProvider';
+import { useAppStore } from '@/context/appStoreProvider';
 import { config } from '@/config';
 import { usePageContext } from '../_context/pageContext';
 
@@ -12,7 +12,7 @@ type Props = {
 };
 
 export function ShowImages({ onSelect }: Props) {
-  const { state } = useSystemState();
+  const questionImages = useAppStore(state => state.questionImages);
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
 
@@ -29,7 +29,7 @@ export function ShowImages({ onSelect }: Props) {
   return (
     <div className="overflow-y-auto border max-h-[80vh] scrollbar rounded-md p-2">
       <div className="grid grid-cols-2 gap-2">
-        {state.questionImages.map(({ name: img }, idx) => (
+        {questionImages.map(({ name: img }, idx) => (
           <div
             key={idx}
             className="w-full h-full aspect-video relative cursor-pointer group"
@@ -66,7 +66,3 @@ export function ShowImages({ onSelect }: Props) {
     </div>
   );
 }
-
-// {state.questionImages.map((img, idx) => (
-//   <Image key={idx} src={`${imgBasePath + img}`} alt={'question image'} />
-// ))}

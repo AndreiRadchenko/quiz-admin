@@ -2,15 +2,13 @@
 
 import React from 'react';
 
-import { useSystemState } from '@/context/SystemStateProvider';
+import { useAppStore } from '@/context/appStoreProvider';
 import { config } from '@/config';
 import { usePageContext } from '../../_context/pageContext';
 import { ShowImages } from '../../_components/ShowImages';
 
 export function QuestionImages() {
-  const {
-    state: { questionImages },
-  } = useSystemState();
+  const questionImages = useAppStore(state => state.questionImages);
   const {
     state: { selectedQuestionImages },
     selectQuestion,

@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { QuizTable } from '@/components/quiz';
 import PlayerTableRow from './_components/PlayerTableRow';
 import { usePageContext } from '../_context/pageContext';
-import { useSystemState } from '@/context/SystemStateProvider';
+import { useAppStore } from '@/context/appStoreProvider';
 import { PlayerTableHeader } from './_components/PlayerTableHeader';
 import { PlayerImages } from './_components/PlayerImages';
 
@@ -21,10 +21,9 @@ export default function PlayerImagesPage({
     bucketsLocale: { table },
     state: { sort, view },
   } = usePageContext();
-  const {
-    state: { playerImages },
-    updatePlayerImages,
-  } = useSystemState();
+
+  const playerImages = useAppStore(state => state.playerImages);
+  const updatePlayerImages = useAppStore(state => state.updatePlayerImages);
 
   useEffect(() => {
     switch (sort) {
