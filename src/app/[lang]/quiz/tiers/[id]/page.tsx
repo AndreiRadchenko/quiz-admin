@@ -39,7 +39,7 @@ export default async function QuizQuestionSlide({
     idx: 'Unknown',
     legend: '50% Question',
     bindType: '',
-    bindQuestion: '',
+    boundQuestion: '',
   };
 
   const slideData = questionsData.find(e => e.idx === id) || defaultData;

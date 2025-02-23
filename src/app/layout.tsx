@@ -3,7 +3,6 @@ import { Inter } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 
 import PreferencesProvider from '@/context/PreferencesProvider';
-import SystemStateProvider from '@/context/SystemStateProvider';
 import AppStoreProvider from '@/context/appStoreProvider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
@@ -50,9 +49,7 @@ export default async function RootLayout({
       >
         <PreferencesProvider>
           <AppStoreProvider>
-            {/* <SystemStateProvider> */}
             <SidebarProvider>{children}</SidebarProvider>
-            {/* </SystemStateProvider> */}
           </AppStoreProvider>
         </PreferencesProvider>
         <Toaster />
