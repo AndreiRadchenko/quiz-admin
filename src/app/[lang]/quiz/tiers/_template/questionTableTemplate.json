@@ -3,102 +3,102 @@
     "idx": "-3",
     "legend": "Demo 1",
     "bindType": "MULTIPLE",
-    "bindQuestion": "AV001"
+    "boundQuestion": "AV001"
   },
   {
     "idx": "-2",
     "legend": "Demo 2",
     "bindType": "TEXT",
-    "bindQuestion": "AV002"
+    "boundQuestion": "AV002"
   },
   {
     "idx": "-1",
     "legend": "Demo 2",
     "bindType": "TEXT_NUMBER",
-    "bindQuestion": "AV003"
+    "boundQuestion": "AV003"
   },
   {
     "idx": "1",
     "legend": "90%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "2",
     "legend": "80%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "3",
     "legend": "70%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "4",
     "legend": "60%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "5",
     "legend": "50%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "6",
     "legend": "40%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "7",
     "legend": "35%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "8",
     "legend": "30%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "9",
     "legend": "25%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "10",
     "legend": "20%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "11",
     "legend": "15%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "12",
     "legend": "10%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "13",
     "legend": "5%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   },
   {
     "idx": "14",
     "legend": "1%",
     "bindType": "",
-    "bindQuestion": ""
+    "boundQuestion": ""
   }
 ]

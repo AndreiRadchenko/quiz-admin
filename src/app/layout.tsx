@@ -3,7 +3,7 @@ import { Inter } from 'next/font/google';
 import { Toaster } from '@/components/ui/toaster';
 
 import PreferencesProvider from '@/context/PreferencesProvider';
-import SystemStateProvider from '@/context/SystemStateProvider';
+import AppStoreProvider from '@/context/appStoreProvider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 import './globals.css';
@@ -48,9 +48,9 @@ export default async function RootLayout({
         className={cn(' bg-background font-sans antialiased', inter.variable)}
       >
         <PreferencesProvider>
-          <SystemStateProvider>
+          <AppStoreProvider>
             <SidebarProvider>{children}</SidebarProvider>
-          </SystemStateProvider>
+          </AppStoreProvider>
         </PreferencesProvider>
         <Toaster />
       </body>

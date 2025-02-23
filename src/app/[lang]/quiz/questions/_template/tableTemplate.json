@@ -6,7 +6,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have? "
+    "description": "How many legs does a cat have? ",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "2",
@@ -15,7 +17,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "3",
@@ -24,7 +28,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "4",
@@ -33,7 +39,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "5",
@@ -42,7 +50,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "6",
@@ -51,7 +61,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "7",
@@ -60,7 +72,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "8",
@@ -69,7 +83,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "9",
@@ -78,7 +94,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "10",
@@ -87,7 +105,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "11",
@@ -96,7 +116,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "12",
@@ -105,7 +127,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "13",
@@ -114,7 +138,9 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   },
   {
     "id": "14",
@@ -123,6 +149,8 @@
     "answerType": "MULTIPLE",
     "answerOptions": "A;B;C",
     "correctAnswer": "A",
-    "description": "How many legs does a cat have?"
+    "description": "How many legs does a cat have?",
+    "boundToNumber": "unbound",
+    "passAllowed": true
   }
 ]

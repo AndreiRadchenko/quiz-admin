@@ -4,7 +4,7 @@ import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { TableHeaderComponent } from '../../_components/TableHeaderComponet';
 
 import { usePageContext } from '../../_context/pageContext';
-import { useSystemState } from '@/context/SystemStateProvider';
+import { useAppStore } from '@/context/appStoreProvider';
 
 type HeaderProps = {
   header: { [key: string]: string };
@@ -12,9 +12,7 @@ type HeaderProps = {
 };
 
 export function PlayerTableHeader({ header, headerTooltips }: HeaderProps) {
-  const {
-    state: { playerImages },
-  } = useSystemState();
+  const playerImages = useAppStore(stor => stor.playerImages);
   const {
     state: { selectedPlayerImages, sort },
     selectAllPlayers,
