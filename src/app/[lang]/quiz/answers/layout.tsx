@@ -3,22 +3,19 @@ import { getDictionary } from '../../../../../dictionaries/dictionaries';
 
 type Props = {
   children: React.ReactNode;
-  modalEditPlayer: React.ReactNode;
   params: { lang: string };
 };
 
 export default async function PlayersLayout({
   children,
-  modalEditPlayer,
   params: { lang },
 }: Readonly<Props>) {
   const {
-    quiz: { players },
+    quiz: { answers },
   } = await getDictionary(lang);
 
   return (
-     <PageContextProvider playersLocale={players}>
-      {modalEditPlayer}
+    <PageContextProvider answersLocale={answers}>
       {children}
     </PageContextProvider>
   );

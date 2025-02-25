@@ -5,6 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import PreferencesProvider from '@/context/PreferencesProvider';
 import AppStoreProvider from '@/context/appStoreProvider';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import QueryProvider from '@/context/queryProvider';
 
 import './globals.css';
 import { cn } from '@/lib/utils';
@@ -48,9 +49,11 @@ export default async function RootLayout({
         className={cn(' bg-background font-sans antialiased', inter.variable)}
       >
         <PreferencesProvider>
-          <AppStoreProvider>
-            <SidebarProvider>{children}</SidebarProvider>
-          </AppStoreProvider>
+          <QueryProvider>
+            <AppStoreProvider>
+              <SidebarProvider>{children}</SidebarProvider>
+            </AppStoreProvider>
+          </QueryProvider>
         </PreferencesProvider>
         <Toaster />
       </body>

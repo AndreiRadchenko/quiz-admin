@@ -14,15 +14,15 @@ type QuestionProps = {
   idx: string;
   legend: string;
   bindType: string;
-  bindQuestion: string;
+  boundQuestion: string;
   index: number;
 };
 
-function QuestionsTableRow({
+function TiersTableRow({
   idx,
   legend,
   bindType,
-  bindQuestion,
+  boundQuestion,
   index,
 }: QuestionProps) {
   const pathname = usePathname();
@@ -61,9 +61,9 @@ function QuestionsTableRow({
       <TableCell id="idx">{idx}</TableCell>
       <TableCell id="legend">{legend}</TableCell>
       <TableCell id="type">{bindType}</TableCell>
-      <TableCell id="question">{bindQuestion}</TableCell>
+      <TableCell id="question">{boundQuestion}</TableCell>
     </TableRow>
   );
 }
 
-export default QuestionsTableRow;
+export default TiersTableRow;

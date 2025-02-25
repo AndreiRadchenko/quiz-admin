@@ -2,27 +2,27 @@
 
 import React, { createContext, useContext, ReactNode } from 'react';
 
-import { type QuestionBankType } from '@/../dictionaries/dictionaries';
+import { type PlayersType } from '@/../dictionaries/dictionaries';
 
 type PageContextType = {
-  questionsLocale: QuestionBankType;
+  playersLocale: PlayersType;
 };
 
 const initContextState: PageContextType = {
-  questionsLocale: {},
+  playersLocale: {},
 };
 
 const PageContext = createContext<PageContextType>(initContextState);
 
 export default function PageContextProvider({
   children,
-  questionsLocale,
+  playersLocale,
 }: {
   children: ReactNode;
-  questionsLocale: QuestionBankType;
+  playersLocale: PlayersType;
 }) {
   return (
-    <PageContext.Provider value={{ questionsLocale }}>
+    <PageContext.Provider value={{ playersLocale }}>
       {children}
     </PageContext.Provider>
   );

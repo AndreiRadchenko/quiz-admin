@@ -1,7 +1,19 @@
+'use client';
+
+import playersData from '@/mock/playersTableTemplate.json' assert { type: 'json' };
+
 import { createZodFetcher } from 'zod-fetch';
 import { PlayerSchema, type Player } from '@/schemas/Player';
 
 const fetchUser = createZodFetcher();
+
+const wait = (duration: number) =>
+  new Promise(resolve => setTimeout(resolve, duration));
+
+export async function getPlayersData() {
+  await wait(500);
+  return playersData;
+}
 
 export async function getPlayer(id: string) {
   // const user = await fetchUser(
@@ -19,13 +31,4 @@ export async function getPlayer(id: string) {
   };
 
   return player;
-}
-
-export async function getPlayers() {
-  // const users = await fetchUsers(
-  //   z.array(UserSchema),
-  //   'http://localhost:3500/users',
-  //   { cache: 'no-store' }
-  // );
-  // return users;
 }
