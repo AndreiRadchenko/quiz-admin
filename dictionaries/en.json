@@ -202,11 +202,12 @@
       },
       "table": {
         "header": {
-          "edit": "",
+          "openTier": "",
           "index": "Index",
           "legend": "Legend",
           "type": "Type",
-          "bindQuestion": "Bound Question"
+          "boundQuestion": "Bound Question",
+          "bindQuestion": ""
         }
       },
       "bindForm": {
@@ -247,7 +248,8 @@
           "edit": "",
           "label": "Label",
           "type": "Type",
-          "description": "Description"
+          "description": "Description",
+          "edit2": ""
         }
       },
       "slider": {

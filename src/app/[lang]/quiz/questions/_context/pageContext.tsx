@@ -1,18 +1,28 @@
 'use client';
 
-import React, { createContext, useContext, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  SetStateAction,
+} from 'react';
 
 import { type QuestionBankType } from '@/../dictionaries/dictionaries';
 
-type PageContextType = {
+export type Preferences = {
+  selectedQuestionImage: string;
+};
+
+interface iPreferencesContext {
   questionsLocale: QuestionBankType;
-};
+  pagePreferences: Preferences;
+  setPagePreferences: React.Dispatch<SetStateAction<Preferences>>;
+}
 
-const initContextState: PageContextType = {
-  questionsLocale: {},
-};
-
-const PageContext = createContext<PageContextType>(initContextState);
+const PageContext = createContext<iPreferencesContext>(
+  {} as iPreferencesContext
+);
 
 export default function PageContextProvider({
   children,
@@ -21,8 +31,17 @@ export default function PageContextProvider({
   children: ReactNode;
   questionsLocale: QuestionBankType;
 }) {
+  const [pagePreferences, setPagePreferences] = useState<Preferences>(() => {
+    const preferences = {
+      selectedQuestionImage: '',
+    } as Preferences;
+    return preferences;
+  });
+
   return (
-    <PageContext.Provider value={{ questionsLocale }}>
+    <PageContext.Provider
+      value={{ questionsLocale, pagePreferences, setPagePreferences }}
+    >
       {children}
     </PageContext.Provider>
   );
