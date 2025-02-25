@@ -1,31 +1,46 @@
-import { QuizTable, ButtonsSection } from '@/components/quiz';
-import { getDictionary } from '../../../../../dictionaries/dictionaries';
-import QuestionsTableRow from './_components/QuestionsTableRow';
+'use client';
 
-import questionsData from './_template/tableTemplate.json' assert { type: 'json' };
+import { useQuery, useMutation } from '@tanstack/react-query';
+
+import { QuizTable, ButtonsSection } from '@/components/quiz';
+import QuestionsTableRow from './_components/QuestionsTableRow';
+import { usePageContext } from './_context/pageContext';
+import { QUERYKEY } from '@/services/queryKeys';
+import { getQuestionsData } from '@/services/questions';
 
 type Props = {
   params: { lang: string };
 };
 
-export default async function QuizQuestionsData({
+export default function QuizQuestionsData({
   params: { lang },
 }: Readonly<Props>) {
+  const { questionsLocale } = usePageContext();
   const {
-    quiz: { questionBank },
-  } = await getDictionary(lang);
+    data: questionsData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: [QUERYKEY.QUESTIONS],
+    queryFn: getQuestionsData,
+    // staleTime: Infinity,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000,
+  });
 
   return (
     <>
-      <h1 className="mb-6">{questionBank.title}</h1>
+      <h1 className="mb-6">{questionsLocale.title}</h1>
       <ButtonsSection
-        buttons={questionBank.buttons}
+        buttons={questionsLocale.buttons!}
         variants={['default', 'default', 'default', 'destructive']}
       />
       <QuizTable
         QuizTableRow={QuestionsTableRow}
-        header={questionBank.table.header}
+        header={questionsLocale.table!.header}
         rowsData={questionsData}
+        isLoading={isLoading}
+        error={error?.message}
       />
     </>
   );

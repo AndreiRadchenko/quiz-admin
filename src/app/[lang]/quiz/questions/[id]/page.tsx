@@ -1,13 +1,18 @@
+'use client';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+
 import QuestionImage from './_components/QuestionImage';
 import SliderHeader from './_components/SliderHeader';
 import QuestionData from './_components/QuestionData';
 import QuestionButtons from './_components/QuestionButtons';
 import QuestionPagination from './_components/QuestionPagination';
-
-import questionsData from '../_template/tableTemplate.json' assert { type: 'json' };
+import { usePageContext } from '../_context/pageContext';
+import { QUERYKEY } from '@/services/queryKeys';
+import { getQuestionsData } from '@/services/questions';
+import Loader from '@/components/quiz/loader';
+import { type QuestionDataType } from '@/types/dataTypes';
 
 import { extractFileName } from '@/utils/RegEx';
-import { getDictionary } from '../../../../../../dictionaries/dictionaries';
 import {
   type QuestionBankType,
   type NestedType,
@@ -20,20 +25,29 @@ import { ArrowLeft } from 'lucide-react';
 
 export type SliderType = NestedType<QuestionBankType, 'slider'>;
 export type LabelsType = NestedType<SliderType, 'labels'>;
-export type QuestionsDataType = ArrayElementType<typeof questionsData>;
 
 type Props = {
   params: { lang: string; id: string };
 };
 
-export default async function QuizQuestionSlide({
+export default function QuizQuestionSlide({
   params: { lang, id },
 }: Readonly<Props>) {
   const {
-    quiz: {
-      questionBank: { slider },
-    },
-  } = await getDictionary(lang);
+    questionsLocale: { slider },
+  } = usePageContext();
+
+  const queryClient = useQueryClient();
+  const cachedData = queryClient.getQueryData<QuestionDataType[]>([
+    QUERYKEY.QUESTIONS,
+  ]);
+
+  const { data, isLoading } = useQuery({
+    queryKey: [QUERYKEY.QUESTIONS],
+    queryFn: getQuestionsData,
+    enabled: !cachedData, // ✅ Only fetch if not in cache
+    initialData: cachedData, // ✅ Use cached data if available
+  });
 
   const defaultData = {
     id: 'Unknown',
@@ -43,12 +57,16 @@ export default async function QuizQuestionSlide({
     answerOptions: '',
     correctAnswer: '',
     description: '',
+    boundToNumber: 'unbound',
+    passAllowed: true,
   };
 
-  const slideData = questionsData.find(e => e.id === id) || defaultData;
+  const slideData = data?.find(e => e.id === id) || defaultData;
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
   const img = extractFileName(slideData.imagePath);
+
+  if (isLoading) return <Loader />;
 
   return (
     <>
@@ -58,15 +76,15 @@ export default async function QuizQuestionSlide({
         </Link>
         <SliderHeader
           locale={lang as Locale}
-          labels={(slider as SliderType).labels}
+          labels={(slider as SliderType)!.labels}
           data={slideData}
         />
-        <QuestionButtons buttons={slider.buttons} className="my-0" />
+        <QuestionButtons buttons={slider!.buttons} className="my-0" />
       </div>
       <div className="flex flex-col gap-5 mt-5 mb-5">
-        <QuestionImage img={img} imgBasePath={imgBasePath} />
+        {img && <QuestionImage img={img} imgBasePath={imgBasePath} />}
       </div>
-      <QuestionPagination questions={questionsData} id={id} />
+      {data && <QuestionPagination questions={data} id={id} />}
     </>
   );
 }
