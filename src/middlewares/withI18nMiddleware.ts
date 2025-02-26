@@ -47,8 +47,6 @@ export function withI18nMiddleware(middleware: CustomMiddleware) {
       locale => !pathname.startsWith(`/${locale}/`) && pathname !== `/${locale}`
     );
 
-    console.log('pathnameIsMissingLocale', pathnameIsMissingLocale);
-
     // Redirect if there is no locale
     if (pathnameIsMissingLocale) {
       const cookieLocale = request.cookies.get('lang')?.value;

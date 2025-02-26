@@ -5,6 +5,7 @@ import { TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
+import { Combobox } from './Combobox';
 import { Play, Link as LinkIcon, Unlink } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -36,7 +37,7 @@ function TiersTableRow({
         index % 2 === 0 ? 'bg-muted' : 'bg-background'
       )}
     >
-      <TableCell id="edit-button" className={'' + `w-[${columnWidth}%]`}>
+      <TableCell id="edit-button" className="w-[13%]">
         <ButtonWithTooltip
           size={'sm'}
           variant={'outline'}
@@ -57,24 +58,8 @@ function TiersTableRow({
       <TableCell className={`w-[${columnWidth}%]`} id="question">
         {boundQuestion}
       </TableCell>
-      <TableCell className={'' + `flex flex-row gap-1 justify-end w-[${columnWidth}%]`}>
-        <ButtonWithTooltip
-          size={'sm'}
-          variant={'outline'}
-          tooltip="Bind question"
-          asChild
-        >
-          <Link href={pathname + `/bind/${idx}?legend=${legend}`}>
-            <LinkIcon size={16} />
-          </Link>
-        </ButtonWithTooltip>
-        <ButtonWithTooltip
-          size={'sm'}
-          variant={'default'}
-          tooltip="Unbind question"
-        >
-          <Unlink size={16} />
-        </ButtonWithTooltip>
+      <TableCell className={`w-[${columnWidth}%]`}>
+        <Combobox idx={idx} />
       </TableCell>
     </TableRow>
   );

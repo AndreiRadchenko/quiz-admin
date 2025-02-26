@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
-import { type ToastMessageType } from '@/context/SystemStateProvider';
+import { type ToastMessageType } from '@/types/stateTypes';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { importImages } from '@/actions/buckets';
@@ -18,12 +18,7 @@ type Props = {
   tooltip: string;
 };
 
-export function ImportImagesForm({
-  field,
-  label,
-  buttonText,
-  tooltip,
-}: Props) {
+export function ImportImagesForm({ field, label, buttonText, tooltip }: Props) {
   const pathname = usePathname();
   const page = pathname.match(/[^/]+$/)?.[0] || '';
   const importImagesAction = async (previousState: any, formData: FormData) =>
