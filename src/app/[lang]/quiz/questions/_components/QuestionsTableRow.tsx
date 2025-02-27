@@ -27,7 +27,6 @@ function QuestionsTableRow({
   const pathname = usePathname();
   // const columnWidth = Math.round(100 / (4 + 4));
   const columnWidth = 15;
-  console.log(columnWidth);
 
   return (
     <TableRow

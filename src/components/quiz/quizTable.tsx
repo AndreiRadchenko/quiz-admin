@@ -43,9 +43,9 @@ export function QuizTable<T extends { index?: number }>({
         )}
         <TableBody className="">
           {isLoading ? (
-            <div className="absolute top-1/2 left-1/2 h-full -translate-x-1/2 -translate-y-1/2">
-              <Loader fullscreen={false} />
-            </div>
+            <TableRow className="absolute top-1/2 left-1/2 h-full -translate-x-1/2 -translate-y-1/2">
+              <Loader table={true} />
+            </TableRow>
           ) : !rowsData ? (
             <div className="m-6 font-medium">{error}</div>
           ) : (
@@ -66,7 +66,6 @@ type HeaderProps = {
 export function HeaderComponent({ header }: HeaderProps) {
   const columns = Object.keys(header).length;
   const columnWidth = Math.round(100 / (columns + 2)) + '%';
-  console.log('columnWidth: ', columnWidth);
   return (
     <TableHeader className="bg-secondary-hover sticky top-0 w-full">
       <TableRow className="flex flex-row justify-between">

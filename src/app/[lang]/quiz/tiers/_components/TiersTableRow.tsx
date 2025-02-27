@@ -9,6 +9,7 @@ import { Combobox } from './Combobox';
 import { Play, Link as LinkIcon, Unlink } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useMutationState } from '@tanstack/react-query';
 
 type QuestionProps = {
   idx: string;
@@ -28,6 +29,25 @@ function TiersTableRow({
   const pathname = usePathname();
   // const columns = Object.keys(header).length;
   const columnWidth = Math.round(100 / (6 + 2));
+
+  const variables = useMutationState<FormData>({
+    filters: { mutationKey: [`boundQuestion${idx}`], status: 'pending' },
+    select: mutation => mutation.state.variables as FormData,
+  });
+
+  const BoundQuestion = () => {
+    let bindData: string | null = null;
+    if (variables.length > 0) {
+      bindData = (variables[0] as FormData).get('boundQuestion') as string;
+    }
+    return variables.length > 0 ? (
+      <span className="text-accent opacity-80 italic">
+        {bindData !== 'unbound' ? 'Binding question ' + bindData : 'Unbinding'}
+      </span>
+    ) : (
+      <span>{boundQuestion}</span>
+    );
+  };
 
   return (
     <TableRow
@@ -56,7 +76,7 @@ function TiersTableRow({
         {bindType}
       </TableCell>
       <TableCell className={`w-[${columnWidth}%]`} id="question">
-        {boundQuestion}
+        <BoundQuestion />
       </TableCell>
       <TableCell className={`w-[${columnWidth}%]`}>
         <Combobox idx={idx} />

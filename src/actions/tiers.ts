@@ -1,13 +1,18 @@
+import { ToastMessageType } from '@/types/stateTypes';
+
 const wait = (duration: number) =>
   new Promise(resolve => setTimeout(resolve, duration));
 
-export async function bindQuestion(formData: FormData, idx: string) {
+export async function bindQuestion(
+  formData: FormData,
+  idx: string
+): Promise<ToastMessageType | undefined> {
   const boundQuestion = formData.get('boundQuestion') as string;
 
   try {
-    await wait(500);
+    await wait(1500);
     if (!boundQuestion) {
-      throw new Error('FormData return null');
+      throw new Error('Error in binding question');
     }
     if (boundQuestion === 'unbound') {
       return {
@@ -15,10 +20,10 @@ export async function bindQuestion(formData: FormData, idx: string) {
         toastMessage: `Question unbound `,
       };
     }
-    return {
-      messageType: 'success',
-      toastMessage: `Question ${boundQuestion} was bound to tier ${idx}`,
-    };
+    // return {
+    //   messageType: 'success',
+    //   toastMessage: `Question ${boundQuestion} was bound to tier ${idx}`,
+    // };
   } catch (error) {
     console.error('Error in binding question:', error);
 

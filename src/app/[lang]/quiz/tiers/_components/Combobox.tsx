@@ -1,9 +1,8 @@
 'use client';
 
-import * as React from 'react';
-import { useFormState } from 'react-dom';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, ChevronsUpDown, Link, Unlink } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Check, Link, Unlink } from 'lucide-react';
 
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -29,25 +28,24 @@ import {
 } from '@/components/ui/tooltip';
 import { QUERYKEY } from '@/services/queryKeys';
 import { QuestionDataType } from '@/types/dataTypes';
-import { getQuestionsData } from '@/services/questions';
-import Loader from '@/components/quiz/loader';
 import { bindQuestion } from '@/actions/tiers';
-import { useEffect } from 'react';
 import { ToastMessageType } from '@/types/stateTypes';
 import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
 
 export function Combobox({ idx }: { idx: string }) {
-  const [open, setOpen] = React.useState(false);
-  const [value, setValue] = React.useState('');
-
-  const bindQuestionAction = async (previousState: any, formData: FormData) =>
-    await bindQuestion(formData, idx);
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState('');
+  const [message, setMessage] = useState<ToastMessageType | undefined>(
+    undefined
+  );
 
   const { toast } = useToast();
-  const [message, formAction, isPending] = useFormState(
-    bindQuestionAction,
-    null
-  );
+  const { mutate, isPending } = useMutation({
+    mutationFn: (formData: FormData) => bindQuestion(formData, idx),
+    onSuccess: data => setMessage(data),
+    // onSettled: () => queryClient.invalidateQueries({ queryKey: [QUERYKEY.TIERS] }),
+    mutationKey: [`boundQuestion${idx}`],
+  });
 
   const queryClient = useQueryClient();
   const data = queryClient.getQueryData<QuestionDataType[]>([
@@ -58,9 +56,9 @@ export function Combobox({ idx }: { idx: string }) {
     if (value) {
       const formDataToSend = new FormData();
       formDataToSend.set('boundQuestion', value);
-      formAction(formDataToSend);
+      mutate(formDataToSend);
     }
-  }, [formAction, value]);
+  }, [value, mutate]);
 
   useEffect(() => {
     if (message) {
@@ -88,31 +86,32 @@ export function Combobox({ idx }: { idx: string }) {
 
   return (
     <form
-      action={formAction}
       onSubmit={e => {
         e.preventDefault();
       }}
       className="flex flex-row gap-1 justify-end w-full"
     >
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger>
-          <TooltipProvider delayDuration={1500}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size={'sm'}
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={open}
-                >
-                  <Link size={16} />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent className="font-normal bg-secondary-foreground">
-                Bind question
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <PopoverTrigger asChild>
+          <span>
+            <TooltipProvider delayDuration={1500}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    size={'sm'}
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                  >
+                    <Link size={16} />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="font-normal bg-secondary-foreground">
+                  Bind question
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </span>
         </PopoverTrigger>
 
         <PopoverContent className="w-[300px] h-[45vh] p-0">
