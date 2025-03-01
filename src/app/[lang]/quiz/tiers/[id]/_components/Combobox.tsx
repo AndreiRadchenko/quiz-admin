@@ -107,9 +107,7 @@ export function Combobox() {
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value
-            ? frameworks.find(framework => framework.value === value)?.label
-            : 'Unbound!'}
+          {value}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -117,7 +115,7 @@ export function Combobox() {
         <Command className="bg-background text-foreground">
           <CommandInput placeholder="Search number..." className="" />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No questions found.</CommandEmpty>
             <CommandGroup>
               {frameworks.map(framework => (
                 <CommandItem

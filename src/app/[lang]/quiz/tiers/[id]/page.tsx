@@ -1,69 +1,111 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+
 import QuestionImage from './_components/QuestionImage';
 import SliderHeader from './_components/SliderHeader';
-import QuestionData from './_components/QuestionData';
 import QuestionButtons from './_components/QuestionButtons';
-import QuestionPagination from './_components/QuestionPagination';
+import QuizPagination from '@/app/[lang]/quiz/_components/QuizPagination';
+import Loader from '@/components/quiz/loader';
+import { ArrowLeft } from 'lucide-react';
 
-import questionsData from '../_template/questionTableTemplate.json' assert { type: 'json' };
-
+import { usePageContext } from '../_context/pageContext';
+import { QUERYKEY } from '@/services/queryKeys';
+import { getQuestionsData } from '@/services/questions';
+import { getTiersData } from '@/services/tiers';
+import { type QuestionDataType, type TierDataType } from '@/types/dataTypes';
 import { extractFileName } from '@/utils/RegEx';
-import { getDictionary } from '../../../../../../dictionaries/dictionaries';
 import {
   type QuestionBankType,
   type NestedType,
-  type ArrayElementType,
+  type QuizTiersType,
 } from '../../../../../../dictionaries/dictionaries';
 import { Locale } from '../../../../../../i18n-config';
 import { config } from '@/config';
-import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
+import { useCachedQuery } from '@/hooks/useCachedQuery';
 
-export type SliderType = NestedType<QuestionBankType, 'slider'>;
+export type SliderType = NestedType<QuizTiersType, 'slider'>;
 export type LabelsType = NestedType<SliderType, 'labels'>;
-export type QuestionsDataType = ArrayElementType<typeof questionsData>;
+
+const defaultData = {
+  id: '100',
+  idx: '-3',
+  legend: 'Demo 1',
+  answerType: '',
+  boundQuestion: '',
+};
+
+const uboundQuestionData = {
+  id: '3',
+  label: 'No question bound',
+  imagePath: 'noImage',
+  answerType: '',
+  answerOptions: '',
+  correctAnswer: '',
+  description: 'No description',
+  boundToNumber: 'unbound',
+  passAllowed: true,
+};
 
 type Props = {
   params: { lang: string; id: string };
 };
 
-export default async function QuizQuestionSlide({
+export default function QuizTierSlide({
   params: { lang, id },
 }: Readonly<Props>) {
   const {
-    quiz: {
-      questionBank: { slider },
-    },
-  } = await getDictionary(lang);
+    tiersLocale: { slider },
+  } = usePageContext();
 
-  const defaultData = {
-    idx: 'Unknown',
-    legend: '50% Question',
-    bindType: '',
-    boundQuestion: '',
+  const { data: questionsState } = useCachedQuery<QuestionDataType[]>(
+    [QUERYKEY.QUESTIONS],
+    getQuestionsData
+  );
+
+  const { data: tiersState, isLoading } = useCachedQuery<TierDataType[]>(
+    [QUERYKEY.TIERS],
+    getTiersData
+  );
+
+  const currentTier = tiersState?.find(e => e.id === id) || defaultData;
+  const boundQuestion =
+    questionsState?.find(e => e.label === currentTier.boundQuestion) ||
+    uboundQuestionData;
+  const imagePath = extractFileName(boundQuestion.imagePath);
+
+  const slideData = {
+    ...boundQuestion,
+    imagePath,
+    idx: currentTier.idx,
+    legend: currentTier.legend,
+    boundQuestion: currentTier.boundQuestion,
   };
 
-  const slideData = questionsData.find(e => e.idx === id) || defaultData;
   const imgBasePath =
     'http://' + config.S3_END_POINT + ':' + config.S3_PORT + '/questions/';
-  const img = '';
+
+  if (isLoading) return <Loader />;
 
   return (
     <>
       <div className="flex flex-row justify-between gap-10">
-        <Link href={'/' + lang + '/quiz/questions'} className="self-start mt-1">
+        <Link href={'/' + lang + '/quiz/tiers'} className="self-start mt-1">
           <ArrowLeft />
         </Link>
         <SliderHeader
           locale={lang as Locale}
-          labels={(slider as SliderType).labels}
-          data={slideData}
+          labels={(slider as SliderType)!.labels}
+          data={{ ...slideData }}
         />
-        <QuestionButtons buttons={slider.buttons} className="my-0" />
+        <QuestionButtons buttons={slider!.buttons} className="my-0" />
       </div>
       <div className="flex flex-col gap-5 mt-5 mb-5">
-        <QuestionImage img={img} imgBasePath={imgBasePath} />
+        {slideData.imagePath && (
+          <QuestionImage img={slideData.imagePath} imgBasePath={imgBasePath} />
+        )}
       </div>
-      <QuestionPagination questions={questionsData} id={id} />
+      {tiersState && <QuizPagination questions={tiersState} id={id} />}
     </>
   );
 }

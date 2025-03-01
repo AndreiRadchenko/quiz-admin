@@ -3,16 +3,21 @@ import Link from 'next/link';
 
 import { ArrowLeft } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Combobox } from './Combobox';
+import { Combobox } from '../../_components/Combobox';
 
 import { type Locale } from '../../../../../../../i18n-config';
-import { type LabelsType, type QuestionsDataType } from '../page';
+import { type LabelsType } from '../page';
+import { type QuestionDataType, type TierDataType } from '@/types/dataTypes';
 import QuestionData from './QuestionData';
 
 type Props = {
   locale: Locale;
   labels: LabelsType;
-  data: QuestionsDataType;
+  data: QuestionDataType & {
+    idx: string;
+    legend: string;
+    boundQuestion: string;
+  };
 };
 
 export default function SliderHeader({ locale, labels, data }: Props) {
@@ -24,15 +29,15 @@ export default function SliderHeader({ locale, labels, data }: Props) {
             {labels.questionLabel + ':'}
           </Label>
           <Label variant="bold" size="default" className="text-accent">
-            {data.legend}
+            {data.legend + '  ( ' + data.idx + ' )'}
           </Label>
         </div>
         <div className="flex gap-5 items-center">
           <Label variant="default" size="sm" className="w-40">
-            {labels.boundToNumber}
+            {labels.boundToNumber + ':'}
             <span className=""></span>
           </Label>
-          <Combobox />
+          <Combobox idx={data.idx} isInput boundQuestion={data.boundQuestion} />
         </div>
         <QuestionData labels={labels} data={data} />
       </div>

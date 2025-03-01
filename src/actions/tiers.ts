@@ -20,10 +20,10 @@ export async function bindQuestion(
         toastMessage: `Question unbound `,
       };
     }
-    // return {
-    //   messageType: 'success',
-    //   toastMessage: `Question ${boundQuestion} was bound to tier ${idx}`,
-    // };
+    return {
+      messageType: 'success',
+      toastMessage: `Question ${boundQuestion} was bound to tier ${idx}`,
+    };
   } catch (error) {
     console.error('Error in binding question:', error);
 

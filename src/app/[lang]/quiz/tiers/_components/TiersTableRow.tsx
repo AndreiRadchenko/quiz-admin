@@ -1,33 +1,29 @@
 'use client';
 
 import React from 'react';
-import { TableRow, TableCell } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
-
-import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
-import { Combobox } from './Combobox';
-import { Play, Link as LinkIcon, Unlink } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useMutationState } from '@tanstack/react-query';
+import { useMutationState, useQueryClient } from '@tanstack/react-query';
 
-type QuestionProps = {
-  idx: string;
-  legend: string;
-  bindType: string;
-  boundQuestion: string;
-  index: number;
-};
+import { TableRow, TableCell } from '@/components/ui/table';
+import { cn } from '@/lib/utils';
+import { ButtonWithTooltip } from '@/components/ui/buttonWithTooltip';
+import { Combobox } from './Combobox';
+import { Play, Link as LinkIcon } from 'lucide-react';
+import { QuestionDataType, TierDataType } from '@/types/dataTypes';
+import { QUERYKEY } from '@/services/queryKeys';
+
+type TierProps = TierDataType & { index: number };
 
 function TiersTableRow({
+  id,
   idx,
   legend,
-  bindType,
+  answerType,
   boundQuestion,
   index,
-}: QuestionProps) {
+}: TierProps) {
   const pathname = usePathname();
-  // const columns = Object.keys(header).length;
   const columnWidth = Math.round(100 / (6 + 2));
 
   const variables = useMutationState<FormData>({
@@ -57,13 +53,16 @@ function TiersTableRow({
         index % 2 === 0 ? 'bg-muted' : 'bg-background'
       )}
     >
-      <TableCell id="edit-button" className="w-[13%]">
+      <TableCell id="edit-button" className="flex flex-row gap-1 w-[13%]">
         <ButtonWithTooltip
           size={'sm'}
           variant={'outline'}
           tooltip="Open question"
+          asChild
         >
-          <Play size={16} />
+          <Link href={pathname + `/${id}`}>
+            <Play size={16} />
+          </Link>
         </ButtonWithTooltip>
       </TableCell>
       <TableCell className={`w-[${columnWidth}%]`} id="idx">
@@ -73,7 +72,7 @@ function TiersTableRow({
         {legend}
       </TableCell>
       <TableCell className={`w-[${columnWidth}%]`} id="type">
-        {bindType}
+        {answerType}
       </TableCell>
       <TableCell className={`w-[${columnWidth}%]`} id="question">
         <BoundQuestion />

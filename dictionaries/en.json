@@ -210,6 +210,30 @@
           "bindQuestion": ""
         }
       },
+      "slider": {
+        "labels": {
+          "questionLabel": "Tier label",
+          "boundToNumber": "Bind question",
+          "type": "Type",
+          "passAllowed": "Pass allowed",
+          "options": "Options",
+          "answers": "Answers"
+        },
+        "buttons": {
+          "edit": {
+            "buttonText": "Edit",
+            "tooltip": "Edit question"
+          },
+          "addNew": {
+            "buttonText": "Add New",
+            "tooltip": "Add New Question"
+          },
+          "delete": {
+            "buttonText": "Delete",
+            "tooltip": "Delete question"
+          }
+        }
+      },
       "bindForm": {
         "title": "Bind to position # {{idx}} / {{legend}}",
         "description": "Bind a question to the games position",

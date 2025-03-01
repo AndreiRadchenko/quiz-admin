@@ -1,4 +1,4 @@
-export default function QuestionSlideLayout({
+export default function TierSlideLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

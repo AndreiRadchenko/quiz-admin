@@ -41,7 +41,7 @@ function PlayersTableRow({
         index % 2 === 0 ? 'bg-muted' : 'bg-background'
       )}
     >
-      <TableCell className="w-[8%]" id="edit-button">
+      <TableCell className="w-[8%] flex flex-row gap-1" id="edit-button">
         <ButtonWithTooltip size={'sm'} tooltip="edit player data" asChild>
           <Link href={pathname + `/edit/${id}?seat=${index + 1}`}>
             <PencilLine size={16} />

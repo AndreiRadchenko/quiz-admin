@@ -1,104 +1,121 @@
 [
   {
+    "id": "101",
     "idx": "-3",
     "legend": "Demo 1",
-    "bindType": "MULTIPLE",
-    "boundQuestion": "AV001"
+    "answerType": "MULTIPLE",
+    "boundQuestion": "b96"
   },
   {
+    "id": "103",
     "idx": "-2",
     "legend": "Demo 2",
-    "bindType": "TEXT",
-    "boundQuestion": "AV002"
+    "answerType": "TEXT",
+    "boundQuestion": "c143"
   },
   {
+    "id": "104",
     "idx": "-1",
     "legend": "Demo 2",
-    "bindType": "TEXT_NUMBER",
-    "boundQuestion": "AV003"
+    "answerType": "TEXT_NUMBER",
+    "boundQuestion": "c149"
   },
   {
+    "id": "102",
     "idx": "1",
     "legend": "90%",
-    "bindType": "",
-    "boundQuestion": ""
+    "answerType": "",
+    "boundQuestion": "b104"
   },
   {
+    "id": "105",
     "idx": "2",
     "legend": "80%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "106",
     "idx": "3",
     "legend": "70%",
-    "bindType": "",
-    "boundQuestion": ""
+    "answerType": "",
+    "boundQuestion": "d250"
   },
   {
+    "id": "107",
     "idx": "4",
     "legend": "60%",
-    "bindType": "",
-    "boundQuestion": ""
+    "answerType": "",
+    "boundQuestion": "d259"
   },
   {
+    "id": "108",
     "idx": "5",
     "legend": "50%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "109",
     "idx": "6",
     "legend": "40%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "110",
     "idx": "7",
     "legend": "35%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "111",
     "idx": "8",
     "legend": "30%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "112",
     "idx": "9",
     "legend": "25%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "113",
     "idx": "10",
     "legend": "20%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "114",
     "idx": "11",
     "legend": "15%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "115",
     "idx": "12",
     "legend": "10%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "116",
     "idx": "13",
     "legend": "5%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   },
   {
+    "id": "117",
     "idx": "14",
     "legend": "1%",
-    "bindType": "",
+    "answerType": "",
     "boundQuestion": ""
   }
 ]
