@@ -213,6 +213,62 @@
           "bindQuestion": ""
         }
       },
+      "slider": {
+        "labels": {
+          "questionLabel": "Щабель вікторини",
+          "boundToNumber": "Прив’язати запитання",
+          "type": "Тип",
+          "passAllowed": "Пропуск дозволений",
+          "options": "Варіанти",
+          "answers": "Відповідь"
+        },
+        "buttons": {
+          "control": {
+            "prepare": {
+              "buttonText": "Підготовка",
+              "tooltip": "Підготуйте рівень"
+            },
+            "start": {
+              "buttonText": "Старт",
+              "tooltip": "Покажіть запитання та отримайте відповіді"
+            },
+            "stop": {
+              "buttonText": "Стоп",
+              "tooltip": "Перестаньте отримувати відповіді"
+            },
+            "finalize": {
+              "buttonText": "Фіналізувати",
+              "tooltip": "Фіналізувати результати рівня"
+            },
+            "show": {
+              "buttonText": "Показати",
+              "tooltip": "Показати правильну відповідь на планшетах учасників конкурсу"
+            },
+            "hide": {
+              "buttonText": "Сховати",
+              "tooltip": "Сховати відповідь на планшетах учасників конкурсу"
+            },
+            "undo": {
+              "buttonText": "Скасувати",
+              "tooltip": "Скасувати результат розіграшу щаблю"
+            }
+          },
+          "state": {
+            "answers": {
+              "buttonText": "Відповіді",
+              "tooltip": "Відповіді рівня"
+            },
+            "disableCountdown": {
+              "buttonText": "Вимкнути зворотний відлік",
+              "tooltip": "Вимкнути зворотний відлік"
+            },
+            "enableCountdown": {
+              "buttonText": "Увімкнути відлік",
+              "tooltip": "Увімкнути відлік"
+            }
+          }
+        }
+      },
       "bindForm": {
         "title": "Прив’язка до позиції # {{idx}} / {{legend}}",
         "description": "Прив'яжіть запитання до ігрової позиції",
@@ -257,11 +313,11 @@
       "slider": {
         "labels": {
           "questionLabel": "Мітка питання",
-          "boundToNumber": "Прив'язка до номера",
+          "boundToNumber": "Прив'язка до щабля",
           "type": "Тип",
           "passAllowed": "Пропуск дозволений",
-          "options": "Опції",
-          "answers": "Відповіді"
+          "options": "Варіанти",
+          "answers": "Відповідь"
         },
         "buttons": {
           "edit": {
