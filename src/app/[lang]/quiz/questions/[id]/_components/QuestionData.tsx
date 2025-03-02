@@ -1,12 +1,13 @@
 import { Label } from '@/components/ui/label';
 import React from 'react';
 
-import { type LabelsType, type QuestionsDataType } from '../page';
+import { type LabelsType } from '../page';
+import { type QuestionDataType } from '@/types/dataTypes';
 import { Check, X } from 'lucide-react';
 
 type Props = {
   labels: LabelsType;
-  data: QuestionsDataType;
+  data: QuestionDataType;
 };
 
 export default function QuestionData({ labels, data }: Props) {

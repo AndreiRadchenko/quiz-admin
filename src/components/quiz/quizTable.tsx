@@ -17,7 +17,7 @@ type TableProps<T extends { index?: number }> = {
   QuizTableRow: React.ComponentType<T>;
   header: { [key: string]: string };
   rowsData: Omit<T, 'index'>[] | undefined;
-  isLoading: boolean;
+  isLoading?: boolean;
   error?: string;
   TableHeaderComponent?: React.ComponentType<{ [key: string]: string }>;
 };
