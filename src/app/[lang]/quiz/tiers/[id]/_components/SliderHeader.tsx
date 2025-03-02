@@ -1,14 +1,11 @@
 import React from 'react';
-import Link from 'next/link';
 
-import { ArrowLeft } from 'lucide-react';
 import { Label } from '@/components/ui/label';
-import { Combobox } from '../../_components/Combobox';
+import { Combobox } from '@/app/[lang]/quiz/tiers/_components/Combobox';
 
 import { type Locale } from '../../../../../../../i18n-config';
 import { type LabelsType } from '../page';
 import { type QuestionDataType, type TierDataType } from '@/types/dataTypes';
-import QuestionData from './QuestionData';
 
 type Props = {
   locale: Locale;
@@ -39,7 +36,6 @@ export default function SliderHeader({ locale, labels, data }: Props) {
           </Label>
           <Combobox idx={data.idx} isInput boundQuestion={data.boundQuestion} />
         </div>
-        <QuestionData labels={labels} data={data} />
       </div>
     </div>
   );

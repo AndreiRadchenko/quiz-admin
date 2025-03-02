@@ -59,18 +59,13 @@ export function Combobox({
   const data = queryClient.getQueryData<QuestionDataType[]>([
     QUERYKEY.QUESTIONS,
   ]);
-  // const tiersData = queryClient.getQueryData<TierDataType[]>([QUERYKEY.TIERS]);
-
-  // console.log('tiersData: ', tiersData);
 
   useEffect(() => {
     if (value) {
       const formDataToSend = new FormData();
       formDataToSend.set('boundQuestion', value);
       mutate(formDataToSend);
-    } // const tiersData = queryClient.getQueryData<TierDataType[]>([QUERYKEY.TIERS]);
-
-    // console.log('tiersData: ', tiersData);
+    }
   }, [value, mutate]);
 
   useEffect(() => {

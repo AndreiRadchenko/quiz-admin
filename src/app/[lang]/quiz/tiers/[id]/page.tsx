@@ -4,7 +4,9 @@ import Link from 'next/link';
 
 import QuestionImage from './_components/QuestionImage';
 import SliderHeader from './_components/SliderHeader';
-import QuestionButtons from './_components/QuestionButtons';
+import ControlButtons from './_components/ControlButtons';
+import StateButtons from './_components/StateButtons';
+import Countdown from './_components/Countdown';
 import QuizPagination from '@/app/[lang]/quiz/_components/QuizPagination';
 import Loader from '@/components/quiz/loader';
 import { ArrowLeft } from 'lucide-react';
@@ -23,6 +25,8 @@ import {
 import { Locale } from '../../../../../../i18n-config';
 import { config } from '@/config';
 import { useCachedQuery } from '@/hooks/useCachedQuery';
+import QuestionData from './_components/QuestionData';
+import Countdown2 from './_components/Countdown2';
 
 export type SliderType = NestedType<QuizTiersType, 'slider'>;
 export type LabelsType = NestedType<SliderType, 'labels'>;
@@ -88,7 +92,7 @@ export default function QuizTierSlide({
   if (isLoading) return <Loader />;
 
   return (
-    <>
+    <div className="flex flex-col justify-around gap-5 h-[90vh]">
       <div className="flex flex-row justify-between gap-10">
         <Link href={'/' + lang + '/quiz/tiers'} className="self-start mt-1">
           <ArrowLeft />
@@ -98,14 +102,24 @@ export default function QuizTierSlide({
           labels={(slider as SliderType)!.labels}
           data={{ ...slideData }}
         />
-        <QuestionButtons buttons={slider!.buttons} className="my-0" />
+        <StateButtons buttons={slider!.buttons.state} className="my-0" />
       </div>
-      <div className="flex flex-col gap-5 mt-5 mb-5">
+      <ControlButtons
+        buttons={slider!.buttons.control}
+        className="mx-auto mt-5"
+      />
+
+      <div className="flex flex-row justify-around items-end gap-10 mt-5 mb-5">
+        <div className="flex flex-col justify-around items-center h-full">
+          QUESTION_OPEN
+          <Countdown2 />
+          <QuestionData labels={slider!.labels} data={slideData} />
+        </div>
         {slideData.imagePath && (
           <QuestionImage img={slideData.imagePath} imgBasePath={imgBasePath} />
         )}
       </div>
       {tiersState && <QuizPagination questions={tiersState} id={id} />}
-    </>
+    </div>
   );
 }

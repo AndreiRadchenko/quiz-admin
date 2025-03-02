@@ -12,7 +12,7 @@ type Props = {
 
 export default function QuestionData({ labels, data }: Props) {
   return (
-    <div className="flex flex-row gap-10">
+    <div className="flex flex-col gap-5">
       <div className="flex gap-5 items-center">
         <Label variant="default" size="sm" className="w-auto">
           {labels.type + ':'}

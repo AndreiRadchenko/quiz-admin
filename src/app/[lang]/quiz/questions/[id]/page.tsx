@@ -68,7 +68,7 @@ export default function QuizQuestionSlide({
   if (isLoading) return <Loader />;
 
   return (
-    <>
+    <div className="flex flex-col justify-around gap-10 h-[90vh]">
       <div className="flex flex-row justify-between gap-10">
         <Link href={'/' + lang + '/quiz/questions'} className="self-start mt-1">
           <ArrowLeft />
@@ -84,6 +84,6 @@ export default function QuizQuestionSlide({
         {img && <QuestionImage img={img} imgBasePath={imgBasePath} />}
       </div>
       {data && <QuizPagination questions={data} id={id} />}
-    </>
+    </div>
   );
 }
