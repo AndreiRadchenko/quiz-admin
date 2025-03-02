@@ -24,27 +24,32 @@ function AnswersTableRow({
   auto,
   index,
 }: AnswerProps) {
+  const columnWidth = Math.round(100 / (6 + 2));
+
   return (
     <TableRow
       key={index}
-      className={cn('', index % 2 === 0 ? 'bg-muted' : 'bg-background')}
+      className={cn(
+        'flex flex-row justify-between items-center w-full',
+        index % 2 === 0 ? 'bg-muted' : 'bg-background'
+      )}
     >
-      <TableCell className={'p-4'} id="id">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="id">
         {id}
       </TableCell>
-      <TableCell className={'p-4'} id="name">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="name">
         {name}
       </TableCell>
-      <TableCell className={'p-4'} id="answer">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="answer">
         {answer}
       </TableCell>
-      <TableCell className={'p-4'} id="correct">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="correct">
         {correct ? 'true' : 'false'}
       </TableCell>
-      <TableCell className={'p-4'} id="pass">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="pass">
         {pass ? 'true' : 'false'}
       </TableCell>
-      <TableCell className={'p-4'} id="auto">
+      <TableCell className={`px-2 py-4 w-[${columnWidth}%]`} id="auto">
         {auto ? 'true' : 'false'}
       </TableCell>
     </TableRow>

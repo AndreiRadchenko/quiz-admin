@@ -1,23 +1,24 @@
 import { Label } from '@/components/ui/label';
 import React from 'react';
 
-import { type LabelsType, type QuestionsDataType } from '../page';
+import { type LabelsType } from '../page';
+import { type QuestionDataType, type TierDataType } from '@/types/dataTypes';
 import { Check, X } from 'lucide-react';
 
 type Props = {
   labels: LabelsType;
-  data: QuestionsDataType;
+  data: QuestionDataType;
 };
 
 export default function QuestionData({ labels, data }: Props) {
   return (
-    <div className="flex flex-row gap-10">
+    <div className="flex flex-col gap-5">
       <div className="flex gap-5 items-center">
         <Label variant="default" size="sm" className="w-auto">
           {labels.type + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          --Answer Type--
+          {data.answerType}
         </Label>
       </div>
       <div className="flex gap-5 items-center">
@@ -32,7 +33,7 @@ export default function QuestionData({ labels, data }: Props) {
           {labels.options + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          --Answer Options--
+          {data.answerOptions}
         </Label>
       </div>
       <div className="flex gap-5 items-center">
@@ -40,7 +41,7 @@ export default function QuestionData({ labels, data }: Props) {
           {labels.answers + ':'}
         </Label>
         <Label variant="bold" size="sm" className="">
-          --Correct Answer--
+          {data.correctAnswer}
         </Label>
       </div>
     </div>

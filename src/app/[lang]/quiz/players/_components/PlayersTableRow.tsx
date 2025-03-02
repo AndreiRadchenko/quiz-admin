@@ -31,27 +31,45 @@ function PlayersTableRow({
   camera,
 }: PlayerProps) {
   const pathname = usePathname();
+  const columnWidth = Math.round(100 / (10 + 2)) + '%';
 
   return (
     <TableRow
       key={id}
-      className={cn('', index % 2 === 0 ? 'bg-muted' : 'bg-background')}
+      className={cn(
+        'flex flex-row justify-between items-center w-full',
+        index % 2 === 0 ? 'bg-muted' : 'bg-background'
+      )}
     >
-      <TableCell id="edit-button">
+      <TableCell className="w-[8%] flex flex-row gap-1" id="edit-button">
         <ButtonWithTooltip size={'sm'} tooltip="edit player data" asChild>
           <Link href={pathname + `/edit/${id}?seat=${index + 1}`}>
             <PencilLine size={16} />
           </Link>
         </ButtonWithTooltip>
       </TableCell>
-      <TableCell id="seat">{index + 1}</TableCell>
-      <TableCell id="id">{id}</TableCell>
-      <TableCell id="name">{name}</TableCell>
-      <TableCell id="active">{active ? 'true' : 'false'}</TableCell>
-      <TableCell id="usedPass">{usedPass ? 'true' : 'false'}</TableCell>
-      <TableCell id="boughtOut">{boughtOut ? 'true' : 'false'}</TableCell>
-      <TableCell id="camera">{camera}</TableCell>
-      <TableCell id="swap">
+      <TableCell className={` w-[${columnWidth}]`} id="seat">
+        {index + 1}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="id">
+        {id}
+      </TableCell>
+      <TableCell className="w-[10%]" id="name">
+        {name}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="active">
+        {active ? 'true' : 'false'}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="usedPass">
+        {usedPass ? 'true' : 'false'}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="boughtOut">
+        {boughtOut ? 'true' : 'false'}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="camera">
+        {camera}
+      </TableCell>
+      <TableCell className={` w-[${columnWidth}]`} id="swap">
         <div className="flex flex-row gap-1">
           <Input className="p-1 w-12 size-9 text-inherit" accept=".csv" />
           <ButtonWithTooltip size={'sm'} tooltip={'swap players'}>
@@ -59,7 +77,7 @@ function PlayersTableRow({
           </ButtonWithTooltip>
         </div>
       </TableCell>
-      <TableCell id="commCheck" className="flex gap-2">
+      <TableCell id="commCheck" className={` w-[${columnWidth}] flex gap-2`}>
         <ButtonWithTooltip size={'sm'} tooltip="controlCommCheckStart">
           <IoMdFlash />
         </ButtonWithTooltip>

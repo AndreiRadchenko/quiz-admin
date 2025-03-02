@@ -25,13 +25,18 @@ function QuestionsTableRow({
   index,
 }: QuestionProps) {
   const pathname = usePathname();
+  // const columnWidth = Math.round(100 / (4 + 4));
+  const columnWidth = 15;
 
   return (
     <TableRow
       key={index}
-      className={cn('', index % 2 === 0 ? 'bg-muted' : 'bg-background')}
+      className={cn(
+        'flex flex-row justify-between items-center w-full',
+        index % 2 === 0 ? 'bg-muted' : 'bg-background'
+      )}
     >
-      <TableCell id="edit-button" className="flex gap-1">
+      <TableCell id="edit-button" className="flex flex-row gap-1 w-[14%]">
         <ButtonWithTooltip
           size={'sm'}
           variant={'default'}
@@ -53,9 +58,15 @@ function QuestionsTableRow({
           </Link>
         </ButtonWithTooltip>
       </TableCell>
-      <TableCell id="idx">{label}</TableCell>
-      <TableCell id="legend">{answerType}</TableCell>
-      <TableCell id="type">{description}</TableCell>
+      <TableCell className="w-[14%]" id="idx">
+        {label}
+      </TableCell>
+      <TableCell className="w-[14%]" id="legend">
+        {answerType}
+      </TableCell>
+      <TableCell className="w-[36%]" id="type">
+        {description}
+      </TableCell>
     </TableRow>
   );
 }

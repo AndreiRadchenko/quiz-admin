@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 
 import noImage from '../../../../../../../public/images/no-image-available-alfa.webp';
@@ -16,7 +16,7 @@ export default function QuestionImage({ img, imgBasePath }: Props) {
   );
 
   return (
-    <div className="w-[90%] mx-auto h-auto aspect-video relative cursor-auto group overflow-hidden">
+    <div className="w-[70%] h-auto aspect-video relative cursor-auto group overflow-hidden">
       <div
         className="absolute w-full h-full top-0 left-0 border-2 border-primary
           group-hover:border-primary-hover group-active:border-primary-active

@@ -12,111 +12,30 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 
-import { QuestionsDataType } from '../page';
-
-type Props = {
-  questions: QuestionsDataType[];
+export default function QuizPagination<T extends { id: string }>({
+  questions,
+  id,
+}: {
+  questions: T[];
   id: string;
-};
-
-export default function QuestionPagination({ questions, id }: Props) {
+}) {
   const pathname = usePathname();
 
-  const index = questions.findIndex((e: QuestionsDataType) => e.idx === id);
+  const index = questions.findIndex((e: T) => e.id === id);
   const lastIndex = questions.length - 1;
 
   const prevPage = index <= 0 ? questions[0] : questions[index - 1];
   const nextPage =
     index >= lastIndex ? questions[lastIndex] : questions[index + 1];
 
-  // if (questions.length < 8) {
-  //   return (
-  //     <Pagination>
-  //       <PaginationContent>
-  //         <PaginationItem>
-  //           <PaginationPrevious
-  //             href={`${prevPage.id}`}
-  //             className={
-  //               index === 0
-  //                 ? 'bg-transparent text-muted-foreground pointer-events-none'
-  //                 : ''
-  //             }
-  //           />
-  //         </PaginationItem>
-  //         {questions.map((q, idx) => (
-  //           <PaginationItem key={idx}>
-  //             <PaginationLink isActive={index === idx} href={`${q.id}`}>
-  //               {idx + 1}
-  //             </PaginationLink>
-  //           </PaginationItem>
-  //         ))}
-  //         <PaginationItem>
-  //           <PaginationNext
-  //             href={`${nextPage.id}`}
-  //             className={
-  //               index === questions.length - 1
-  //                 ? 'bg-transparent text-muted-foreground pointer-events-none'
-  //                 : ''
-  //             }
-  //           />
-  //         </PaginationItem>
-  //       </PaginationContent>
-  //     </Pagination>
-  //   );
-  // } else if (questions.length > 8 && index < 8) {
-  //   return (
-  //     <Pagination>
-  //       <PaginationContent>
-  //         <PaginationItem>
-  //           <PaginationPrevious
-  //             href={`${prevPage.id}`}
-  //             className={
-  //               index === 0
-  //                 ? 'bg-transparent text-muted-foreground pointer-events-none'
-  //                 : ''
-  //             }
-  //           />
-  //         </PaginationItem>
-  //         {questions.slice(0, 5).map((q, idx) => (
-  //           <PaginationItem key={idx}>
-  //             <PaginationLink isActive={index === idx} href={`${q.id}`}>
-  //               {idx + 1}
-  //             </PaginationLink>
-  //           </PaginationItem>
-  //         ))}
-  //         <PaginationItem>
-  //           <PaginationEllipsis />
-  //         </PaginationItem>
-  //         <PaginationItem>
-  //           <PaginationLink
-  //             isActive={index === questions.length - 1}
-  //             href={`${questions[questions.length - 1].id}`}
-  //           >
-  //             {questions.length}
-  //           </PaginationLink>
-  //         </PaginationItem>
-  //         <PaginationItem>
-  //           <PaginationNext
-  //             href={`${nextPage.id}`}
-  //             className={
-  //               index === questions.length - 1
-  //                 ? 'bg-transparent text-muted-foreground pointer-events-none'
-  //                 : ''
-  //             }
-  //           />
-  //         </PaginationItem>
-  //       </PaginationContent>
-  //     </Pagination>
-  //   );
-  // }
   return (
     <PaginationWrapper
-      prevPageId={prevPage.idx}
-      nextPageId={nextPage.idx}
+      prevPageId={prevPage.id}
+      nextPageId={nextPage.id}
       index={index}
       lastIndex={lastIndex}
     >
-      <PaginationNumbers
+      <PaginationNumbers<T>
         questions={questions}
         index={index}
         lastIndex={lastIndex}
@@ -169,23 +88,21 @@ export function PaginationWrapper({
   );
 }
 
-type PaginationNumbersProps = {
-  questions: QuestionsDataType[];
-  index: number;
-  lastIndex: number;
-};
-
-export function PaginationNumbers({
+export function PaginationNumbers<T extends { id: string }>({
   questions,
   index,
   lastIndex,
-}: PaginationNumbersProps) {
+}: {
+  questions: T[];
+  index: number;
+  lastIndex: number;
+}) {
   if (questions.length <= 8) {
     return (
       <>
         {questions.map((q, idx) => (
           <PaginationItem key={idx}>
-            <PaginationLink isActive={index === idx} href={`${q.idx}`}>
+            <PaginationLink isActive={index === idx} href={`${q.id}`}>
               {idx + 1}
             </PaginationLink>
           </PaginationItem>
@@ -197,7 +114,7 @@ export function PaginationNumbers({
       <>
         {questions.slice(0, 7).map((q, idx) => (
           <PaginationItem key={idx}>
-            <PaginationLink isActive={index === idx} href={`${q.idx}`}>
+            <PaginationLink isActive={index === idx} href={`${q.id}`}>
               {idx + 1}
             </PaginationLink>
           </PaginationItem>
@@ -208,7 +125,7 @@ export function PaginationNumbers({
         <PaginationItem>
           <PaginationLink
             isActive={index === lastIndex}
-            href={`${questions[lastIndex].idx}`}
+            href={`${questions[lastIndex].id}`}
           >
             {questions.length}
           </PaginationLink>
@@ -219,7 +136,7 @@ export function PaginationNumbers({
     return (
       <>
         <PaginationItem>
-          <PaginationLink isActive={index === 0} href={`${questions[0].idx}`}>
+          <PaginationLink isActive={index === 0} href={`${questions[0].id}`}>
             1
           </PaginationLink>
         </PaginationItem>
@@ -230,7 +147,7 @@ export function PaginationNumbers({
           <PaginationItem key={idx}>
             <PaginationLink
               isActive={index === lastIndex - 6 + idx}
-              href={`${q.idx}`}
+              href={`${q.id}`}
             >
               {lastIndex - 5 + idx}
             </PaginationLink>
@@ -242,7 +159,7 @@ export function PaginationNumbers({
     return (
       <>
         <PaginationItem>
-          <PaginationLink isActive={index === 0} href={`${questions[0].idx}`}>
+          <PaginationLink isActive={index === 0} href={`${questions[0].id}`}>
             1
           </PaginationLink>
         </PaginationItem>
@@ -251,7 +168,7 @@ export function PaginationNumbers({
         </PaginationItem>
         {questions.slice(index - 2, index + 3).map((q, idx) => (
           <PaginationItem key={idx}>
-            <PaginationLink isActive={idx === 2} href={`${q.idx}`}>
+            <PaginationLink isActive={idx === 2} href={`${q.id}`}>
               {index - 1 + idx}
             </PaginationLink>
           </PaginationItem>
@@ -262,7 +179,7 @@ export function PaginationNumbers({
         <PaginationItem>
           <PaginationLink
             isActive={index === lastIndex}
-            href={`${questions[lastIndex].idx}`}
+            href={`${questions[lastIndex].id}`}
           >
             {questions.length}
           </PaginationLink>

@@ -3,6 +3,7 @@
 import React from 'react';
 
 import Loader from './loader';
+import { cn } from '@/lib/utils';
 
 import {
   Table,
@@ -34,7 +35,7 @@ export function QuizTable<T extends { index?: number }>({
       className="h-[78vh] relative overflow-auto overflow-y-auto border scrollbar rounded-md
         border-background"
     >
-      <Table className="">
+      <Table className="w-full">
         {TableHeaderComponent ? (
           <TableHeaderComponent />
         ) : (
@@ -42,9 +43,9 @@ export function QuizTable<T extends { index?: number }>({
         )}
         <TableBody className="">
           {isLoading ? (
-            <div className="absolute top-1/2 left-1/2 h-full -translate-x-1/2 -translate-y-1/2">
-              <Loader fullscreen={false} />
-            </div>
+            <TableRow className="absolute top-1/2 left-1/2 h-full -translate-x-1/2 -translate-y-1/2">
+              <Loader table={true} />
+            </TableRow>
           ) : !rowsData ? (
             <div className="m-6 font-medium">{error}</div>
           ) : (
@@ -63,11 +64,19 @@ type HeaderProps = {
 };
 
 export function HeaderComponent({ header }: HeaderProps) {
+  const columns = Object.keys(header).length;
+  const columnWidth = Math.round(100 / (columns + 2)) + '%';
   return (
-    <TableHeader className="bg-secondary-hover sticky top-0">
-      <TableRow>
+    <TableHeader className="bg-secondary-hover sticky top-0 w-full">
+      <TableRow className="flex flex-row justify-between">
         {Object.keys(header).map((key, idx) => (
-          <TableHead className="text-primary-foreground" key={idx}>
+          <TableHead
+            className={cn(
+              'text-primary-foreground flex flex-col justify-center',
+              ` w-[${columnWidth}]`
+            )}
+            key={idx}
+          >
             {header[key]}
           </TableHead>
         ))}

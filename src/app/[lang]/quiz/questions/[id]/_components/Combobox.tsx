@@ -102,6 +102,7 @@ export function Combobox() {
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          size={'sm'}
           variant="outline"
           role="combobox"
           aria-expanded={open}

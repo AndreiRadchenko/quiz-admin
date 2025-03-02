@@ -27,8 +27,6 @@ export default async function QuestionEdit({ params: { id, lang } }: Props) {
     seat: '22',
   });
 
-  console.log('alertConfirmationDialog: ', alertConfirmationDialog);
-
   return (
     <Modal
       title={formTitle}

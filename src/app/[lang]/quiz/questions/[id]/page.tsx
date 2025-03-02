@@ -3,9 +3,8 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import QuestionImage from './_components/QuestionImage';
 import SliderHeader from './_components/SliderHeader';
-import QuestionData from './_components/QuestionData';
 import QuestionButtons from './_components/QuestionButtons';
-import QuestionPagination from './_components/QuestionPagination';
+import QuizPagination from '@/app/[lang]/quiz/_components/QuizPagination';
 import { usePageContext } from '../_context/pageContext';
 import { QUERYKEY } from '@/services/queryKeys';
 import { getQuestionsData } from '@/services/questions';
@@ -69,7 +68,7 @@ export default function QuizQuestionSlide({
   if (isLoading) return <Loader />;
 
   return (
-    <>
+    <div className="flex flex-col justify-around gap-10 h-[90vh]">
       <div className="flex flex-row justify-between gap-10">
         <Link href={'/' + lang + '/quiz/questions'} className="self-start mt-1">
           <ArrowLeft />
@@ -84,7 +83,7 @@ export default function QuizQuestionSlide({
       <div className="flex flex-col gap-5 mt-5 mb-5">
         {img && <QuestionImage img={img} imgBasePath={imgBasePath} />}
       </div>
-      {data && <QuestionPagination questions={data} id={id} />}
-    </>
+      {data && <QuizPagination questions={data} id={id} />}
+    </div>
   );
 }

@@ -1,12 +1,15 @@
 'use client';
 
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { usePageContext } from './_context/pageContext';
 import { QuizTable, ButtonsSection } from '@/components/quiz';
 import TiersTableRow from './_components/TiersTableRow';
 import { QUERYKEY } from '@/services/queryKeys';
 import { getTiersData } from '@/services/tiers';
+import { AnswerType, QuestionDataType, TierDataType } from '@/types/dataTypes';
+import { getQuestionsData } from '@/services/questions';
+import { useCachedQuery } from '@/hooks/useCachedQuery';
 
 type Props = {
   params: { lang: string };
@@ -14,15 +17,23 @@ type Props = {
 
 export default function QuizTiers({ params: { lang } }: Readonly<Props>) {
   const { tiersLocale } = usePageContext();
+
+  const { data: questionsState } = useCachedQuery<QuestionDataType[]>(
+    [QUERYKEY.QUESTIONS],
+    getQuestionsData
+  );
+
   const {
-    data: tiersData,
-    error,
+    data: tiersState,
     isLoading,
-    isError,
-  } = useQuery({
-    queryKey: [QUERYKEY.TIERS],
-    queryFn: getTiersData,
-    // staleTime: 1 * 60 * 1000,
+    error,
+  } = useCachedQuery<TierDataType[]>([QUERYKEY.TIERS], getTiersData);
+
+  const tiersData = tiersState?.map(t => {
+    const answerType: AnswerType =
+      (questionsState?.find(q => q.label === t.boundQuestion)
+        ?.answerType as AnswerType) || '';
+    return { ...t, answerType };
   });
 
   return (

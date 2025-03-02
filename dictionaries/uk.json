@@ -53,34 +53,34 @@
       "buttons": {
         "gameFlow": {
           "resetGame": "Скинути гру",
-          "idle": "Бездіяльність",
+          "idle": "Простій",
           "refreshStatus": "Оновити статус",
-          "rebuildExternal": "Перебудувати зовнішню"
+          "rebuildExternal": "Перебудувати ззовні"
         },
         "buyout": {
           "startBuyout": "Розпочати викуп",
           "stopBuyout": "Зупинити викуп"
         },
         "endGameBuyout": {
-          "showEndGameBuyout": "Показати підказку викупу в кінцівці",
-          "stopEndgameBuyout": "Зупинити викуп в ендшпілі",
-          "reconcileEndgameBuyout": "Узгодити викуп в ендшпілі"
+          "showEndGameBuyout": "Показати підказку викупу в фіналі",
+          "stopEndgameBuyout": "Зупинити викуп в фіналі",
+          "reconcileEndgameBuyout": "Узгодити викуп в фіналі"
         },
         "showButtons": {
-          "showPasses": "Показати перепустки",
-          "showActive": "Показати активний",
-          "showEndgameActive": "Показати активний фінал"
+          "showPasses": "Показати паси",
+          "showActive": "Показати активні",
+          "showEndgameActive": "Показати активні в фіналі"
         },
         "commCheck": {
           "commCheckStart": "Початок перевірки зв'язку",
           "commCheckStop": "Зупинка перевірки зв'язку",
           "commCheckSilent": "Перевірка зв'язку без звуку",
-          "commCheckSilentActive": "Перевірка зв'язку Без звуку Активна"
+          "commCheckSilentActive": "Перевірка зв'язку без звуку активна"
         }
       },
       "inputs": {
         "forceCurrentQuestion": {
-          "buttonText": "Примусове поточне запитання",
+          "buttonText": "Запустити поточне запитання",
           "tooltip": "Пояснення введення, Пояснення введення"
         },
         "setShowNumber": {
@@ -94,32 +94,32 @@
       },
       "importFiles": {
         "seatInfo": {
-          "label": "Інформація про місце",
-          "buttonText": "Імпорт інформації про місце",
-          "tooltip": "Імпорт інформації про місце"
+          "label": "Інформація про місця",
+          "buttonText": "Імпорт місць",
+          "tooltip": "Імпорт інформації про місця"
         },
         "playerData": {
-          "label": "Дані гравця",
-          "buttonText": "Імпорт даних гравця",
-          "tooltip": "Імпорт даних гравця"
+          "label": "Дані гравців",
+          "buttonText": "Імпорт даних гравців",
+          "tooltip": "Імпорт даних гравців"
         },
         "externalQuestionData": {
-          "label": "Зовнішні дані питання",
-          "buttonText": "Імпортні запитання",
-          "tooltip": "Імпортні запитання"
+          "label": "Завантажити запитання",
+          "buttonText": "Імпорт запитань",
+          "tooltip": "Імпортувати запитання"
         },
         "externalPlayerInfo": {
-          "label": "Інформація про зовнішнього гравця",
-          "buttonText": "Імпорт даних гравця",
-          "tooltip": "Імпорт даних гравця"
+          "label": "Додаткова інформація про гравців",
+          "buttonText": "Імпорт даних гравців",
+          "tooltip": "Імпорт даних гравців"
         }
       }
     },
     "players": {
       "title": "Гравці",
       "filter": {
-        "all": "все",
-        "active": "Активний",
+        "all": "Всі",
+        "active": "Активні",
         "passes": "Паси"
       },
       "buttons": {
@@ -132,26 +132,26 @@
           "tooltip": "Скинути всю інформацію про гру"
         },
         "defaultNames": {
-          "buttonText": "Імена за замовчуванням",
+          "buttonText": "За замовчуванням",
           "tooltip": "Установити всі імена за замовчуванням"
         },
         "resetSeats": {
-          "buttonText": "Скинути сидіння",
-          "tooltip": "Переставте номери місць з ідентифікаторами гравців у порядку зростання"
+          "buttonText": "Скинути місця",
+          "tooltip": "Встановити номери місць з ідентифікаторами гравців у порядку зростання"
         },
         "endgameMap": {
           "buttonText": "Карта фіналу",
-          "tooltip": "Відкрити форму карти ендшпілю"
+          "tooltip": "Відкрити форму карти фіналу"
         }
       },
       "table": {
         "header": {
           "edit": "",
-          "seat": "місце №",
+          "seat": "Місце №",
           "id": "ID",
           "name": "Ім'я",
           "active": "Активний",
-          "usedPass": "Паспорт б/у",
+          "usedPass": "Пас",
           "boughtOut": "Викуплено",
           "camera": "Камера",
           "swapWith": "Поміняти з",
@@ -173,7 +173,7 @@
         },
         "checkBoxes": {
           "active": "Активний",
-          "usedPass": "Паспорт б/у",
+          "usedPass": "Пас",
           "boughtOut": "Викуплено",
           "boughtOutEndGame": "Викуплено (фінальна гра)"
         },
@@ -199,17 +199,74 @@
           "tooltip": "Експорт розширено"
         },
         "unbindAll": {
-          "buttonText": "Розв’язати все",
-          "tooltip": "Розв’язати все"
+          "buttonText": "Відв’язати все",
+          "tooltip": "Відв’язати все"
         }
       },
       "table": {
         "header": {
-          "edit": "",
+          "openTier": "",
           "index": "Індекс",
           "legend": "Легенда",
           "type": "Тип",
-          "bindQuestion": "Зв'язане питання"
+          "boundQuestion": "Зв'язане запитання",
+          "bindQuestion": ""
+        }
+      },
+      "slider": {
+        "labels": {
+          "questionLabel": "Щабель вікторини",
+          "boundToNumber": "Прив’язати запитання",
+          "type": "Тип",
+          "passAllowed": "Пропуск дозволений",
+          "options": "Варіанти",
+          "answers": "Відповідь"
+        },
+        "buttons": {
+          "control": {
+            "prepare": {
+              "buttonText": "Підготовка",
+              "tooltip": "Підготуйте рівень"
+            },
+            "start": {
+              "buttonText": "Старт",
+              "tooltip": "Покажіть запитання та отримайте відповіді"
+            },
+            "stop": {
+              "buttonText": "Стоп",
+              "tooltip": "Перестаньте отримувати відповіді"
+            },
+            "finalize": {
+              "buttonText": "Фіналізувати",
+              "tooltip": "Фіналізувати результати рівня"
+            },
+            "show": {
+              "buttonText": "Показати",
+              "tooltip": "Показати правильну відповідь на планшетах учасників конкурсу"
+            },
+            "hide": {
+              "buttonText": "Сховати",
+              "tooltip": "Сховати відповідь на планшетах учасників конкурсу"
+            },
+            "undo": {
+              "buttonText": "Скасувати",
+              "tooltip": "Скасувати результат розіграшу щаблю"
+            }
+          },
+          "state": {
+            "answers": {
+              "buttonText": "Відповіді",
+              "tooltip": "Відповіді рівня"
+            },
+            "disableCountdown": {
+              "buttonText": "Вимкнути зворотний відлік",
+              "tooltip": "Вимкнути зворотний відлік"
+            },
+            "enableCountdown": {
+              "buttonText": "Увімкнути відлік",
+              "tooltip": "Увімкнути відлік"
+            }
+          }
         }
       },
       "bindForm": {
@@ -249,17 +306,18 @@
           "edit": "",
           "label": "Мітка",
           "type": "Тип",
-          "description": "опис"
+          "description": "Опис",
+          "edit2": ""
         }
       },
       "slider": {
         "labels": {
           "questionLabel": "Мітка питання",
-          "boundToNumber": "Прив'язка до номера",
+          "boundToNumber": "Прив'язка до щабля",
           "type": "Тип",
           "passAllowed": "Пропуск дозволений",
-          "options": "Опції",
-          "answers": "Відповіді"
+          "options": "Варіанти",
+          "answers": "Відповідь"
         },
         "buttons": {
           "edit": {
@@ -277,20 +335,20 @@
         }
       },
       "questionForm": {
-        "title": "Редагувати питання",
-        "description": "Редагувати дані питання",
+        "title": "Редагувати запитання",
+        "description": "Редагувати дані запитання",
         "labels": {
           "answerType": "Тип",
           "label": "Мітка",
-          "description": "опис",
+          "description": "Опис",
           "answerOptions": "Опції",
           "correctAnswer": "Правильна відповідь",
           "imagePath": "Шлях зображення"
         },
         "radioButtons": {
-          "multiple": "множинний",
-          "text": "текст",
-          "textNumeric": "Текст Числовий"
+          "multiple": "Множинний",
+          "text": "Текст",
+          "textNumeric": "Текст числовий"
         },
         "buttons": {
           "save": "Зберегти зміни",

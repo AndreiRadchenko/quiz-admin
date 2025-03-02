@@ -202,11 +202,68 @@
       },
       "table": {
         "header": {
-          "edit": "",
+          "openTier": "",
           "index": "Index",
           "legend": "Legend",
           "type": "Type",
-          "bindQuestion": "Bound Question"
+          "boundQuestion": "Bound Question",
+          "bindQuestion": ""
+        }
+      },
+      "slider": {
+        "labels": {
+          "questionLabel": "Tier label",
+          "boundToNumber": "Bind question",
+          "type": "Type",
+          "passAllowed": "Pass allowed",
+          "options": "Options",
+          "answers": "Answers"
+        },
+        "buttons": {
+          "control": {
+            "prepare": {
+              "buttonText": "Prepare",
+              "tooltip": "Prepare tier"
+            },
+            "start": {
+              "buttonText": "Start",
+              "tooltip": "Show question and receive answers"
+            },
+            "stop": {
+              "buttonText": "Stop",
+              "tooltip": "Stop receiving answers"
+            },
+            "finalize": {
+              "buttonText": "Finalize",
+              "tooltip": "Finalize tier results"
+            },
+            "show": {
+              "buttonText": "Show",
+              "tooltip": "Show right answer on contestants tablet"
+            },
+            "hide": {
+              "buttonText": "Hide",
+              "tooltip": "Hide answer on contestants tablet"
+            },
+            "undo": {
+              "buttonText": "Undo",
+              "tooltip": "Undo tier result"
+            }
+          },
+          "state": {
+            "answers": {
+              "buttonText": "Answers",
+              "tooltip": "Tier answers"
+            },
+            "disableCountdown": {
+              "buttonText": "Disable Countdown",
+              "tooltip": "Disable Countdown"
+            },
+            "enableCountdown": {
+              "buttonText": "Enable Countdown",
+              "tooltip": "Enable Countdown"
+            }
+          }
         }
       },
       "bindForm": {
@@ -247,13 +304,14 @@
           "edit": "",
           "label": "Label",
           "type": "Type",
-          "description": "Description"
+          "description": "Description",
+          "edit2": ""
         }
       },
       "slider": {
         "labels": {
           "questionLabel": "Question label",
-          "boundToNumber": "Bound to number",
+          "boundToNumber": "Bound to tier",
           "type": "Type",
           "passAllowed": "Pass allowed",
           "options": "Options",
