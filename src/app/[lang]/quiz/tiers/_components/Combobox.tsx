@@ -47,18 +47,24 @@ export function Combobox({
     undefined
   );
 
-  const { toast } = useToast();
-  const { mutate, isPending } = useMutation({
-    mutationFn: (formData: FormData) => bindQuestion(formData, idx),
-    onSuccess: data => setMessage(data),
-    // onSettled: () => queryClient.invalidateQueries({ queryKey: [QUERYKEY.TIERS] }),
-    mutationKey: [`boundQuestion${idx}`],
-  });
-
   const queryClient = useQueryClient();
   const data = queryClient.getQueryData<QuestionDataType[]>([
     QUERYKEY.QUESTIONS,
   ]);
+
+  const { toast } = useToast();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (formData: FormData) => bindQuestion(formData, idx),
+    onSuccess: data => setMessage(data),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERYKEY.TIERS],
+        refetchType: 'active',
+      });
+      // queryClient.refetchQueries({ queryKey: [QUERYKEY.TIERS] });
+    },
+    mutationKey: [`boundQuestion${idx}`],
+  });
 
   useEffect(() => {
     if (value) {

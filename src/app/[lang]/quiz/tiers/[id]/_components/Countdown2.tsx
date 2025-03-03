@@ -26,8 +26,8 @@ export default function Countdown2() {
           fill="none"
           className="stroke-current text-blue-600 dark:text-blue-500"
           strokeWidth="1"
-          stroke-dasharray="100"
-          stroke-dashoffset="65"
+          strokeDasharray="100"
+          strokeDashoffset="65"
           strokeLinecap="round"
         ></circle>
       </svg>

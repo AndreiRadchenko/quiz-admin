@@ -17,6 +17,9 @@
 10. [Server Send Events (S3 bucket update)](#server-send-events)
 11. [Page Context](#page-context)
 12. [Tailwind scrollbar styling](#tailwind-scrollbar-styling)
+13. [React-Query](#react-query)
+    - [useCashedQuery custom hook](#get-data-using-custom-hook-usecachedquery)
+    - [Optimistic mutation](#optimistic-update-show-data-preview-on-data-mutation)
 
 ## Install Next project
 
@@ -1334,3 +1337,310 @@ And add `scrollbar` style to the container className:
 ```
 
 <a href="#top">⬅️ Back to top</a>
+
+## React-Query
+
+[Documentation](https://tanstack.com/query/latest/docs/framework/react/quick-start)
+|
+[React-Query blog](https://tkdodo.eu/blog/placeholder-and-initial-data-in-react-query)
+|
+[Optimistic update](https://tanstack.com/query/latest/docs/framework/react/guides/optimistic-updates#if-the-mutation-and-the-query-dont-live-in-the-same-component)
+
+[Youtube PedroTech](https://www.youtube.com/watch?v=e74rB-14-m8&list=WL&index=1)
+|
+[GitHub project](https://github.dev/machadop1407/tanstack-react-query-tutorial)
+
+- ### Install React-Query:
+
+  ```bash
+  npm i @tanstack/react-query
+  ```
+
+- ### Create provider and and wrap app into provider:
+
+  _src/context/queryProvider.tsx_
+
+  ```tsx
+  'use client';
+  
+  import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+  import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+  import { useState } from 'react';
+  
+  interface Props {
+    children: React.ReactNode;
+  }
+  
+  export default function QueryProvider({ children }: Props) {
+    const [queryClient] = useState(() => new QueryClient());
+    return (
+      <QueryClientProvider client={queryClient}>
+        {children}
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    );
+  }
+  ```
+
+  _src/app/layout.tsx_
+
+  ```tsx
+  export default async function RootLayout({
+    children,
+    params: { lang },
+  }: Readonly<Props>) {
+    const {
+      quiz: { nav },
+      menu,
+    } = await getDictionary(lang);
+    const theme = await getThemeCookie();
+
+    return (
+      <html lang="en" className={theme || 'dark'}>
+        <body
+          className={cn(' bg-background font-sans antialiased', inter.variable)}
+        >
+          <PreferencesProvider>
+            <QueryProvider> // <---
+              <AppStoreProvider>
+                <SidebarProvider>{children}</SidebarProvider>
+              </AppStoreProvider>
+            </QueryProvider>
+          </PreferencesProvider>
+          <Toaster />
+        </body>
+      </html>
+    );
+  }
+  ```
+
+- ### Get data using useQuery
+
+  [useQuery API](https://tanstack.com/query/v5/docs/framework/react/reference/useQuery)
+
+  _src/app/[lang]/quiz/players/page.tsx_
+
+  ```tsx
+  const {
+    data: playersData,
+    error,
+    isLoading,
+  } = useQuery({
+    queryKey: [QUERYKEY.PLAYERS],
+    queryFn: getPlayersData,
+    // staleTime: Infinity,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 5 * 60 * 1000, //Garbage collector time
+  });
+  ```
+
+- ### Get data using custom hook useCachedQuery.
+
+  It allows using query cache if data isn't stale and refetch it if cache is
+  invalid.
+
+  _src/hooks/useCachedQuery.tsx_
+
+  ```ts
+  'use client';
+  
+  import { useQuery, useQueryClient } from '@tanstack/react-query';
+  
+  // 🔹 Custom hook that fetches or returns cached data while refetching stale data
+  export const useCachedQuery = <T>(
+    queryKey: string[],
+    queryFn: () => Promise<T>
+  ) => {
+    const queryClient = useQueryClient();
+    const cachedData = queryClient.getQueryData<T>(queryKey);
+    const cachedDataUpdatedAt =
+      queryClient.getQueryState(queryKey)?.dataUpdatedAt || 0;
+  
+    return useQuery({
+      queryKey,
+      queryFn,
+      enabled: true, // ✅ Always allow refetching in the background
+      initialData: cachedData, // ✅ Use cached data initially
+      initialDataUpdatedAt: cachedDataUpdatedAt, // ✅ Ensures proper refetch logic
+      staleTime: 5 * 60 * 1000, // ✅ 5 min before data is considered stale
+      // refetchOnMount: true, // ✅ Ensures data refresh when component mounts
+      // refetchOnWindowFocus: true, // ✅ Refresh when user refocuses tab
+    });
+  };
+  ```
+
+  _src/app/[lang]/quiz/tiers/page.tsx_
+
+  ```ts
+  const {
+    data: tiersState,
+    isLoading,
+    error,
+  } = useCachedQuery<TierDataType[]>([QUERYKEY.TIERS], getTiersData);
+  ```
+
+  _src/app/[lang]/quiz/tiers/[id]/page.tsx_
+
+  ```ts
+  const { data: questionsState } = useCachedQuery<QuestionDataType[]>(
+    [QUERYKEY.QUESTIONS],
+    getQuestionsData
+  );
+  
+  const { data: tiersState, isLoading } = useCachedQuery<TierDataType[]>(
+    [QUERYKEY.TIERS],
+    getTiersData
+  );
+  ```
+
+- ### useMutation
+
+  [useMutation API](https://tanstack.com/query/v5/docs/framework/react/reference/useMutation)
+
+- #### Mutate data using next.js server action and react form as data structure. Invalidate and refetch query if page with query is visible.
+
+  _src/app/[lang]/quiz/tiers/\_components/Combobox.tsx_
+
+  ```tsx
+  const queryClient = useQueryClient();
+  const data = queryClient.getQueryData<QuestionDataType[]>([QUERYKEY.QUESTIONS]);
+
+  const { toast } = useToast();
+  const { mutate, isPending } = useMutation({
+    mutationFn: (formData: FormData) => bindQuestion(formData, idx), //<-- server action
+    onSuccess: data => setMessage(data),
+    onSettled: () => {
+      console.log('onSettled');
+      queryClient.invalidateQueries({
+        queryKey: [QUERYKEY.TIERS],
+        refetchType: 'active',
+      });
+      // queryClient.refetchQueries({ queryKey: [QUERYKEY.TIERS] });
+    },
+    mutationKey: [`boundQuestion${idx}`],
+  });
+
+  useEffect(() => {
+    if (value) {
+      const formDataToSend = new FormData();
+      formDataToSend.set('boundQuestion', value);
+      mutate(formDataToSend);
+    }
+  }, [value, mutate]);
+
+  //.........
+
+      return (
+      <form
+        onSubmit={e => {
+          e.preventDefault();  //<---- prevent default. submit form on select popup
+        }}
+        className="flex flex-row gap-1 justify-end w-full"
+      >
+        <Popover open={open} onOpenChange={setOpen}>
+          <PopoverTrigger asChild>
+            <span>
+              <TooltipProvider delayDuration={1500}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      size={'sm'}
+                      variant="outline"
+                      role="combobox"
+                      aria-expanded={open}
+                    >
+                      <Link size={16} />
+                    </Button>
+                  </TooltipTrigger>
+
+  //............
+
+            <PopoverContent className="w-[300px] h-[45vh] p-0">
+            <Command className="bg-background text-foreground">
+              <CommandInput placeholder="Search question..." className="" />
+              <CommandList className="max-h-full">
+                <CommandEmpty>No questions found.</CommandEmpty>
+                <CommandGroup className="h-full">
+                  {questions &&
+                    questions.map((question, idx) => (
+                      <CommandItem
+                        className="max-h-10 group overflow-hidden data-[selected=true]:bg-primary-hover items-start
+                          text-sm/4 cursor-pointer"
+                        key={idx}
+                        value={question.value}
+                        onSelect={currentValue => {
+                          setValue(currentValue === value ? '' : currentValue); //<--- submit form on select popup
+                          setOpen(false);
+                        }}
+                      >
+  ```
+
+  _src/actions/tiers.ts_
+
+  ```ts
+  import { ToastMessageType } from '@/types/stateTypes';
+  
+  const wait = (duration: number) =>
+    new Promise(resolve => setTimeout(resolve, duration));
+  
+  export async function bindQuestion(
+    formData: FormData,
+    idx: string
+  ): Promise<ToastMessageType | undefined> {
+    const boundQuestion = formData.get('boundQuestion') as string;
+  
+    try {
+      await wait(1500);
+      if (!boundQuestion) {
+        throw new Error('Error in binding question');
+      }
+      if (boundQuestion === 'unbound') {
+        return {
+          messageType: 'success',
+          toastMessage: `Question unbound `,
+        };
+      }
+      return {
+        messageType: 'success',
+        toastMessage: `Question ${boundQuestion} was bound to tier ${idx}`,
+      };
+    } catch (error) {
+      console.error('Error in binding question:', error);
+  
+      return {
+        messageType: 'error',
+        toastMessage:
+          (error as { message: string }).message || 'An unknown error occurred',
+      };
+    }
+  }
+  ```
+
+- ### Optimistic update. Show data preview on data mutation
+
+    <img src='./readme_img/binding_question.png' width="800px">
+
+  _src/app/[lang]/quiz/tiers/\_components/TiersTableRow.tsx_
+
+  ```tsx
+  const variables = useMutationState<FormData>({
+    filters: { mutationKey: [`boundQuestion${idx}`], status: 'pending' },
+    select: mutation => mutation.state.variables as FormData,
+  });
+  
+  const BoundQuestion = () => {
+    let bindData: string | null = null;
+    if (variables.length > 0) {
+      bindData = (variables[0] as FormData).get('boundQuestion') as string;
+    }
+    return variables.length > 0 ? (
+      <span className="text-accent opacity-80 italic">
+        {bindData !== 'unbound' ? 'Binding question ' + bindData : 'Unbinding'}
+      </span>
+    ) : (
+      <span>{boundQuestion}</span>
+    );
+  };
+  ```
+
+  <a href="#top">⬅️ Back to top</a>
