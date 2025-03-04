@@ -20,6 +20,8 @@
 13. [React-Query](#react-query)
     - [useCashedQuery custom hook](#get-data-using-custom-hook-usecachedquery)
     - [Optimistic mutation](#optimistic-update-show-data-preview-on-data-mutation)
+14. [Zustand](#zustand)
+    - [Update Zustand on changes in MinIO buckets](#1️⃣-bucket-content-changes-minio)
 
 ## Install Next project
 
@@ -1644,3 +1646,427 @@ And add `scrollbar` style to the container className:
   ```
 
   <a href="#top">⬅️ Back to top</a>
+
+  ## Zustand
+
+  [Docs](https://zustand.docs.pmnd.rs/guides/nextjs) |
+  [Youtube tutor](https://www.youtube.com/watch?v=h0rQ73r8yag&list=PL1T-3Hf9FqXbH54aLLMWMpdn6OMa5TWOX)
+
+  Library fo store UI state, substitution for Context. I've used it for storing
+  images loaded into minio server.
+
+  - ### Installation
+
+  ```ts
+  npm install zustand
+  ```
+
+  - ### Create imageSlice:
+
+  _src/stores/imagesSlice.ts_
+
+  ```ts
+  import { StateCreator } from 'zustand';
+  import * as Minio from 'minio';
+  
+  export type ImagesStateType = {
+    questionImages: Minio.BucketItem[];
+    playerImages: Minio.BucketItem[];
+  };
+  
+  export type ImagesActionType = {
+    updateQuestionImages: (data: Minio.BucketItem[]) => void;
+    updatePlayerImages: (data: Minio.BucketItem[]) => void;
+  };
+  
+  export type ImagesStoreType = ImagesStateType & ImagesActionType;
+  
+  const initState: ImagesStateType = {
+    questionImages: [
+      {
+        name: 'init1.img',
+        size: 10,
+        etag: '',
+        lastModified: new Date('1995-12-17T03:24:00'),
+      },
+    ],
+    playerImages: [
+      {
+        name: 'init2.img',
+        size: 10,
+        etag: '',
+        lastModified: new Date('1995-12-17T03:24:10'),
+      },
+    ],
+  };
+  
+  export const questionImagesSlice: StateCreator<
+    ImagesStoreType,
+    [['zustand/devtools', unknown]]
+  > = (set, get) => ({
+    ...initState,
+  
+    updateQuestionImages: (data: Minio.BucketItem[]) =>
+      set(state => {
+        const questionImages = data || [];
+        return { ...state, questionImages };
+      }),
+  
+    updatePlayerImages: (data: Minio.BucketItem[]) =>
+      set(state => {
+        const playerImages = data || [];
+        return { ...state, playerImages };
+      }),
+  });
+  ```
+
+- ### Create store and initialize it:
+
+  _src/stores/appStore.ts_
+
+  ```ts
+  import { createStore } from 'zustand/vanilla';
+  import { devtools } from 'zustand/middleware';
+  import * as Minio from 'minio';
+  
+  import {
+    type ImagesStateType,
+    type ImagesStoreType,
+    questionImagesSlice,
+  } from './imagesSlice';
+  import { getImages } from '@/actions/buckets';
+  import { config } from '@/config';
+  
+  export type AppStoreType = ImagesStoreType;
+  
+  export const initAppStore = async (): Promise<ImagesStateType> => {
+    try {
+      const questionImages = await getImages(config.S3_BUCKET_QUESTIONS);
+      const playerImages = await getImages(config.S3_BUCKET_PLAYERS);
+      return {
+        questionImages: questionImages as Minio.BucketItem[],
+        playerImages: playerImages as Minio.BucketItem[],
+      };
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return {
+        questionImages: [],
+        playerImages: [],
+      };
+    }
+  };
+  
+  export const createAppStore = (initStore: Promise<ImagesStateType>) => {
+    const store = createStore<AppStoreType>()(
+      devtools(questionImagesSlice, {
+        //<-- You can use redux devtools to view Zustand state
+        enabled: true,
+        name: '1% Store',
+      })
+    );
+    initStore.then(store.setState);
+    return store;
+  };
+  ```
+
+- ### Create provider
+
+  In provider useEffect setup listener for server send event minio bucket
+  update. SSE will update Zustatnd state when buckets content changes.
+
+  _src/context/appStoreProvider.tsx_
+
+  ```ts
+  export type applicationStoreApi = ReturnType<typeof createAppStore>;
+
+  export const AppStoreContext = createContext<applicationStoreApi | undefined>(
+    undefined
+  );
+
+  export interface AppStoreProviderProps {
+    children: ReactNode;
+  }
+
+  export const AppStoreProvider = ({ children }: AppStoreProviderProps) => {
+    const [store, setStore] = useState<applicationStoreApi | null>(null);
+
+    useEffect(() => {
+      initAppStore().then(initialState => {
+        setStore(createAppStore(Promise.resolve(initialState))); // Ensure state is fully loaded
+      });
+    }, []);
+
+    useEffect(() => {
+      //Update array of images in the store on change content of bucket
+      const eventSource = new EventSource('/api');
+
+      eventSource.onmessage = event => {
+        try {
+          const { bucket, images } = JSON.parse(event.data);
+          // Convert lastModified to Date objects
+          const bucketImagesWithDate = (images as Minio.BucketItem[]).map(e => ({
+            ...e,
+            lastModified: new Date(e.lastModified as Date),
+          }));
+          // Update Zustand store based on the bucket type
+          switch (bucket) {
+            case config.S3_BUCKET_QUESTIONS:
+              store?.setState(state => ({
+                ...state,
+                questionImages: bucketImagesWithDate as Minio.BucketItem[],
+              }));
+              break;
+            case config.S3_BUCKET_PLAYERS:
+              store?.setState(state => ({
+                ...state,
+                playerImages: bucketImagesWithDate as Minio.BucketItem[],
+              }));
+              break;
+            default:
+              break;
+          }
+        } catch (error) {
+          console.error('Error processing SSE message:', error);
+        }
+      };
+      eventSource.onerror = error => {
+        console.error('SSE Error:', error);
+        eventSource.close();
+      };
+      return () => {
+        eventSource.close();
+      };
+    }, [store]);
+
+    if (!store) return null; // Avoid rendering until store is ready
+
+    return (
+      <AppStoreContext.Provider value={store}>
+        {children}
+      </AppStoreContext.Provider>
+    );
+  };
+
+  export const useAppStore = <T,>(selector: (store: AppStoreType) => T): T => {
+    const appStoreContext = useContext(AppStoreContext);
+
+    if (!appStoreContext) {
+      throw new Error(`useAppStore must be used within AppStoreProvider`);
+    }
+
+    return useStore(appStoreContext, selector);
+  };
+
+  export default AppStoreProvider;
+  ```
+
+- ### Getting data from Zustand store
+
+  _src/app/[lang]/quiz/buckets/questions/page.tsx_
+
+  ```ts
+  import { useAppStore } from '@/context/appStoreProvider';
+
+  export default function QuestionImagesPage({
+    params: { lang },
+  }: Readonly<Props>) {
+
+    const questionImages = useAppStore(state => state.questionImages);
+    const updateQuestionImages = useAppStore(state => state.updateQuestionImages);
+  ```
+
+  <a href="#top">⬅️ Back to top</a>
+
+- ### Where zustand update method calls
+
+  s3Service (`src/services/s3Services.ts`) - singleton instance lives on next.js
+  server side. It's subscribed to minio bucket content change thought the method
+  `startBucketPoller`
+
+  Let's go step by step to understand how the whole mechanism works when the
+  content of MinIO buckets changes and how it propagates updates to the client
+  using **SSE (Server-Sent Events)** and **Zustand store**.
+
+---
+
+### **1️⃣ Bucket Content Changes (MinIO)**
+
+When a file is added or removed from the MinIO bucket, MinIO generates an event
+related to the bucket.
+
+- Your **S3Service** class in `s3Services.ts` listens for these events via the
+  **listenBucketNotification** method:
+
+  ```ts
+  const poller = this.Bucket.listenBucketNotification(this.bucketName, '', '', [
+    's3:ObjectCreated:*',
+    's3:ObjectRemoved:*',
+  ]);
+  ```
+
+- When an object is created or removed, MinIO triggers an event, and your event
+  listener in `startBucketPoller` receives the update.
+
+- You use **lodash.debounce** to ensure that updates are not too frequent. This
+  ensures that **all updates within 1 second are batched together**, preventing
+  unnecessary frequent calls.
+
+  ```ts
+  private startBucketPoller(): void {
+    const poller = this.Bucket.listenBucketNotification(
+      this.bucketName,
+      '',
+      '',
+      ['s3:ObjectCreated:*', 's3:ObjectRemoved:*']
+    );
+
+    const debouncedUpdate = debounce(async () => {
+      try {
+        const bucketImages = await this.getImages();
+        this.eventEmitter.emit('bucketUpdate', this.bucketName, bucketImages);
+      } catch (error) {
+        console.error('Error fetching images:', error);
+      }
+    }, 1000);
+
+    poller.on('notification', debouncedUpdate);
+  }
+
+  public onBucketUpdate(
+    callback: (bucket: string, images: Minio.BucketItem[]) => void
+  ): void {
+    this.eventEmitter.on('bucketUpdate', callback);
+  }
+  ```
+
+- onBucketUpdate tied to startBucketPoller listener through the
+  `this.eventEmitter.emit('bucketUpdate', this.bucketName, bucketImages);` in
+  startBucketPoller and `this.eventEmitter.on('bucketUpdate', callback);` in
+  onBucketUpdate
+
+---
+
+### **2️⃣ Server Side Events (SSE) API in Next.js**
+
+- The `GET` function in `/api/index.ts` is responsible for sending updates to
+  the client via **Server-Sent Events (SSE)**.
+
+- When a client connects, a **ReadableStream** is created:
+
+  ```ts
+  const stream = new ReadableStream({
+    start(controller) {
+  ```
+
+- The **S3Service instances** for the required buckets (`questionsService` and
+  `playerService`) are initialized:
+
+  ```ts
+  const questionsService = await S3Service.getInstance(
+    config.S3_BUCKET_QUESTIONS
+  );
+  const playerService = await S3Service.getInstance(config.S3_BUCKET_PLAYERS);
+  ```
+
+- The event listener function **onUpdate** is created to send updated bucket
+  contents as an SSE message:
+
+  ```ts
+  const onUpdate = (bucket: string, images: Minio.BucketItem[]) => {
+    const data = `data: ${JSON.stringify({ bucket, images })}\n\n`;
+    controller.enqueue(new TextEncoder().encode(data));
+  };
+  ```
+
+- This listener is attached to both buckets:
+
+  ```ts
+  questionsService.onBucketUpdate(onUpdate);
+  playerService.onBucketUpdate(onUpdate);
+  ```
+
+- The SSE response is returned to the client:
+
+  ```ts
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+      'X-Accel-Buffering': 'no',
+    },
+  });
+  ```
+
+- This ensures that when bucket contents change, the SSE API will **push the
+  updates** to the client.
+
+---
+
+### **3️⃣ Client Side - Receiving Updates and Updating Zustand Store**
+
+- The frontend component **connects to the SSE API**:
+
+  ```ts
+  const eventSource = new EventSource('/api');
+  ```
+
+- Whenever an update is received, the **onmessage** event fires:
+
+  ```ts
+  eventSource.onmessage = event => {
+    try {
+      const { bucket, images } = JSON.parse(event.data);
+  ```
+
+- The images' `lastModified` fields are converted into `Date` objects:
+
+  ```ts
+  const bucketImagesWithDate = (images as Minio.BucketItem[]).map(e => ({
+    ...e,
+    lastModified: new Date(e.lastModified as Date),
+  }));
+  ```
+
+- The Zustand store is updated based on **which bucket received the update**:
+
+  ```ts
+  switch (bucket) {
+    case config.S3_BUCKET_QUESTIONS:
+      store?.setState(state => ({
+        ...state,
+        questionImages: bucketImagesWithDate as Minio.BucketItem[],
+      }));
+      break;
+    case config.S3_BUCKET_PLAYERS:
+      store?.setState(state => ({
+        ...state,
+        playerImages: bucketImagesWithDate as Minio.BucketItem[],
+      }));
+      break;
+    default:
+      break;
+  }
+  ```
+
+- **If an error occurs in SSE**, the connection is closed:
+
+  ```ts
+  eventSource.onerror = error => {
+    console.error('SSE Error:', error);
+    eventSource.close();
+  };
+  ```
+
+---
+
+### **4️⃣ Final Flow Summary**
+
+1. **File is uploaded/removed in MinIO** → MinIO triggers a notification.
+2. **S3Service receives the event** and calls
+   `eventEmitter.emit('bucketUpdate', bucketName, images)`.
+3. **SSE API detects the update** and sends a real-time event to all clients.
+4. **Frontend (Zustand) receives the event** and updates the store.
+5. **React components using Zustand** re-render with the new images.
+
+<a href="#top">⬅️ Back to top</a>
