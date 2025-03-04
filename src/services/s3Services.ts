@@ -15,17 +15,6 @@ export class S3Service {
   private Bucket: Minio.Client;
   private bucketName: string;
 
-  // private publicReadPolicy = {
-  //   Version: '2012-10-17',
-  //   Statement: [
-  //     {
-  //       Effect: 'Allow',
-  //       Principal: '*',
-  //       Action: ['s3:GetObject'],
-  //       Resource: [], // To be updated dynamically
-  //     },
-  //   ],
-  // };
   private publicReadPolicy = () => ({
     Version: '2012-10-17',
     Statement: [
@@ -47,11 +36,6 @@ export class S3Service {
       accessKey: config.S3_ACCESS_KEY,
       secretKey: config.S3_SECRET_KEY,
     });
-
-    // Update the publicReadPolicy with the current bucket name
-    // this.publicReadPolicy.Statement[0].Resource = [
-    //   `arn:aws:s3:::${this.bucketName}/*`,
-    // ];
   }
 
   private async init(): Promise<void> {
